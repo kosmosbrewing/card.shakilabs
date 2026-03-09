@@ -20,6 +20,7 @@ const routes: RouteRecordRaw[] = [
     name: "CardIssuer",
     component: () => import("@/views/CardIssuerView.vue"),
     props: true,
+    meta: { title: "카드사별 주유 할인카드 | Car Tools" },
   },
   // 유종별 SEO 페이지
   {
@@ -27,6 +28,7 @@ const routes: RouteRecordRaw[] = [
     name: "FuelType",
     component: () => import("@/views/FuelTypeView.vue"),
     props: true,
+    meta: { title: "유종별 주유 할인카드 비교 | Car Tools" },
   },
   // 월 금액별 SEO 페이지
   {
@@ -36,6 +38,7 @@ const routes: RouteRecordRaw[] = [
     props: (route) => ({
       amount: Number.parseInt(String(route.params.amount), 10),
     }),
+    meta: { title: "월 주유비별 추천 카드 | Car Tools" },
   },
   {
     path: "/about",

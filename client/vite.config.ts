@@ -45,8 +45,12 @@ export default defineConfig({
           if (id.includes("vue") || id.includes("pinia") || id.includes("vue-router")) {
             return "vendor";
           }
+          // 아이콘 (트리쉐이킹 대상, 별도 캐시)
+          if (id.includes("lucide-vue-next")) {
+            return "icons";
+          }
           // UI 라이브러리
-          if (id.includes("radix-vue") || id.includes("lucide-vue-next")) {
+          if (id.includes("radix-vue")) {
             return "ui";
           }
           // 기타 라이브러리
