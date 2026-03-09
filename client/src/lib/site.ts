@@ -1,4 +1,4 @@
-export const DEFAULT_SITE_URL = "https://car.shakilabs.com";
+export const DEFAULT_SITE_URL = "https://card.shakilabs.com";
 
 export function getSiteUrl(): string {
   if (typeof window !== "undefined" && window.location.origin) {

@@ -9,7 +9,7 @@ const year = new Date().getFullYear();
   <footer class="mt-8 border-t border-border/60 bg-muted/20">
     <div class="container py-5">
       <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <p class="text-caption font-bold text-foreground">car.shakilabs.com</p>
+        <p class="text-caption font-bold text-foreground">card.shakilabs.com</p>
         <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-tiny">
           <RouterLink to="/about" class="text-muted-foreground hover:text-foreground transition-colors">
             사이트 안내

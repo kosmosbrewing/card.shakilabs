@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://car.shakilabs.com/sitemap.xml
+Sitemap: https://card.shakilabs.com/sitemap.xml

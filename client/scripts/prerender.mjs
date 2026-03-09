@@ -5,7 +5,7 @@ import { SEO_ROUTES, CARD_ISSUERS } from "./seo-routes.mjs";
 
 const DIST_DIR = resolve(import.meta.dirname, "../dist");
 const INDEX_HTML = resolve(DIST_DIR, "index.html");
-const SITE_URL = "https://car.shakilabs.com";
+const SITE_URL = "https://card.shakilabs.com";
 
 const ISSUER_LABELS = {
   hyundai: "현대카드",
@@ -115,7 +115,7 @@ function buildMeta(route) {
 
   if (route === "/privacy") {
     const title = "개인정보 처리방침 | Car Tools";
-    const description = "car.shakilabs.com 서비스의 개인정보 처리 원칙을 안내합니다.";
+    const description = "card.shakilabs.com 서비스의 개인정보 처리 원칙을 안내합니다.";
     const canonical = `${SITE_URL}/privacy`;
     return {
       title, description, canonical,
@@ -131,7 +131,7 @@ function buildMeta(route) {
   return {
     title, description, canonical,
     jsonLd: [
-      { "@context": "https://schema.org", "@type": "WebSite", name: "car.shakilabs.com", url: SITE_URL, description, inLanguage: "ko" },
+      { "@context": "https://schema.org", "@type": "WebSite", name: "card.shakilabs.com", url: SITE_URL, description, inLanguage: "ko" },
       { "@context": "https://schema.org", "@type": "WebApplication", name: title, url: canonical, applicationCategory: "FinanceApplication", operatingSystem: "Any", inLanguage: "ko", offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" } },
     ],
     breadcrumb: buildBreadcrumb([{ name: "홈", url: SITE_URL }, { name: "주유 할인카드 비교" }]),
