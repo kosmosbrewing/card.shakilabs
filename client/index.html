@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>주유 할인카드 비교 계산기 | 내 주유량에 맞는 최적 카드 찾기 2026</title>
+    <meta name="description" content="월 주유 금액만 입력하면 카드별 절약액을 즉시 비교합니다. 현대카드, 신한카드, KB국민, 삼성카드 주유 할인 한눈에." />
+    <link rel="canonical" href="https://car.shakilabs.com/fuel-card" />
+
+    <!-- GA4 preconnect -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
+
+    <!-- 로컬 폰트 preload -->
+    <link rel="preload" href="/fonts/Pretendard-Regular-subset.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Pretendard-Bold-subset.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- OG 태그 -->
+    <meta property="og:title" content="주유 할인카드 비교 계산기 | 내 주유량에 맞는 최적 카드 찾기 2026" />
+    <meta property="og:description" content="월 주유 금액만 입력하면 카드별 절약액을 즉시 비교합니다. 현대카드, 신한카드, KB국민, 삼성카드 주유 할인 한눈에." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:site_name" content="ShakiLabs 자동차 계산기" />
+    <meta property="og:url" content="https://car.shakilabs.com/fuel-card" />
+    <meta property="og:image" content="https://car.shakilabs.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="주유 할인카드 비교 계산기 | 내 주유량에 맞는 최적 카드 찾기" />
+    <meta name="twitter:description" content="월 주유 금액만 입력하면 카드별 절약액을 즉시 비교합니다." />
+    <meta name="twitter:image" content="https://car.shakilabs.com/og-image.png" />
+
+    <!-- GEO / 언어 -->
+    <meta name="content-language" content="ko" />
+    <meta name="geo.region" content="KR" />
+    <meta name="geo.placename" content="대한민국" />
+    <link rel="alternate" hreflang="ko" href="https://car.shakilabs.com/fuel-card" />
+    <link rel="alternate" hreflang="x-default" href="https://car.shakilabs.com/fuel-card" />
+
+    <!-- 테마 — teal 계열 -->
+    <meta name="theme-color" content="hsl(174, 84%, 32%)" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="hsl(174, 30%, 12%)" media="(prefers-color-scheme: dark)" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "주유 할인카드 비교 계산기",
+        "url": "https://car.shakilabs.com/fuel-card",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Web",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" },
+        "inLanguage": "ko"
+      }
+    </script>
+
+    <script>
+      (() => {
+        try {
+          const key = "car-tools:theme:v1";
+          const saved = localStorage.getItem(key);
+          const prefersDark =
+            typeof window.matchMedia === "function" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches;
+          const theme =
+            saved === "dark" || saved === "light"
+              ? saved
+              : prefersDark
+                ? "dark"
+                : "light";
+          if (theme === "dark") {
+            document.documentElement.classList.add("dark");
+          }
+        } catch {}
+      })();
+    </script>
+    <!-- Critical CSS: car-tools 테마 — teal 주유/자동차 톤 -->
+    <style>
+      :root {
+        --background: 210 40% 98%;
+        --foreground: 222 47% 11%;
+        --muted: 210 40% 96%;
+        --muted-foreground: 215 16% 37%;
+        --card: 0 0% 100%;
+        --card-foreground: 222 47% 11%;
+        --primary: 174 84% 32%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 174 20% 93%;
+        --secondary-foreground: 222 47% 11%;
+        --accent: 174 60% 95%;
+        --accent-foreground: 174 60% 28%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222 47% 11%;
+        --destructive: 0 72% 52%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214 16% 85%;
+        --input: 214 16% 85%;
+        --ring: 174 84% 32%;
+        --radius: 0.4rem;
+        --savings: 160 84% 39%;
+        --savings-foreground: 0 0% 100%;
+        --loss: 0 72% 52%;
+        --loss-foreground: 0 0% 100%;
+
+        --status-success: 148 61% 36%;
+        --status-warning: 43 88% 43%;
+        --status-caution: 28 82% 48%;
+        --status-danger: 0 70% 52%;
+        --status-info: 212 83% 45%;
+      }
+
+      .dark {
+        --background: 222 47% 11%;
+        --foreground: 210 40% 96%;
+        --muted: 217 33% 17%;
+        --muted-foreground: 215 20% 72%;
+        --card: 217 33% 17%;
+        --card-foreground: 210 40% 96%;
+        --primary: 174 70% 45%;
+        --primary-foreground: 174 90% 8%;
+        --secondary: 174 15% 20%;
+        --secondary-foreground: 210 40% 96%;
+        --accent: 174 40% 22%;
+        --accent-foreground: 174 60% 75%;
+        --popover: 217 33% 17%;
+        --popover-foreground: 210 40% 96%;
+        --destructive: 0 72% 58%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 214 16% 26%;
+        --input: 214 16% 30%;
+        --ring: 174 70% 45%;
+        --savings: 160 56% 50%;
+        --savings-foreground: 0 0% 100%;
+        --loss: 0 62% 58%;
+        --loss-foreground: 0 0% 100%;
+
+        --status-success: 148 63% 66%;
+        --status-warning: 43 95% 70%;
+        --status-caution: 28 91% 66%;
+        --status-danger: 0 86% 73%;
+        --status-info: 205 90% 72%;
+      }
+
+      html {
+        scroll-behavior: auto;
+        font-size: 16px;
+      }
+
+      body {
+        background: hsl(var(--background));
+        color: hsl(var(--foreground));
+        font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overflow-x: hidden;
+        margin: 0;
+        color-scheme: light dark;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <noscript>
+      <section style="max-width:920px;margin:0 auto;padding:20px 16px;line-height:1.6;">
+        <h1 style="font-size:28px;line-height:1.3;margin:0 0 12px;">주유 할인카드 비교 계산기</h1>
+        <p style="margin:0 0 10px;">월 주유 금액만 입력하면 카드별 절약액을 즉시 비교합니다.</p>
+        <ul style="margin:0;padding-left:20px;">
+          <li><a href="/fuel-card">주유 할인카드 비교</a></li>
+          <li><a href="/fuel-card/hyundai">현대카드 주유 할인</a></li>
+          <li><a href="/fuel-card/kb">KB국민카드 주유 할인</a></li>
+          <li><a href="/fuel-card/shinhan">신한카드 주유 할인</a></li>
+        </ul>
+      </section>
+    </noscript>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
