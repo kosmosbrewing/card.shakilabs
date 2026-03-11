@@ -1,7 +1,7 @@
 // 빌드 후 라우트별 SEO HTML 생성
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
-import { resolve, dirname } from "path";
-import { SEO_ROUTES, CARD_ISSUERS } from "./seo-routes.mjs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { dirname, resolve } from "path";
+import { SEO_ROUTES } from "./seo-routes.mjs";
 
 const DIST_DIR = resolve(import.meta.dirname, "../dist");
 const INDEX_HTML = resolve(DIST_DIR, "index.html");
@@ -14,6 +14,16 @@ const ISSUER_LABELS = {
   samsung: "삼성카드",
   lotte: "롯데카드",
   hana: "하나카드",
+};
+
+const OVERSEAS_LABELS = {
+  usd: "미국 달러",
+  eur: "유로",
+  jpy: "일본 엔",
+  gbp: "영국 파운드",
+  cny: "중국 위안",
+  thb: "태국 바트",
+  vnd: "베트남 동",
 };
 
 if (!existsSync(INDEX_HTML)) {
@@ -41,8 +51,8 @@ function buildBreadcrumb(items) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: items.map((item, i) => {
-      const entry = { "@type": "ListItem", position: i + 1, name: item.name };
+    itemListElement: items.map((item, index) => {
+      const entry = { "@type": "ListItem", position: index + 1, name: item.name };
       if (item.url) entry.item = item.url;
       return entry;
     }),
@@ -50,22 +60,28 @@ function buildBreadcrumb(items) {
 }
 
 function buildMeta(route) {
-  // 카드사별 페이지
   const issuerMatch = route.match(/^\/fuel-card\/(hyundai|shinhan|kb|samsung|lotte|hana)$/);
   if (issuerMatch) {
     const issuer = issuerMatch[1];
-    const label = ISSUER_LABELS[issuer] || issuer;
+    const label = ISSUER_LABELS[issuer] ?? issuer;
     const title = `${label} 주유 할인카드 비교 | Car Tools`;
     const description = `${label} 주유 할인카드를 비교합니다. 월 주유비 기준 연간 절약액과 실적 조건을 한눈에 확인하세요.`;
     const canonical = `${SITE_URL}/fuel-card/${issuer}`;
+
     return {
-      title, description, canonical,
+      title,
+      description,
+      canonical,
+      appPath: "/fuel-card",
       jsonLd: { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
-      breadcrumb: buildBreadcrumb([{ name: "홈", url: SITE_URL }, { name: "주유 할인카드", url: `${SITE_URL}/fuel-card` }, { name: label }]),
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "주유 할인카드", url: `${SITE_URL}/fuel-card` },
+        { name: label },
+      ]),
     };
   }
 
-  // 유종별 페이지
   const fuelMatch = route.match(/^\/fuel-card\/(gasoline|diesel)$/);
   if (fuelMatch) {
     const fuelType = fuelMatch[1];
@@ -73,14 +89,21 @@ function buildMeta(route) {
     const title = `${label} 주유 할인카드 추천 | Car Tools`;
     const description = `${label} 주유 시 가장 유리한 할인카드를 비교합니다. 카드별 리터당 할인액과 연간 절약액을 확인하세요.`;
     const canonical = `${SITE_URL}/fuel-card/${fuelType}`;
+
     return {
-      title, description, canonical,
+      title,
+      description,
+      canonical,
+      appPath: "/fuel-card",
       jsonLd: { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
-      breadcrumb: buildBreadcrumb([{ name: "홈", url: SITE_URL }, { name: "주유 할인카드", url: `${SITE_URL}/fuel-card` }, { name: label }]),
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "주유 할인카드", url: `${SITE_URL}/fuel-card` },
+        { name: label },
+      ]),
     };
   }
 
-  // 월 금액별 페이지
   const monthlyMatch = route.match(/^\/fuel-card\/monthly\/(\d+)$/);
   if (monthlyMatch) {
     const amount = Number.parseInt(monthlyMatch[1], 10);
@@ -88,62 +111,160 @@ function buildMeta(route) {
     const title = `월 ${manWon}만원 주유 시 추천 카드 | Car Tools`;
     const description = `월 주유비 ${manWon}만원 기준 가장 절약되는 주유 할인카드를 비교합니다.`;
     const canonical = `${SITE_URL}/fuel-card/monthly/${amount}`;
+
     return {
-      title, description, canonical,
+      title,
+      description,
+      canonical,
+      appPath: "/fuel-card",
       jsonLd: {
-        "@context": "https://schema.org", "@type": "FAQPage",
-        mainEntity: [{
-          "@type": "Question",
-          name: `월 ${manWon}만원 주유하면 어떤 카드가 유리한가요?`,
-          acceptedAnswer: { "@type": "Answer", text: "카드별 리터당 할인액, 월 할인 한도, 연회비를 종합 비교하여 최적 카드를 찾을 수 있습니다." },
-        }],
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: `월 ${manWon}만원 주유하면 어떤 카드가 유리한가요?`,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: "카드별 리터당 할인액, 월 할인 한도, 연회비를 종합 비교하여 최적 카드를 찾을 수 있습니다.",
+            },
+          },
+        ],
       },
-      breadcrumb: buildBreadcrumb([{ name: "홈", url: SITE_URL }, { name: "주유 할인카드", url: `${SITE_URL}/fuel-card` }, { name: `월 ${manWon}만원` }]),
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "주유 할인카드", url: `${SITE_URL}/fuel-card` },
+        { name: `월 ${manWon}만원` },
+      ]),
+    };
+  }
+
+  const overseasMatch = route.match(/^\/overseas-payment\/(usd|eur|jpy|gbp|cny|thb|vnd)$/);
+  if (overseasMatch) {
+    const currency = overseasMatch[1];
+    const label = OVERSEAS_LABELS[currency] ?? currency.toUpperCase();
+    const title = `${label} 해외결제 카드 비교 | DCC 수수료 계산기`;
+    const description = `${label} 결제 시 카드별 해외수수료, 캐시백, DCC 원화결제 손해를 비교합니다.`;
+    const canonical = `${SITE_URL}/overseas-payment/${currency}`;
+
+    return {
+      title,
+      description,
+      canonical,
+      appPath: "/overseas-payment",
+      jsonLd: { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "해외결제 비교", url: `${SITE_URL}/overseas-payment` },
+        { name: label },
+      ]),
+    };
+  }
+
+  if (route === "/overseas-payment") {
+    const title = "해외결제 카드 비교 + DCC 수수료 계산기 | Car Tools 2026";
+    const description = "현지통화 결제와 DCC 원화결제를 비교하고, 카드별 해외수수료와 혜택을 한 번에 계산합니다.";
+    const canonical = `${SITE_URL}/overseas-payment`;
+
+    return {
+      title,
+      description,
+      canonical,
+      appPath: "/overseas-payment",
+      jsonLd: [
+        { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
+        { "@context": "https://schema.org", "@type": "WebApplication", name: title, url: canonical, applicationCategory: "FinanceApplication", operatingSystem: "Any", inLanguage: "ko", offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" } },
+      ],
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "해외결제 비교" },
+      ]),
+    };
+  }
+
+  if (route === "/min-spend") {
+    const title = "전월 실적 채우기 최소 비용 계산기 | Car Tools 2026";
+    const description = "내 월 지출 패턴을 기준으로 카드별 전월 실적 충족 여부와 추가 지출까지 반영한 순혜택을 계산합니다.";
+    const canonical = `${SITE_URL}/min-spend`;
+
+    return {
+      title,
+      description,
+      canonical,
+      appPath: "/min-spend",
+      jsonLd: [
+        { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
+        { "@context": "https://schema.org", "@type": "WebApplication", name: title, url: canonical, applicationCategory: "FinanceApplication", operatingSystem: "Any", inLanguage: "ko", offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" } },
+      ],
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "실적 채우기 계산기" },
+      ]),
     };
   }
 
   if (route === "/about") {
     const title = "서비스 안내 | Car Tools";
-    const description = "주유 할인카드 비교 계산기. 내 주유 패턴에 맞는 최적 카드를 찾아보세요.";
+    const description = "주유 할인카드와 해외결제 카드를 비교해 실질 비용을 계산하는 도구입니다.";
     const canonical = `${SITE_URL}/about`;
+
     return {
-      title, description, canonical,
+      title,
+      description,
+      canonical,
+      appPath: "/fuel-card",
       jsonLd: { "@context": "https://schema.org", "@type": "AboutPage", name: title, description, url: canonical, inLanguage: "ko" },
-      breadcrumb: buildBreadcrumb([{ name: "홈", url: SITE_URL }, { name: "서비스 안내" }]),
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "서비스 안내" },
+      ]),
     };
   }
 
   if (route === "/privacy") {
     const title = "개인정보 처리방침 | Car Tools";
-    const description = "card.shakilabs.com 서비스의 개인정보 처리 원칙을 안내합니다.";
+    const description = "card.shakilabs.com 개인정보 처리방침 안내 페이지입니다.";
     const canonical = `${SITE_URL}/privacy`;
+
     return {
-      title, description, canonical,
+      title,
+      description,
+      canonical,
+      appPath: "/fuel-card",
       jsonLd: { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
-      breadcrumb: buildBreadcrumb([{ name: "홈", url: SITE_URL }, { name: "개인정보 처리방침" }]),
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "개인정보 처리방침" },
+      ]),
     };
   }
 
-  // 메인 (fuel-card)
   const title = "주유 할인카드 비교 계산기 | 내 주유량에 맞는 최적 카드 찾기 2026";
   const description = "월 주유 금액만 입력하면 카드별 절약액을 즉시 비교합니다. 현대카드, 신한카드, KB국민, 삼성카드 주유 할인 한눈에.";
   const canonical = `${SITE_URL}/fuel-card`;
+
   return {
-    title, description, canonical,
+    title,
+    description,
+    canonical,
+    appPath: "/fuel-card",
     jsonLd: [
       { "@context": "https://schema.org", "@type": "WebSite", name: "card.shakilabs.com", url: SITE_URL, description, inLanguage: "ko" },
       { "@context": "https://schema.org", "@type": "WebApplication", name: title, url: canonical, applicationCategory: "FinanceApplication", operatingSystem: "Any", inLanguage: "ko", offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" } },
     ],
-    breadcrumb: buildBreadcrumb([{ name: "홈", url: SITE_URL }, { name: "주유 할인카드 비교" }]),
+    breadcrumb: buildBreadcrumb([
+      { name: "홈", url: SITE_URL },
+      { name: "주유 할인카드 비교" },
+    ]),
   };
 }
 
-function buildPrerenderSection(route, meta) {
+function buildPrerenderSection(meta) {
   return `
     <section data-seo-prerender style="max-width:920px;margin:0 auto;padding:20px 16px;line-height:1.6;">
       <h1 style="font-size:28px;line-height:1.3;margin:0 0 12px;">${meta.title.split(" | ")[0]}</h1>
       <p style="margin:0 0 10px;">${meta.description}</p>
-      <p style="margin:0;"><a href="/fuel-card">주유 할인카드 비교 계산기 열기</a></p>
+      <p style="margin:0;"><a href="${meta.appPath}">계산기 열기</a></p>
     </section>`;
 }
 
@@ -152,7 +273,7 @@ function replaceTag(html, pattern, next) {
   return html;
 }
 
-function applyMeta(html, route, meta) {
+function applyMeta(html, meta) {
   const escapedTitle = escapeAttr(meta.title);
   const escapedDescription = escapeAttr(meta.description);
   const escapedCanonical = escapeAttr(meta.canonical);
@@ -170,14 +291,12 @@ function applyMeta(html, route, meta) {
   output = replaceTag(output, /<meta name="twitter:description" content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${escapedDescription}" />`);
   output = replaceTag(output, /<meta name="twitter:image" content="[^"]*"\s*\/?>/i, `<meta name="twitter:image" content="${escapedOgImage}" />`);
 
-  // JSON-LD
   const jsonLdArray = [meta.jsonLd, meta.breadcrumb].flat().filter(Boolean);
   const jsonLdTag = `    <script type="application/ld+json" data-seo-prerender="jsonld">${toSafeJson(jsonLdArray)}</script>`;
   output = output.replace(/\n?\s*<script type="application\/ld\+json" data-seo-prerender="jsonld">[\s\S]*?<\/script>/i, "");
   output = output.replace("</head>", `${jsonLdTag}\n  </head>`);
 
-  // Prerender section
-  const prerenderSection = buildPrerenderSection(route, meta);
+  const prerenderSection = buildPrerenderSection(meta);
   output = output.replace(/\n?\s*<section data-seo-prerender[\s\S]*?<\/section>/i, "");
   if (output.includes('<div id="app"></div>')) {
     output = output.replace('<div id="app"></div>', `<div id="app"></div>${prerenderSection}`);
@@ -199,7 +318,7 @@ for (const route of SEO_ROUTES) {
   }
 
   const meta = buildMeta(route);
-  const html = applyMeta(template, route, meta);
+  const html = applyMeta(template, meta);
   writeFileSync(filePath, html, "utf-8");
   console.log(`[prerender] ${route} -> ${filePath}`);
 }

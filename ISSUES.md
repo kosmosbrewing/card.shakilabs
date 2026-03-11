@@ -1,7 +1,7 @@
 # 04.card 품질 개선 이슈
 
 > **기준 문서**: `docs/BOILERPLATE_FRONTEND.md`, `docs/MVP_QUALITY_MANUAL.md`
-> **점검일**: 2026-03-09
+> **점검일**: 2026-03-09 (1차), 2026-03-10 (2차)
 
 ---
 
@@ -22,6 +22,11 @@
 ### ~~H5. GmarketSans woff2 미참조~~ ✅ 해결
 - `main.css` @font-face에 woff2 format 우선 선언 추가
 
+### ~~H6. KakaoTalk 공유 아이콘 에셋 누락~~ ✅ 해결
+- `public/images/icons/kakaotalk-sharing-medium.svg` 추가
+- `ShareModal.vue` 참조 경로를 로컬 SVG 에셋으로 교체
+- `public/images/icons/` 디렉토리 생성으로 404 해소
+
 ---
 
 ## 🟡 MEDIUM — 다음 배포 전 수정
@@ -40,23 +45,29 @@
 - `"prebuild": "node scripts/generate-sitemap.mjs"`
 - `"build": "vite build && node scripts/prerender.mjs"`
 
+### ~~M5. `retro-titlebar-actions` CSS 클래스 미정의~~ ✅ 해결
+- `main.css`에 `.retro-titlebar-actions { @apply flex items-center gap-2; }` 추가
+
+### ~~M6. SectionShareButton 미구현~~ ✅ 해결
+- `components/common/SectionShareButton.vue` 추가
+- `FuelCardView.vue` SummaryBanner 하단에 인라인 공유 CTA + `ShareModal` 연결
+
 ---
 
 ## 🟢 LOW — 개선 권장 (미처리)
 
-### L1. 공통 컴포넌트 누락
-- `EmptyState.vue` — 빈 상태 (아이콘 + 메시지) 표시
-- `ErrorMessage.vue` — 에러 상태 표시
-- **현재**: `WittyState.vue`로 대체 사용 중, 필요 시 02.finance에서 복사
+### ~~L1. 공통 컴포넌트 누락~~ ✅ 해결
+- `components/common/EmptyState.vue`
+- `components/common/ErrorMessage.vue`
+- 기존 `WittyState.vue`를 재사용하는 래퍼 형태로 추가
 
-### L2. Composable 누락
-- `useUrlParams.ts` — URL 쿼리 파라미터 동기화
-- `useRecentCalcs.ts` — 최근 계산 이력 (localStorage)
-- **현재**: 기능 자체가 미구현 상태, 필요 시 추가
+### ~~L2. Composable 누락~~ ✅ 해결
+- `composables/useUrlParams.ts` 추가
+- `composables/useRecentCalcs.ts` 추가
 
-### L3. public/images/ 디렉토리 없음
-- **기준**: 브랜드 에셋 전용 디렉토리
-- **현재**: favicon.png만 public/ 루트에 존재
+### ~~L3. public/images/ 디렉토리 없음~~ ✅ 해결
+- `public/images/icons/` 디렉토리 생성
+- 공유 아이콘 로컬 에셋 배치
 
 ---
 
@@ -64,9 +75,9 @@
 
 | 등급 | 전체 | 해결 | 미해결 |
 |------|------|------|--------|
-| 🔴 HIGH | 5 | 5 | 0 |
-| 🟡 MEDIUM | 4 | 4 | 0 |
-| 🟢 LOW | 3 | 0 | 3 |
-| **합계** | **12** | **9** | **3** |
+| 🔴 HIGH | 6 | 6 | 0 |
+| 🟡 MEDIUM | 6 | 6 | 0 |
+| 🟢 LOW | 3 | 3 | 0 |
+| **합계** | **15** | **15** | **0** |
 
-> LOW 3건은 현재 기능에 영향 없는 선택적 개선 항목입니다.
+> 문서 기준 미해결 항목은 모두 반영 완료.

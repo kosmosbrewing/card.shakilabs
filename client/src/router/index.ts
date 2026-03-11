@@ -41,6 +41,25 @@ const routes: RouteRecordRaw[] = [
     meta: { title: "월 주유비별 추천 카드 | Car Tools" },
   },
   {
+    path: "/overseas-payment",
+    name: "OverseasPayment",
+    component: () => import("@/views/OverseasPaymentView.vue"),
+    meta: { title: "해외결제 카드 비교 + DCC 수수료 계산기 | Car Tools 2026" },
+  },
+  {
+    path: "/overseas-payment/:currency(usd|eur|jpy|gbp|cny|thb|vnd)",
+    name: "OverseasCurrency",
+    component: () => import("@/views/OverseasCurrencyView.vue"),
+    props: true,
+    meta: { title: "통화별 해외결제 카드 비교 | Car Tools" },
+  },
+  {
+    path: "/min-spend",
+    name: "MinSpend",
+    component: () => import("@/views/MinSpendView.vue"),
+    meta: { title: "전월 실적 채우기 최소 비용 계산기 | Car Tools 2026" },
+  },
+  {
     path: "/about",
     name: "About",
     component: () => import("@/views/AboutView.vue"),
@@ -74,7 +93,7 @@ router.beforeEach(async (to) => {
   const title =
     typeof to.meta.title === "string"
       ? to.meta.title
-      : "주유 할인카드 비교 계산기 | Car Tools";
+      : "카드 비교 계산기 | Car Tools";
   document.title = title;
   return true;
 });

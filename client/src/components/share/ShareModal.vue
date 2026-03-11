@@ -81,7 +81,7 @@ function handleAction(action: "kakao" | "link"): void {
                 @click="handleAction('kakao')"
               >
                 <img
-                  src="/images/icons/kakaotalk-sharing-medium.png?v=1"
+                  src="/images/icons/kakaotalk-sharing-medium.svg?v=1"
                   alt=""
                   aria-hidden="true"
                   class="h-6 w-6 object-contain"

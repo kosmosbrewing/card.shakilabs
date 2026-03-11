@@ -11,7 +11,10 @@ const today = new Date().toISOString().split("T")[0];
 
 function resolvePriority(route) {
   if (route === "/fuel-card") return "1.0";
+  if (route === "/overseas-payment") return "0.9";
+  if (route === "/min-spend") return "0.9";
   if (/^\/fuel-card\/(hyundai|shinhan|kb|samsung|lotte|hana)$/.test(route)) return "0.8";
+  if (/^\/overseas-payment\/(usd|eur|jpy|gbp|cny|thb|vnd)$/.test(route)) return "0.8";
   if (/^\/fuel-card\/(gasoline|diesel)$/.test(route)) return "0.7";
   if (route.startsWith("/fuel-card/monthly/")) return "0.6";
   return "0.3";
@@ -19,8 +22,11 @@ function resolvePriority(route) {
 
 function resolveChangeFreq(route) {
   if (route === "/fuel-card") return "weekly";
+  if (route === "/overseas-payment") return "weekly";
+  if (route === "/min-spend") return "weekly";
   if (/^\/fuel-card\/(gasoline|diesel)$/.test(route)) return "weekly";
   if (/^\/fuel-card\/(hyundai|shinhan|kb|samsung|lotte|hana)$/.test(route)) return "monthly";
+  if (/^\/overseas-payment\/(usd|eur|jpy|gbp|cny|thb|vnd)$/.test(route)) return "weekly";
   if (route.startsWith("/fuel-card/monthly/")) return "monthly";
   return "yearly";
 }

@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
+import SectionShareButton from "@/components/common/SectionShareButton.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import FuelCardInput from "@/components/fuel-card/FuelCardInput.vue";
 import TopCardList from "@/components/fuel-card/TopCardList.vue";
@@ -9,7 +10,9 @@ import FeeCompareTable from "@/components/fuel-card/FeeCompareTable.vue";
 import CardDetailSection from "@/components/fuel-card/CardDetailSection.vue";
 import SavingsBarChart from "@/components/fuel-card/SavingsBarChart.vue";
 import FuelCardFAQ from "@/components/fuel-card/FuelCardFAQ.vue";
+import ShareModal from "@/components/share/ShareModal.vue";
 import { useFuelCardCalc } from "@/composables/useFuelCardCalc";
+import { useShare } from "@/composables/useShare";
 import { FUEL_TYPE_LABELS } from "@/data/fuelPrices";
 import { RouterLink } from "vue-router";
 import { ISSUER_DISPLAY_NAME } from "@/data/fuelCards";
@@ -24,6 +27,20 @@ const {
   bestCard,
   mismatchResults,
 } = useFuelCardCalc();
+
+const {
+  showShareModal,
+  kakaoBusy,
+  shareSummary,
+  openShare,
+  closeShare,
+  shareKakao,
+  copyLink,
+} = useShare({
+  fuelType,
+  monthlySpend,
+  bestCard,
+});
 
 const seoTitle = "주유 할인카드 비교 계산기 | 내 주유량에 맞는 최적 카드 찾기 2026";
 const seoDescription =
@@ -94,7 +111,12 @@ const monthlyLinks = [
     <TopCardList v-if="topCards.length > 0" :cards="topCards" />
 
     <!-- SummaryBanner -->
-    <SummaryBanner v-if="bestCard" :message="summaryMessage" />
+    <div v-if="bestCard" class="space-y-2">
+      <SummaryBanner :message="summaryMessage" />
+      <div class="flex justify-end">
+        <SectionShareButton @click="openShare" />
+      </div>
+    </div>
 
     <!-- 광고 상단 -->
     <AdSlot slot="fuel-card-top" label="비교 결과 하단" />
@@ -122,6 +144,15 @@ const monthlyLinks = [
 
     <!-- 광고 하단 -->
     <AdSlot slot="fuel-card-bottom" label="FAQ 하단" />
+
+    <ShareModal
+      :show="showShareModal"
+      :kakao-busy="kakaoBusy"
+      :summary-text="shareSummary"
+      @close="closeShare"
+      @share-kakao="shareKakao"
+      @copy-link="copyLink"
+    />
 
     <!-- 내부 링크 -->
     <div class="space-y-3">

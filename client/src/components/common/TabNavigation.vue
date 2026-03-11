@@ -6,12 +6,16 @@ const route = useRoute();
 
 const tabs = [
   { key: "fuel-card", label: "주유 할인카드", to: "/fuel-card" },
+  { key: "overseas-payment", label: "해외결제 비교", to: "/overseas-payment" },
+  { key: "min-spend", label: "실적 채우기", to: "/min-spend" },
 ] as const;
 
 const activePath = computed(() => route.path);
 
 function isActiveTab(key: (typeof tabs)[number]["key"]): boolean {
   if (key === "fuel-card") return activePath.value.startsWith("/fuel-card");
+  if (key === "overseas-payment") return activePath.value.startsWith("/overseas-payment");
+  if (key === "min-spend") return activePath.value.startsWith("/min-spend");
   return activePath.value === tabs.find((t) => t.key === key)?.to;
 }
 </script>
