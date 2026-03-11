@@ -1,6 +1,10 @@
 // 주유 할인카드 절약액 계산 엔진
 
-import type { FuelCard } from "@/data/fuelCards";
+import {
+  getFuelCardMinimumSpend,
+  getFuelCardTierForSpend,
+  type FuelCard,
+} from "@/data/fuelCards";
 import type { FuelType } from "@/data/fuelPrices";
 import { getFuelPrice } from "@/data/fuelPrices";
 
@@ -13,6 +17,12 @@ export interface FuelCardCalcInput {
 export interface FuelCardCalcResult {
   cardId: string;
   card: FuelCard;
+  /** 현재 계산에 적용된 실적 구간 */
+  appliedMinSpend: number;
+  /** 현재 계산에 적용된 할인 한도 */
+  appliedMonthlyCap: number;
+  /** 현재 계산에 적용된 구간 라벨 */
+  appliedTierLabel: string | null;
   /** 월 주유량 (L) */
   monthlyLiters: number;
   /** 월 할인 금액 (한도 적용 전) */
@@ -44,6 +54,10 @@ export function calculateCardSavings(
 ): FuelCardCalcResult {
   const fuelPrice = getFuelPrice(input.fuelType);
   const monthlyLiters = fuelPrice > 0 ? input.monthlySpend / fuelPrice : 0;
+  const appliedTier = getFuelCardTierForSpend(card, input.monthlySpend, true);
+  const appliedMinSpend = appliedTier?.minSpend ?? getFuelCardMinimumSpend(card);
+  const appliedMonthlyCap = appliedTier?.monthlyCap ?? card.discount.monthlyCap;
+  const appliedTierLabel = appliedTier?.label ?? null;
 
   // 브랜드 제한 확인
   const isBrandMismatch =
@@ -67,10 +81,10 @@ export function calculateCardSavings(
 
   // 월 할인 한도 적용
   const isCapExceeded =
-    card.discount.monthlyCap > 0 && rawMonthlyDiscount > card.discount.monthlyCap;
+    appliedMonthlyCap > 0 && rawMonthlyDiscount > appliedMonthlyCap;
   const monthlyDiscount =
-    card.discount.monthlyCap > 0
-      ? Math.min(rawMonthlyDiscount, card.discount.monthlyCap)
+    appliedMonthlyCap > 0
+      ? Math.min(rawMonthlyDiscount, appliedMonthlyCap)
       : rawMonthlyDiscount;
 
   // 연회비 월 환산
@@ -88,11 +102,14 @@ export function calculateCardSavings(
 
   // 전월 실적 미달 경고
   const isMinSpendWarning =
-    card.discount.minSpend > 0 && input.monthlySpend < card.discount.minSpend;
+    appliedMinSpend > 0 && input.monthlySpend < appliedMinSpend;
 
   return {
     cardId: card.id,
     card,
+    appliedMinSpend,
+    appliedMonthlyCap,
+    appliedTierLabel,
     monthlyLiters: Math.round(monthlyLiters * 10) / 10,
     rawMonthlyDiscount: Math.round(rawMonthlyDiscount),
     monthlyDiscount: Math.round(monthlyDiscount),
@@ -151,14 +168,17 @@ export function formatDiscountDetail(result: FuelCardCalcResult): string {
   }
 
   const capNote =
-    isCapExceeded && d.monthlyCap > 0
-      ? `, 한도 초과 — 실제 할인은 월 ${d.monthlyCap.toLocaleString()}원까지`
-      : d.monthlyCap > 0
-        ? `, 한도 ${d.monthlyCap.toLocaleString()}원 이내 ✅`
+    isCapExceeded && result.appliedMonthlyCap > 0
+      ? `, 한도 초과 — 현재 구간 한도는 월 ${result.appliedMonthlyCap.toLocaleString()}원`
+      : result.appliedMonthlyCap > 0
+        ? `, 현재 구간 한도 ${result.appliedMonthlyCap.toLocaleString()}원`
         : "";
+  const tierNote = result.appliedTierLabel
+    ? `, 적용 구간 ${result.appliedTierLabel}`
+    : `, 전월 실적 ${result.appliedMinSpend.toLocaleString()}원 기준`;
 
   const feeNote = `, 연회비 ${card.annualFee.toLocaleString()}원 차감`;
   const netNote = ` → 순 절약 ${result.monthlyNet.toLocaleString()}원/월`;
 
-  return base + capNote + feeNote + netNote;
+  return base + tierNote + capNote + feeNote + netNote;
 }

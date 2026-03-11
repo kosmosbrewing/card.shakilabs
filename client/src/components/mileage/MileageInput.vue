@@ -60,19 +60,19 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
         </button>
       </div>
 
-      <!-- 마일리지 입력: [−] input [+] -->
-      <div class="flex items-center gap-2">
+      <!-- 마일리지 입력: 인라인 스테퍼 [−|input 마일|+] -->
+      <div class="flex items-stretch overflow-hidden rounded-xl border border-input bg-card">
         <button
           type="button"
-          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border text-lg font-bold text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+          class="shrink-0 px-2.5 text-base font-bold text-muted-foreground transition-colors hover:bg-muted/50 active:bg-muted"
           aria-label="5,000마일 감소"
           @click="emit('update:mileageBalance', Math.max(MIN, mileageBalance - STEP))"
         >−</button>
-        <div class="relative flex-1">
+        <div class="relative min-w-0 flex-1">
           <input
             type="text"
             inputmode="numeric"
-            class="retro-input !pr-14 text-right tabular-nums"
+            class="w-full border-x border-input bg-transparent px-3 py-2.5 text-right text-body tabular-nums focus:outline-none"
             :value="mileageBalance.toLocaleString()"
             @input="handleMileageInput"
           />
@@ -80,7 +80,7 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
         </div>
         <button
           type="button"
-          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border text-lg font-bold text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+          class="shrink-0 px-2.5 text-base font-bold text-muted-foreground transition-colors hover:bg-muted/50 active:bg-muted"
           aria-label="5,000마일 증가"
           @click="emit('update:mileageBalance', Math.min(MAX, mileageBalance + STEP))"
         >+</button>

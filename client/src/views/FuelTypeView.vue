@@ -4,11 +4,13 @@ import { RouterLink } from "vue-router";
 import SEOHead from "@/components/common/SEOHead.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
+import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FeeCompareTable from "@/components/fuel-card/FeeCompareTable.vue";
 import SavingsBarChart from "@/components/fuel-card/SavingsBarChart.vue";
 import FuelCardFAQ from "@/components/fuel-card/FuelCardFAQ.vue";
 import { FUEL_CARDS } from "@/data/fuelCards";
 import { FUEL_PRICES, FUEL_TYPE_LABELS, type FuelType } from "@/data/fuelPrices";
+import { FUEL_COMPARE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
 import { calculateAllCards } from "@/utils/calculator";
 import { ref } from "vue";
 import type { SortKey } from "@/composables/useFuelCardCalc";
@@ -69,6 +71,12 @@ const seoDescription = computed(
     <AdSlot slot="fuel-type-detail" label="유종별 비교" />
 
     <FuelCardFAQ />
+
+    <CompareSourceFooter
+      :sources="FUEL_COMPARE_SOURCES"
+      :updated-at="SOURCE_VERIFIED_AT"
+      note="※ 유종별 비교도 실제 할인 조건과 전월 실적 기준은 카드사 공식 안내를 우선합니다."
+    />
 
     <div class="retro-panel-muted p-4">
       <p class="text-caption font-semibold text-foreground mb-2">내 금액으로 직접 계산하기</p>

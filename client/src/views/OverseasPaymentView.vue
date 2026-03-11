@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
@@ -17,6 +18,7 @@ import { useOverseasCalc } from "@/composables/useOverseasCalc";
 import { SEO_CURRENCIES } from "@/data/exchangeRates";
 import { useResultShare } from "@/composables/useResultShare";
 import { buildAbsoluteUrl, buildQuery } from "@/lib/routeState";
+import { OVERSEAS_COMPARE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
 
 const {
   currency,
@@ -142,6 +144,12 @@ const {
     <OverseasFAQ />
 
     <AdSlot slot="overseas-bottom" label="해외결제 FAQ 하단" />
+
+    <CompareSourceFooter
+      :sources="OVERSEAS_COMPARE_SOURCES"
+      :updated-at="SOURCE_VERIFIED_AT"
+      note="※ 해외수수료 면제·적립 조건과 DCC 안내는 카드사 및 결제 설정에 따라 달라질 수 있으니 실제 결제 전 공식 안내를 확인하세요."
+    />
 
     <ShareModal
       :show="showShareModal"

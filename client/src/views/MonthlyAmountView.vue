@@ -5,11 +5,13 @@ import SEOHead from "@/components/common/SEOHead.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
+import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import TopCardList from "@/components/fuel-card/TopCardList.vue";
 import FeeCompareTable from "@/components/fuel-card/FeeCompareTable.vue";
 import FuelCardFAQ from "@/components/fuel-card/FuelCardFAQ.vue";
 import { FUEL_CARDS } from "@/data/fuelCards";
 import { FUEL_PRICES } from "@/data/fuelPrices";
+import { FUEL_COMPARE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
 import { calculateAllCards } from "@/utils/calculator";
 import type { SortKey } from "@/composables/useFuelCardCalc";
 
@@ -78,6 +80,12 @@ const summaryMessage = computed(() => {
     <FuelCardFAQ />
 
     <AdSlot slot="monthly-bottom" label="월금액 하단" />
+
+    <CompareSourceFooter
+      :sources="FUEL_COMPARE_SOURCES"
+      :updated-at="SOURCE_VERIFIED_AT"
+      note="※ 월 주유금액 기준 추천도 실제 연회비, 실적, 브랜드 제한은 각 카드사 공식 기준을 우선합니다."
+    />
 
     <div class="retro-panel-muted p-4">
       <p class="text-caption font-semibold text-foreground mb-2">내 금액으로 직접 계산하기</p>

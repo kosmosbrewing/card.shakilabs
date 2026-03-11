@@ -5,6 +5,7 @@ import SEOHead from "@/components/common/SEOHead.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
+import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import DCCCompareSection from "@/components/overseas/DCCCompareSection.vue";
 import OverseasBarChart from "@/components/overseas/OverseasBarChart.vue";
 import OverseasCompareTable from "@/components/overseas/OverseasCompareTable.vue";
@@ -19,6 +20,7 @@ import {
   parseCurrencyQueryValue,
 } from "@/data/exchangeRates";
 import { OVERSEAS_CARDS } from "@/data/overseasCards";
+import { OVERSEAS_COMPARE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
 import { calculateAllOverseasCards } from "@/utils/overseasCalculator";
 
 const props = defineProps<{
@@ -108,6 +110,12 @@ const summaryMessage = computed(() => {
     <AdSlot slot="overseas-currency-detail" label="통화별 비교" />
 
     <OverseasFAQ />
+
+    <CompareSourceFooter
+      :sources="OVERSEAS_COMPARE_SOURCES"
+      :updated-at="SOURCE_VERIFIED_AT"
+      note="※ 통화별 비교도 실제 환율 반영 시점, 해외결제 설정, 브랜드 수수료 정책에 따라 달라질 수 있습니다."
+    />
 
     <div class="retro-panel-muted p-4">
       <p class="mb-2 text-caption font-semibold text-foreground">내 금액으로 직접 계산하기</p>

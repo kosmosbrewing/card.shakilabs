@@ -85,7 +85,10 @@ const props = defineProps<{
 
         <!-- 전월 실적 -->
         <div class="text-muted-foreground">
-          전월 실적: {{ result.card.discount.minSpend.toLocaleString() }}원
+          전월 실적: {{ result.appliedMinSpend.toLocaleString() }}원
+          <template v-if="result.appliedTierLabel">
+            · {{ result.appliedTierLabel }}
+          </template>
         </div>
 
         <!-- 실적 미달 경고 -->
@@ -102,7 +105,7 @@ const props = defineProps<{
           v-if="result.isCapExceeded"
           class="text-status-warning"
         >
-          한도 초과 — 실제 할인은 월 {{ result.card.discount.monthlyCap.toLocaleString() }}원까지
+          한도 초과 — 실제 할인은 월 {{ result.appliedMonthlyCap.toLocaleString() }}원까지
         </div>
 
         <!-- 연회비 -->

@@ -36,27 +36,27 @@ function handleAmountInput(event: Event) {
     </div>
 
     <div class="retro-panel-content space-y-3">
-      <!-- 구매 금액: [−] input [+] -->
-      <div class="flex items-center gap-2">
+      <!-- 구매 금액: 인라인 스테퍼 [−|$ input|+] -->
+      <div class="flex items-stretch overflow-hidden rounded-xl border border-input bg-card">
         <button
           type="button"
-          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border text-lg font-bold text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+          class="shrink-0 px-2.5 text-base font-bold text-muted-foreground transition-colors hover:bg-muted/50 active:bg-muted"
           aria-label="$100 감소"
           @click="emit('update:purchaseAmountUsd', Math.max(MIN, purchaseAmountUsd - STEP))"
         >−</button>
-        <div class="relative flex-1">
+        <div class="relative min-w-0 flex-1">
           <span class="absolute left-3 top-1/2 -translate-y-1/2 text-body font-semibold text-muted-foreground">$</span>
           <input
             type="text"
             inputmode="decimal"
-            class="retro-input !pl-8 text-right tabular-nums"
+            class="w-full border-x border-input bg-transparent py-2.5 pl-8 pr-3 text-right text-body tabular-nums focus:outline-none"
             :value="purchaseAmountUsd.toLocaleString()"
             @input="handleAmountInput"
           />
         </div>
         <button
           type="button"
-          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border text-lg font-bold text-muted-foreground transition-colors hover:border-primary hover:text-primary"
+          class="shrink-0 px-2.5 text-base font-bold text-muted-foreground transition-colors hover:bg-muted/50 active:bg-muted"
           aria-label="$100 증가"
           @click="emit('update:purchaseAmountUsd', Math.min(MAX, purchaseAmountUsd + STEP))"
         >+</button>

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import SEOHead from "@/components/common/SEOHead.vue";
+import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
+import { ABOUT_PAGE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
 </script>
 
 <template>
@@ -28,12 +30,20 @@ import SEOHead from "@/components/common/SEOHead.vue";
         <ul class="list-disc pl-5 space-y-1 text-caption text-muted-foreground">
           <li>유가: Opinet(오피넷) 전국 평균가, 주 1회 수동 업데이트</li>
           <li>카드 혜택: 각 카드사 공식 사이트 기준, 변경 시 수동 업데이트</li>
+          <li>일부 계산은 대표 구간 기준으로 단순화되어, 카드사 원문과 1:1로 완전히 같지 않을 수 있습니다</li>
+          <li>각 계산기 하단의 `출처 및 기준` 카드에서 공식 링크를 바로 확인할 수 있습니다</li>
           <li>계산 결과는 참고용이며, 실제 할인은 카드사 기준을 확인하세요</li>
         </ul>
         <h2 class="text-heading font-bold">문의</h2>
         <p class="text-caption text-muted-foreground">
           오류 제보 및 제안은 shakilabs@gmail.com으로 보내주세요.
         </p>
+
+        <CompareSourceFooter
+          :sources="ABOUT_PAGE_SOURCES"
+          :updated-at="SOURCE_VERIFIED_AT"
+          note="※ 페이지별 계산 로직에 쓰는 상세 출처는 각 계산기 하단 카드에서 확인할 수 있습니다."
+        />
       </div>
     </div>
   </div>

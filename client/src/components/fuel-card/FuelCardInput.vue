@@ -49,48 +49,48 @@ function handleAmountInput(e: Event) {
       </button>
     </div>
     <div class="retro-panel-content space-y-3">
-      <!-- 유종 선택 -->
-      <div class="flex gap-1.5">
-        <button
-          v-for="ft in fuelTypes"
-          :key="ft"
-          type="button"
-          :class="[
-            'flex-1 rounded-lg border px-2.5 py-1.5 text-caption font-semibold transition-colors',
-            fuelType === ft
-              ? 'border-primary bg-primary/10 text-primary'
-              : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-          ]"
-          @click="emit('update:fuelType', ft)"
-        >
-          {{ FUEL_TYPE_LABELS[ft] }}
-        </button>
-      </div>
-
-      <!-- 금액 입력: [−] input [+] -->
+      <!-- 유종 + 금액 입력 (1행 병합) -->
       <div class="flex items-center gap-2">
-        <button
-          type="button"
-          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border text-lg font-bold text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-          aria-label="5만원 감소"
-          @click="emit('update:monthlySpend', Math.max(MIN, monthlySpend - STEP))"
-        >−</button>
-        <div class="relative flex-1">
-          <input
-            type="text"
-            inputmode="numeric"
-            class="retro-input !pr-10 text-right tabular-nums"
-            :value="monthlySpend.toLocaleString()"
-            @input="handleAmountInput"
-          />
-          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-caption text-muted-foreground">원</span>
+        <div class="flex shrink-0 gap-1">
+          <button
+            v-for="ft in fuelTypes"
+            :key="ft"
+            type="button"
+            :class="[
+              'rounded-lg border px-2.5 py-1.5 text-caption font-semibold transition-colors',
+              fuelType === ft
+                ? 'border-primary bg-primary/10 text-primary'
+                : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
+            ]"
+            @click="emit('update:fuelType', ft)"
+          >
+            {{ FUEL_TYPE_LABELS[ft] }}
+          </button>
         </div>
-        <button
-          type="button"
-          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border text-lg font-bold text-muted-foreground transition-colors hover:border-primary hover:text-primary"
-          aria-label="5만원 증가"
-          @click="emit('update:monthlySpend', Math.min(MAX, monthlySpend + STEP))"
-        >+</button>
+        <div class="flex flex-1 items-stretch overflow-hidden rounded-xl border border-input bg-card">
+          <button
+            type="button"
+            class="shrink-0 px-2.5 text-base font-bold text-muted-foreground transition-colors hover:bg-muted/50 active:bg-muted"
+            aria-label="5만원 감소"
+            @click="emit('update:monthlySpend', Math.max(MIN, monthlySpend - STEP))"
+          >−</button>
+          <div class="relative min-w-0 flex-1">
+            <input
+              type="text"
+              inputmode="numeric"
+              class="w-full border-x border-input bg-transparent px-3 py-2.5 text-right text-body tabular-nums focus:outline-none"
+              :value="monthlySpend.toLocaleString()"
+              @input="handleAmountInput"
+            />
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-caption text-muted-foreground">원</span>
+          </div>
+          <button
+            type="button"
+            class="shrink-0 px-2.5 text-base font-bold text-muted-foreground transition-colors hover:bg-muted/50 active:bg-muted"
+            aria-label="5만원 증가"
+            @click="emit('update:monthlySpend', Math.min(MAX, monthlySpend + STEP))"
+          >+</button>
+        </div>
       </div>
 
       <!-- 금액 슬라이더 -->

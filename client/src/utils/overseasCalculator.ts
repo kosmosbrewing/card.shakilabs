@@ -103,7 +103,9 @@ export function calculateAllOverseasCards(
 }
 
 export function formatFeeRate(card: OverseasCard): string {
-  if (card.fee.totalFeeRate <= 0) return "수수료 면제";
+  if (card.fee.totalFeeRate <= 0) {
+    return card.feeCondition ? "조건부 수수료 면제" : "수수료 면제";
+  }
   return `${(card.fee.totalFeeRate * 100).toFixed(1)}%`;
 }
 
@@ -133,6 +135,9 @@ export function formatPaymentBreakdown(result: OverseasCalcResult): string {
       ? `혜택 ${result.benefitAmount.toLocaleString()}원 적용 후 실부담 ${result.localCurrencyNet.toLocaleString()}원`
       : `혜택 차감 없이 실부담 ${result.localCurrencyNet.toLocaleString()}원`;
   const dccText = `DCC 선택 시 ${result.dccTotal.toLocaleString()}원으로 ${result.dccDifference.toLocaleString()}원 차이`;
+  const conditionText = result.card.feeCondition
+    ? ` ${result.card.feeCondition}.`
+    : "";
 
-  return `${feeText}, ${benefitText}. ${dccText}.`;
+  return `${feeText}, ${benefitText}. ${dccText}.${conditionText}`;
 }

@@ -2,7 +2,7 @@
 
 import { computed, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { FUEL_CARDS } from "@/data/fuelCards";
+import { FUEL_CARDS, getFuelCardMinimumSpend } from "@/data/fuelCards";
 import type { FuelType } from "@/data/fuelPrices";
 import {
   calculateAllCards,
@@ -66,7 +66,10 @@ export function useFuelCardCalc() {
         sorted.sort((a, b) => a.card.annualFee - b.card.annualFee);
         break;
       case "minSpend":
-        sorted.sort((a, b) => a.card.discount.minSpend - b.card.discount.minSpend);
+        sorted.sort(
+          (a, b) =>
+            getFuelCardMinimumSpend(a.card) - getFuelCardMinimumSpend(b.card)
+        );
         break;
     }
     return sorted;

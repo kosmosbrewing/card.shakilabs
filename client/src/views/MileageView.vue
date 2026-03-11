@@ -2,6 +2,7 @@
 import { RouterLink } from "vue-router";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import MileageDetailSection from "@/components/mileage/MileageDetailSection.vue";
 import MileageFAQ from "@/components/mileage/MileageFAQ.vue";
 import MileageInput from "@/components/mileage/MileageInput.vue";
@@ -9,6 +10,7 @@ import MileageRouteTable from "@/components/mileage/MileageRouteTable.vue";
 import MileageSummaryCard from "@/components/mileage/MileageSummaryCard.vue";
 import MileageValueChart from "@/components/mileage/MileageValueChart.vue";
 import { useMileageCalc } from "@/composables/useMileageCalc";
+import { MILEAGE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
 
 const {
   airlineId,
@@ -73,6 +75,12 @@ const faqJsonLd = {
     <MileageFAQ />
 
     <AdSlot slot="mileage-bottom" label="마일리지 FAQ 하단" />
+
+    <CompareSourceFooter
+      :sources="MILEAGE_SOURCES"
+      :updated-at="SOURCE_VERIFIED_AT"
+      note="※ 공제 마일은 공식 항공사 안내를 참고하고, 현금가 비교값은 서비스 내 예시 계산용 추정치입니다."
+    />
 
     <div class="space-y-3">
       <div class="section-heading-block">

@@ -2,6 +2,7 @@
 import { RouterLink } from "vue-router";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import DutyFreeBarChart from "@/components/duty-free/DutyFreeBarChart.vue";
 import DutyFreeFAQ from "@/components/duty-free/DutyFreeFAQ.vue";
 import DutyFreeInput from "@/components/duty-free/DutyFreeInput.vue";
@@ -9,6 +10,7 @@ import DutyFreeResult from "@/components/duty-free/DutyFreeResult.vue";
 import TaxBreakdownSection from "@/components/duty-free/TaxBreakdownSection.vue";
 import { useDutyFreeCalc } from "@/composables/useDutyFreeCalc";
 import { formatTaxBreakdown } from "@/utils/dutyFreeCalculator";
+import { DUTY_FREE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
 
 const { purchaseAmountUsd, category, result } = useDutyFreeCalc();
 
@@ -62,6 +64,12 @@ const faqJsonLd = {
     <DutyFreeFAQ />
 
     <AdSlot slot="duty-free-bottom" label="관세 FAQ 하단" />
+
+    <CompareSourceFooter
+      :sources="DUTY_FREE_SOURCES"
+      :updated-at="SOURCE_VERIFIED_AT"
+      note="※ 실제 세액은 통관 시점 환율, 세율, 품목 세번 분류, 자진신고 여부에 따라 달라질 수 있습니다."
+    />
 
     <div class="space-y-3">
       <div class="section-heading-block">

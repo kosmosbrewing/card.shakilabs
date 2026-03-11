@@ -31,7 +31,7 @@ export interface AirlineMileageData {
 export const AIRLINES: AirlineInfo[] = [
   { id: "korean-air", name: "대한항공", color: "#2563eb", alliance: "SkyTeam", mileageName: "스카이패스" },
   { id: "asiana", name: "아시아나항공", color: "#dc2626", alliance: "Star Alliance", mileageName: "아시아나클럽" },
-  { id: "card-mileage", name: "카드 마일리지", color: "#0f766e", alliance: "Transfer", mileageName: "전환형 포인트" },
+  { id: "card-mileage", name: "전환형 포인트(예시)", color: "#0f766e", alliance: "Transfer", mileageName: "카드 포인트 환산 예시" },
 ];
 
 export const SEAT_CLASS_LABELS: Record<SeatClass, string> = {

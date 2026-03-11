@@ -1,4 +1,8 @@
-import type { FuelCard } from "@/data/fuelCards";
+import {
+  getFuelCardMinimumSpend,
+  getFuelCardTierForSpend,
+  type FuelCard,
+} from "@/data/fuelCards";
 import { getFuelPrice, type FuelType } from "@/data/fuelPrices";
 import type { SpendingMap } from "@/data/spendingCategories";
 import { sumSpendingMap } from "@/data/spendingCategories";
@@ -15,6 +19,8 @@ export interface MinSpendCalcResult {
   card: FuelCard;
   totalSpending: number;
   minSpendRequired: number;
+  appliedMonthlyCap: number;
+  appliedTierLabel: string | null;
   isQualified: boolean;
   qualificationRate: number;
   gap: number;
@@ -40,13 +46,15 @@ export function calculateMinSpendCard(
   const fuelPrice = getFuelPrice(input.fuelType);
   const monthlyLiters = fuelPrice > 0 ? input.fuelSpend / fuelPrice : 0;
   const totalSpending = sumSpendingMap(input.spending) + input.fuelSpend;
+  const appliedTier = getFuelCardTierForSpend(card, totalSpending, true);
 
   const isBrandMismatch =
     card.discount.brandRestriction.length > 0 &&
     input.preferredBrand !== "all" &&
     !card.discount.brandRestriction.includes(input.preferredBrand);
 
-  const minSpendRequired = card.discount.minSpend;
+  const minSpendRequired = appliedTier?.minSpend ?? getFuelCardMinimumSpend(card);
+  const appliedMonthlyCap = appliedTier?.monthlyCap ?? card.discount.monthlyCap;
   const isQualified = totalSpending >= minSpendRequired;
   const gap = Math.max(0, minSpendRequired - totalSpending);
   const qualificationRate =
@@ -64,10 +72,10 @@ export function calculateMinSpendCard(
   }
 
   const isCapExceeded =
-    card.discount.monthlyCap > 0 && rawDiscount > card.discount.monthlyCap;
+    appliedMonthlyCap > 0 && rawDiscount > appliedMonthlyCap;
   const cappedDiscount =
-    card.discount.monthlyCap > 0
-      ? Math.min(rawDiscount, card.discount.monthlyCap)
+    appliedMonthlyCap > 0
+      ? Math.min(rawDiscount, appliedMonthlyCap)
       : rawDiscount;
 
   const monthlyDiscount = isQualified && !isBrandMismatch ? cappedDiscount : 0;
@@ -85,6 +93,8 @@ export function calculateMinSpendCard(
     card,
     totalSpending: roundWon(totalSpending),
     minSpendRequired,
+    appliedMonthlyCap,
+    appliedTierLabel: appliedTier?.label ?? null,
     isQualified,
     qualificationRate,
     gap: roundWon(gap),
@@ -119,12 +129,15 @@ export function formatGapAnalysis(result: MinSpendCalcResult): string {
   }
 
   if (result.isQualified) {
-    return `월 지출 ${result.totalSpending.toLocaleString()}원으로 실적 ${result.minSpendRequired.toLocaleString()}원을 충족했고, 순혜택은 ${result.monthlyNetBenefit.toLocaleString()}원입니다.`;
+    const tierText = result.appliedTierLabel
+      ? `${result.appliedTierLabel} 구간`
+      : `실적 ${result.minSpendRequired.toLocaleString()}원`;
+    return `월 지출 ${result.totalSpending.toLocaleString()}원으로 ${tierText}을 충족했고, 현재 한도 ${result.appliedMonthlyCap.toLocaleString()}원 기준 순혜택은 ${result.monthlyNetBenefit.toLocaleString()}원입니다.`;
   }
 
   const discountText = result.monthlyDiscount > 0
     ? `${result.monthlyDiscount.toLocaleString()}원`
     : `${Math.round(result.monthlyNetBenefit + result.monthlyAnnualFee).toLocaleString()}원`;
 
-  return `실적까지 ${result.gap.toLocaleString()}원 부족합니다. 충족 시 월 할인 ${discountText}, 추가 지출까지 감안한 순혜택은 ${result.netBenefitIncludingGap.toLocaleString()}원입니다.`;
+  return `실적까지 ${result.gap.toLocaleString()}원 부족합니다. 충족 시 현재 구간 한도 ${result.appliedMonthlyCap.toLocaleString()}원 기준 월 할인 ${discountText}, 추가 지출까지 감안한 순혜택은 ${result.netBenefitIncludingGap.toLocaleString()}원입니다.`;
 }

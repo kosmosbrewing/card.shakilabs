@@ -117,7 +117,10 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
               </td>
               <td class="px-3 py-2">{{ formatQualificationStatus(result) }}</td>
               <td class="px-3 py-2 text-right tabular-nums">{{ result.gap.toLocaleString() }}원</td>
-              <td class="px-3 py-2 text-right tabular-nums">{{ result.monthlyDiscount.toLocaleString() }}원</td>
+              <td class="px-3 py-2 text-right tabular-nums">
+                {{ result.monthlyDiscount.toLocaleString() }}원
+                <div class="text-tiny text-muted-foreground">한도 {{ result.appliedMonthlyCap.toLocaleString() }}원</div>
+              </td>
               <td
                 class="px-3 py-2 text-right font-semibold tabular-nums"
                 :class="result.netBenefitIncludingGap >= 0 ? 'text-savings' : 'text-loss'"

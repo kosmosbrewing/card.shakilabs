@@ -37,6 +37,15 @@ defineProps<{
             실적 {{ result.minSpendRequired.toLocaleString() }}원
           </span>
           <span class="rounded-full border border-border/60 bg-background/60 px-2 py-0.5 text-tiny text-muted-foreground">
+            현재 한도 {{ result.appliedMonthlyCap.toLocaleString() }}원
+          </span>
+          <span
+            v-if="result.appliedTierLabel"
+            class="rounded-full border border-border/60 bg-background/60 px-2 py-0.5 text-tiny text-muted-foreground"
+          >
+            {{ result.appliedTierLabel }}
+          </span>
+          <span class="rounded-full border border-border/60 bg-background/60 px-2 py-0.5 text-tiny text-muted-foreground">
             달성률 {{ (result.qualificationRate * 100).toFixed(0) }}%
           </span>
           <span

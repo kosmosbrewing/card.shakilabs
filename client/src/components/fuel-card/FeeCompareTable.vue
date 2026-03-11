@@ -68,10 +68,10 @@ const sortOptions: { key: SortKey; label: string }[] = [
               <div class="text-tiny text-muted-foreground">연 절약</div>
               <div class="text-caption font-semibold tabular-nums text-savings">▲ {{ r.annualNet.toLocaleString() }}원</div>
             </div>
-            <div>
-              <div class="text-tiny text-muted-foreground">실적</div>
-              <div class="text-caption font-semibold tabular-nums text-foreground">{{ r.card.discount.minSpend.toLocaleString() }}원</div>
-            </div>
+              <div>
+                <div class="text-tiny text-muted-foreground">실적</div>
+              <div class="text-caption font-semibold tabular-nums text-foreground">{{ r.appliedMinSpend.toLocaleString() }}원</div>
+              </div>
           </div>
         </div>
       </div>
@@ -133,7 +133,7 @@ const sortOptions: { key: SortKey; label: string }[] = [
                 {{ r.effectivePrice.toLocaleString() }}원
               </td>
               <td class="px-3 py-2 text-right tabular-nums">
-                {{ r.card.discount.minSpend.toLocaleString() }}원
+                {{ r.appliedMinSpend.toLocaleString() }}원
               </td>
               <td class="px-3 py-2 whitespace-nowrap">
                 <template v-if="r.card.discount.brandRestriction.length > 0">

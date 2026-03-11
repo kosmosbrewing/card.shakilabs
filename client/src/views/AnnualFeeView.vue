@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 
 import ShareModal from "@/components/share/ShareModal.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
@@ -17,6 +18,7 @@ import { useAnnualFeeCalc } from "@/composables/useAnnualFeeCalc";
 import { useResultShare } from "@/composables/useResultShare";
 import { buildAbsoluteUrl, buildQuery } from "@/lib/routeState";
 import { formatBreakEven, formatRoiRatio } from "@/utils/annualFeeCalculator";
+import { ANNUAL_FEE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
 
 const {
   spending,
@@ -134,6 +136,12 @@ const {
     <AnnualFeeFAQ />
 
     <AdSlot slot="annual-fee-bottom" label="연회비 FAQ 하단" />
+
+    <CompareSourceFooter
+      :sources="ANNUAL_FEE_SOURCES"
+      :updated-at="SOURCE_VERIFIED_AT"
+      note="※ 연회비와 실적 구간, 업종별 할인 한도는 자주 바뀌므로 발급 전 각 카드사 공식 안내를 다시 확인하세요."
+    />
 
     <ShareModal
       :show="showShareModal"

@@ -95,9 +95,12 @@ const progressTone = computed(() => {
         <div class="text-muted-foreground">
           {{ result.card.discount.type === 'perLiter' ? `리터당 ${result.card.discount.amount}원 할인` : `${(result.card.discount.amount * 100).toFixed(0)}% 할인` }}
           · 전월 실적 {{ result.minSpendRequired.toLocaleString() }}원
+          <template v-if="result.appliedTierLabel">
+            · {{ result.appliedTierLabel }}
+          </template>
         </div>
         <div v-if="!result.isQualified" class="text-muted-foreground">
-          실적 충족 시 월 {{ Math.round(result.monthlyNetBenefit + result.monthlyAnnualFee).toLocaleString() }}원 할인 가능
+          실적 충족 시 현재 한도 {{ result.appliedMonthlyCap.toLocaleString() }}원 기준 월 {{ Math.round(result.monthlyNetBenefit + result.monthlyAnnualFee).toLocaleString() }}원 할인 가능
         </div>
         <div
           v-if="!result.isQualified"

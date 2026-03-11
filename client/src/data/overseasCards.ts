@@ -29,6 +29,7 @@ export interface OverseasCard {
   category: OverseasCardCategory;
   annualFee: number;
   fee: OverseasFee;
+  feeCondition?: string;
   benefits: OverseasBenefit[];
   extras: string[];
   summary: string;
@@ -161,6 +162,7 @@ export const OVERSEAS_CARDS: OverseasCard[] = [
     category: "credit",
     annualFee: 20000,
     fee: buildFee(0, 0, ["visa", "mastercard"]),
+    feeCondition: "해외결제를 외화 하나머니로 선택한 경우 기준",
     benefits: [
       {
         type: "point",
@@ -171,8 +173,8 @@ export const OVERSEAS_CARDS: OverseasCard[] = [
         minSpend: 400000,
       },
     ],
-    extras: ["환전/인출 우대", "여행 특화 부가혜택"],
-    summary: "수수료 면제와 높은 적립률을 함께 노릴 수 있는 해외 특화 카드",
+    extras: ["외화 하나머니 결제 선택 필요", "환전/인출 우대", "여행 특화 부가혜택"],
+    summary: "조건을 맞추면 해외수수료를 크게 줄일 수 있는 여행 특화 카드",
   },
   {
     id: "hana-travelog-debit",

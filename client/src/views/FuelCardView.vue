@@ -3,6 +3,7 @@ import { computed } from "vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
+import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FuelCardInput from "@/components/fuel-card/FuelCardInput.vue";
 import TopCardList from "@/components/fuel-card/TopCardList.vue";
 import FeeCompareTable from "@/components/fuel-card/FeeCompareTable.vue";
@@ -15,6 +16,7 @@ import { useShare } from "@/composables/useShare";
 import { FUEL_TYPE_LABELS } from "@/data/fuelPrices";
 import { RouterLink } from "vue-router";
 import { ISSUER_DISPLAY_NAME } from "@/data/fuelCards";
+import { FUEL_COMPARE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
 
 const {
   fuelType,
@@ -139,6 +141,12 @@ const monthlyLinks = [
 
     <!-- 광고 하단 -->
     <AdSlot slot="fuel-card-bottom" label="FAQ 하단" />
+
+    <CompareSourceFooter
+      :sources="FUEL_COMPARE_SOURCES"
+      :updated-at="SOURCE_VERIFIED_AT"
+      note="※ 유가와 카드 혜택은 수시로 바뀌므로 실제 할인 조건과 연회비는 각 카드사 공식 페이지를 다시 확인하세요."
+    />
 
     <ShareModal
       :show="showShareModal"

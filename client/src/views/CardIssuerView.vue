@@ -4,13 +4,16 @@ import { RouterLink } from "vue-router";
 import SEOHead from "@/components/common/SEOHead.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
+import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import CardDetailSection from "@/components/fuel-card/CardDetailSection.vue";
 import {
   FUEL_CARDS,
+  formatFuelCardTierSummary,
   ISSUER_SLUG_MAP,
   ISSUER_DISPLAY_NAME,
 } from "@/data/fuelCards";
 import { FUEL_PRICES, type FuelType } from "@/data/fuelPrices";
+import { FUEL_COMPARE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
 import { calculateCardSavings, formatDiscountType } from "@/utils/calculator";
 
 const props = defineProps<{
@@ -69,10 +72,7 @@ const seoDescription = computed(
           </div>
           <p class="text-caption text-muted-foreground">
             {{ formatDiscountType(card) }}
-            <template v-if="card.discount.monthlyCap > 0">
-              · 월 한도 {{ card.discount.monthlyCap.toLocaleString() }}원
-            </template>
-            · 전월 실적 {{ card.discount.minSpend.toLocaleString() }}원
+            · {{ formatFuelCardTierSummary(card) }}
             <template v-if="card.discount.brandRestriction.length > 0">
               · {{ card.discount.brandRestriction.join(', ') }} 전용
             </template>
@@ -124,6 +124,12 @@ const seoDescription = computed(
     </div>
 
     <AdSlot slot="issuer-detail" label="카드사 상세" />
+
+    <CompareSourceFooter
+      :sources="FUEL_COMPARE_SOURCES"
+      :updated-at="SOURCE_VERIFIED_AT"
+      note="※ 카드사별 상세 요약도 실제 상품 페이지의 실적, 한도, 브랜드 제한을 우선 확인해야 합니다."
+    />
 
     <!-- 다른 카드와 비교 링크 -->
     <div class="retro-panel-muted p-4 space-y-2">
