@@ -27,7 +27,7 @@ defineProps<{
           <p class="tabular-nums text-muted-foreground">
             + 해외수수료 {{ result.cardFeeAmount.toLocaleString() }}원
           </p>
-          <p class="tabular-nums text-emerald-600 dark:text-emerald-400">
+          <p class="tabular-nums text-savings">
             - 혜택 {{ result.benefitAmount.toLocaleString() }}원
           </p>
           <p class="border-t border-border/60 pt-2 text-heading font-bold tabular-nums text-foreground">
@@ -55,7 +55,7 @@ defineProps<{
       </div>
     </div>
 
-    <div class="border-t border-border/60 bg-rose-50/60 px-4 py-3 text-body font-semibold text-rose-700 dark:bg-rose-950/20 dark:text-rose-300 sm:px-5">
+    <div class="border-t border-border/60 bg-loss/10 px-4 py-3 text-body font-semibold text-loss sm:px-5">
       {{ currencyCode }} 결제를 DCC로 바꾸면 {{ result.dccDifference.toLocaleString() }}원({{ (result.dccDifferenceRate * 100).toFixed(1) }}%) 더 비쌉니다.
     </div>
   </div>

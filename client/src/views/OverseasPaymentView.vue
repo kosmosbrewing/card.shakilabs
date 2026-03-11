@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import SEOHead from "@/components/common/SEOHead.vue";
+import ShareModal from "@/components/share/ShareModal.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import DCCCompareSection from "@/components/overseas/DCCCompareSection.vue";
@@ -11,8 +12,11 @@ import OverseasDetailSection from "@/components/overseas/OverseasDetailSection.v
 import OverseasFAQ from "@/components/overseas/OverseasFAQ.vue";
 import OverseasInput from "@/components/overseas/OverseasInput.vue";
 import OverseasTopCardList from "@/components/overseas/OverseasTopCardList.vue";
+import { DCC_MARKUP, getCurrencyQueryValue } from "@/data/exchangeRates";
 import { useOverseasCalc } from "@/composables/useOverseasCalc";
-import { SEO_CURRENCIES, getCurrencyQueryValue } from "@/data/exchangeRates";
+import { SEO_CURRENCIES } from "@/data/exchangeRates";
+import { useResultShare } from "@/composables/useResultShare";
+import { buildAbsoluteUrl, buildQuery } from "@/lib/routeState";
 
 const {
   currency,
@@ -66,6 +70,33 @@ const currencyLinks = SEO_CURRENCIES.map((item) => {
     to: `/overseas-payment/${getCurrencyQueryValue(item)}`,
   };
 });
+
+const {
+  showShareModal,
+  kakaoBusy,
+  shareSummary,
+  openShare,
+  closeShare,
+  shareKakao,
+  copyLink,
+} = useResultShare({
+  page: "overseas-payment",
+  summaryText: () => summaryMessage.value,
+  shareUrl: () => buildAbsoluteUrl("/overseas-payment", buildQuery({
+    currency: currency.value !== "USD" ? getCurrencyQueryValue(currency.value) : undefined,
+    amount: foreignAmount.value !== 100 ? foreignAmount.value : undefined,
+    dcc:
+      Math.abs(dccMarkupRate.value - DCC_MARKUP.defaultRate) > 0.0001
+        ? Math.round(dccMarkupRate.value * 1000) / 10
+        : undefined,
+  })),
+  shareTitle: () => {
+    if (!bestCard.value) return "해외결제 카드 비교 계산기";
+    return `${bestCard.value.card.issuer} ${bestCard.value.card.name} 해외결제 비교`;
+  },
+  shareDescription: () => "현지통화 결제와 DCC 원화결제 차이를 카드별로 비교합니다.",
+  buttonTitle: "해외결제 비교 보기",
+});
 </script>
 
 <template>
@@ -79,6 +110,7 @@ const currencyLinks = SEO_CURRENCIES.map((item) => {
       @update:currency="currency = $event"
       @update:foreign-amount="foreignAmount = $event"
       @update:dcc-markup-rate="dccMarkupRate = $event"
+      @share-request="openShare"
     />
 
     <OverseasTopCardList v-if="topCards.length > 0" :cards="topCards" />
@@ -111,9 +143,18 @@ const currencyLinks = SEO_CURRENCIES.map((item) => {
 
     <AdSlot slot="overseas-bottom" label="해외결제 FAQ 하단" />
 
+    <ShareModal
+      :show="showShareModal"
+      :kakao-busy="kakaoBusy"
+      :summary-text="shareSummary"
+      @close="closeShare"
+      @share-kakao="shareKakao"
+      @copy-link="copyLink"
+    />
+
     <div class="space-y-3">
       <div class="section-heading-block">
-        <h2 class="section-title">통화별 바로가기</h2>
+        <h2 class="section-title">통화별 바로가기 / 다른 계산기</h2>
       </div>
       <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <RouterLink
@@ -123,6 +164,36 @@ const currencyLinks = SEO_CURRENCIES.map((item) => {
           class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
         >
           {{ link.code }} 카드 비교
+        </RouterLink>
+        <RouterLink
+          to="/annual-fee"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+        >
+          연회비 회수 계산기
+        </RouterLink>
+        <RouterLink
+          to="/duty-free"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+        >
+          관세 계산기
+        </RouterLink>
+        <RouterLink
+          to="/mileage"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+        >
+          마일리지 가치 계산기
+        </RouterLink>
+        <RouterLink
+          to="/fuel-card"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+        >
+          주유 할인카드 비교
+        </RouterLink>
+        <RouterLink
+          to="/min-spend"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+        >
+          전월 실적 계산기
         </RouterLink>
       </div>
     </div>

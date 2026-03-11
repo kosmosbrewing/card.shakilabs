@@ -30,8 +30,7 @@
 
 @font-face {
   font-family: "GmarketSans";
-  src: url("/fonts/GmarketSansBold-subset-v2.woff2") format("woff2"),
-       url("/fonts/GmarketSansBold.woff") format("woff");
+  src: url("/fonts/GmarketSansBold.woff") format("woff");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -42,22 +41,6 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --status-success: 148 61% 36%;
-    --status-warning: 43 88% 43%;
-    --status-caution: 28 82% 48%;
-    --status-danger: 0 70% 52%;
-    --status-info: 212 83% 45%;
-  }
-
-  .dark {
-    --status-success: 148 63% 66%;
-    --status-warning: 43 95% 70%;
-    --status-caution: 28 91% 66%;
-    --status-danger: 0 86% 73%;
-    --status-info: 205 90% 72%;
-  }
-
   * {
     @apply border-border;
   }
@@ -123,7 +106,12 @@
   }
 
   .retro-title {
-    @apply text-heading font-semibold tracking-normal font-brand;
+    @apply text-heading font-semibold tracking-normal font-title;
+  }
+
+  /* Gmarket Sans는 로고나 아주 짧은 강조 타이틀에만 사용한다. */
+  .retro-title-brand {
+    @apply text-heading font-bold tracking-normal font-brand;
   }
 
   .retro-kbd {
@@ -259,6 +247,36 @@
     @apply inline-flex items-center justify-center rounded-lg border border-border/70 bg-card px-3 py-2 text-body font-medium text-foreground transition-all duration-200 hover:border-primary/50 hover:text-primary hover:scale-[1.02];
   }
 
+  .retro-range {
+    -webkit-appearance: none;
+    appearance: none;
+    @apply h-2 w-full rounded-full bg-primary/20 outline-none;
+  }
+
+  .retro-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    @apply h-4 w-4 rounded-full border-2 border-primary-foreground bg-primary shadow;
+    margin-top: -4px;
+  }
+
+  .retro-range::-webkit-slider-runnable-track {
+    @apply h-2 rounded-full bg-primary/20;
+  }
+
+  .retro-range::-moz-range-thumb {
+    @apply h-4 w-4 rounded-full border-2 border-primary-foreground bg-primary shadow;
+  }
+
+  .retro-range::-moz-range-track {
+    @apply h-2 rounded-full bg-primary/20;
+  }
+
+  .retro-range:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
   .retro-chip {
     @apply inline-flex items-center text-caption font-medium text-muted-foreground;
   }
@@ -292,7 +310,7 @@
   }
 
   .section-eyebrow {
-    @apply inline-flex w-fit items-center rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-primary;
+    @apply inline-flex w-fit items-center rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-tiny font-bold uppercase tracking-[0.14em] text-primary;
   }
 
   .section-title {

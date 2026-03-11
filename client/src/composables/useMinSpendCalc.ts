@@ -108,7 +108,9 @@ export function useMinSpendCalc() {
         const spendingQuery = Object.fromEntries(
           SPENDING_CATEGORIES.map((category) => [
             category.id,
-            spending.value[category.id] > 0 ? spending.value[category.id] : undefined,
+            spending.value[category.id] !== category.defaultAmount
+              ? spending.value[category.id]
+              : undefined,
           ])
         );
 

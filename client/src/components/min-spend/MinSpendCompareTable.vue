@@ -30,7 +30,7 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
           :key="option.key"
           type="button"
           :class="[
-            'rounded-lg border px-2 py-1 text-tiny font-medium transition-colors',
+            'touch-target rounded-lg border px-2 py-1 text-tiny font-medium transition-colors',
             sortKey === option.key
               ? 'border-primary bg-primary/10 text-primary'
               : 'border-border/70 text-muted-foreground hover:text-primary',
@@ -43,8 +43,48 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
     </div>
 
     <div class="retro-panel-content">
-      <div class="overflow-x-auto -mx-4 sm:-mx-5">
-        <table class="w-full text-caption">
+      <div class="space-y-2 md:hidden">
+        <div
+          v-for="(result, idx) in results"
+          :key="`${result.cardId}-mobile`"
+          :class="[
+            'rounded-xl border p-3',
+            idx === 0 ? 'border-savings/30 bg-savings/10' : 'border-border/60 bg-background/60',
+          ]"
+        >
+          <div class="flex items-center justify-between gap-3">
+            <span class="text-caption font-semibold text-foreground">{{ idx === 0 ? "🏆 1위" : `${idx + 1}위` }}</span>
+            <span class="text-tiny text-muted-foreground">{{ result.card.issuer }} {{ result.card.name }}</span>
+          </div>
+          <div class="mt-2 grid grid-cols-3 gap-2">
+            <div>
+              <div class="text-tiny text-muted-foreground">실적 상태</div>
+              <div class="text-caption font-semibold text-foreground">{{ formatQualificationStatus(result) }}</div>
+            </div>
+            <div>
+              <div class="text-tiny text-muted-foreground">부족액</div>
+              <div class="text-caption font-semibold tabular-nums text-foreground">{{ result.gap.toLocaleString() }}원</div>
+            </div>
+            <div>
+              <div class="text-tiny text-muted-foreground">순혜택</div>
+              <div class="text-caption font-semibold tabular-nums" :class="result.netBenefitIncludingGap >= 0 ? 'text-savings' : 'text-loss'">
+                {{ result.netBenefitIncludingGap >= 0 ? '▲' : '▼' }} {{ Math.abs(result.netBenefitIncludingGap).toLocaleString() }}원
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hidden overflow-x-auto -mx-4 sm:-mx-5 md:block">
+        <table class="w-full table-fixed text-caption">
+          <colgroup>
+            <col class="w-[8%]" />
+            <col class="w-[24%]" />
+            <col class="w-[20%]" />
+            <col class="w-[14%]" />
+            <col class="w-[14%]" />
+            <col class="w-[20%]" />
+          </colgroup>
           <thead>
             <tr class="border-b border-border bg-muted/30">
               <th class="px-3 py-2 text-left font-semibold">순위</th>
@@ -59,7 +99,10 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
             <tr
               v-for="(result, idx) in results"
               :key="result.cardId"
-              class="border-b border-border/50 transition-colors hover:bg-accent/20"
+              :class="[
+                'border-b border-border/50 transition-colors',
+                idx === 0 ? 'bg-savings/10 hover:bg-savings/15' : 'hover:bg-accent/20',
+              ]"
             >
               <td class="px-3 py-2 font-bold tabular-nums">{{ idx === 0 ? "🏆" : idx + 1 }}</td>
               <td class="px-3 py-2">
@@ -77,9 +120,9 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
               <td class="px-3 py-2 text-right tabular-nums">{{ result.monthlyDiscount.toLocaleString() }}원</td>
               <td
                 class="px-3 py-2 text-right font-semibold tabular-nums"
-                :class="result.netBenefitIncludingGap >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'"
+                :class="result.netBenefitIncludingGap >= 0 ? 'text-savings' : 'text-loss'"
               >
-                {{ result.netBenefitIncludingGap.toLocaleString() }}원
+                {{ result.netBenefitIncludingGap >= 0 ? '▲' : '▼' }} {{ Math.abs(result.netBenefitIncludingGap).toLocaleString() }}원
               </td>
             </tr>
           </tbody>

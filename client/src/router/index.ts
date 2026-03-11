@@ -60,6 +60,24 @@ const routes: RouteRecordRaw[] = [
     meta: { title: "전월 실적 채우기 최소 비용 계산기 | Car Tools 2026" },
   },
   {
+    path: "/annual-fee",
+    name: "AnnualFee",
+    component: () => import("@/views/AnnualFeeView.vue"),
+    meta: { title: "연회비 회수 계산기 | Car Tools 2026" },
+  },
+  {
+    path: "/duty-free",
+    name: "DutyFree",
+    component: () => import("@/views/DutyFreeView.vue"),
+    meta: { title: "면세 한도 초과 관세 계산기 | Car Tools 2026" },
+  },
+  {
+    path: "/mileage",
+    name: "Mileage",
+    component: () => import("@/views/MileageView.vue"),
+    meta: { title: "마일리지 가치 계산기 | Car Tools 2026" },
+  },
+  {
     path: "/about",
     name: "About",
     component: () => import("@/views/AboutView.vue"),

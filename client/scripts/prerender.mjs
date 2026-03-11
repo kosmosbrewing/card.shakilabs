@@ -203,6 +203,69 @@ function buildMeta(route) {
     };
   }
 
+  if (route === "/annual-fee") {
+    const title = "연회비 회수 계산기 | 카드 혜택 vs 연회비 손익분석 2026";
+    const description = "월 소비 패턴을 기준으로 카드별 연회비 회수 기간, 연 순혜택, ROI를 비교하는 계산기입니다.";
+    const canonical = `${SITE_URL}/annual-fee`;
+
+    return {
+      title,
+      description,
+      canonical,
+      appPath: "/annual-fee",
+      jsonLd: [
+        { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
+        { "@context": "https://schema.org", "@type": "WebApplication", name: title, url: canonical, applicationCategory: "FinanceApplication", operatingSystem: "Any", inLanguage: "ko", offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" } },
+      ],
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "연회비 회수 계산기" },
+      ]),
+    };
+  }
+
+  if (route === "/duty-free") {
+    const title = "면세 한도 초과 관세 계산기 | 해외쇼핑 관세·부가세 자동 계산 2026";
+    const description = "구매 금액과 물품 카테고리를 입력하면 800달러 초과분에 대한 예상 관세와 부가세를 계산합니다.";
+    const canonical = `${SITE_URL}/duty-free`;
+
+    return {
+      title,
+      description,
+      canonical,
+      appPath: "/duty-free",
+      jsonLd: [
+        { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
+        { "@context": "https://schema.org", "@type": "WebApplication", name: title, url: canonical, applicationCategory: "FinanceApplication", operatingSystem: "Any", inLanguage: "ko", offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" } },
+      ],
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "관세 계산기" },
+      ]),
+    };
+  }
+
+  if (route === "/mileage") {
+    const title = "마일리지 가치 계산기 | 1마일 원화 가치 · 좌석등급별 가성비 비교 2026";
+    const description = "항공사별 마일리지 사용처를 비교해 1마일당 원화 가치와 최적 노선을 계산합니다.";
+    const canonical = `${SITE_URL}/mileage`;
+
+    return {
+      title,
+      description,
+      canonical,
+      appPath: "/mileage",
+      jsonLd: [
+        { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
+        { "@context": "https://schema.org", "@type": "WebApplication", name: title, url: canonical, applicationCategory: "FinanceApplication", operatingSystem: "Any", inLanguage: "ko", offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" } },
+      ],
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "마일리지 가치 계산기" },
+      ]),
+    };
+  }
+
   if (route === "/about") {
     const title = "서비스 안내 | Car Tools";
     const description = "주유 할인카드와 해외결제 카드를 비교해 실질 비용을 계산하는 도구입니다.";

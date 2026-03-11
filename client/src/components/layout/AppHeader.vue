@@ -38,13 +38,13 @@ onMounted(() => {
               <span class="inline-flex h-6 w-6 items-center justify-center rounded-md bg-muted/60 ring-1 ring-border/60" aria-hidden="true">
                 <img src="/favicon.png" alt="" class="h-4 w-4 shrink-0" />
               </span>
-              <span class="hidden sm:inline font-brand text-tiny font-semibold tracking-wide text-foreground/90">
+              <span class="hidden sm:inline font-brand text-tiny font-bold tracking-wide text-foreground/90">
                 Car Tools
               </span>
             </RouterLink>
 
             <!-- 티커 -->
-            <div class="flex h-full flex-1 items-center justify-center text-center font-brand text-caption sm:text-body overflow-hidden">
+            <div class="flex h-full flex-1 items-center justify-center overflow-hidden text-center font-title text-caption font-semibold sm:text-body">
               <TickerBar :messages="tickerMessages" />
             </div>
 

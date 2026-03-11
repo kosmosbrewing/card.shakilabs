@@ -35,16 +35,16 @@ const maxMagnitude = computed(() => {
         <div class="h-6 flex-1 overflow-hidden rounded-md bg-muted/50">
           <div
             class="h-full rounded-md transition-all duration-500 ease-out"
-            :class="result.netBenefitIncludingGap >= 0 ? 'bg-emerald-500/80' : 'bg-red-400/80'"
+            :class="result.netBenefitIncludingGap >= 0 ? 'bg-savings/80' : 'bg-loss/80'"
             :style="{ width: `${Math.max((Math.abs(result.netBenefitIncludingGap) / maxMagnitude) * 100, 2)}%` }"
           />
         </div>
 
         <div
           class="w-24 shrink-0 text-right text-caption font-bold tabular-nums"
-          :class="result.netBenefitIncludingGap >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'"
+          :class="result.netBenefitIncludingGap >= 0 ? 'text-savings' : 'text-loss'"
         >
-          {{ result.netBenefitIncludingGap.toLocaleString() }}원
+          {{ result.netBenefitIncludingGap >= 0 ? '▲' : '▼' }} {{ Math.abs(result.netBenefitIncludingGap).toLocaleString() }}원
         </div>
       </div>
     </div>

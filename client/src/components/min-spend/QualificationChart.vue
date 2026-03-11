@@ -6,9 +6,9 @@ defineProps<{
 }>();
 
 function progressClass(rate: number) {
-  if (rate >= 1) return "bg-emerald-500/80";
-  if (rate >= 0.8) return "bg-amber-500/80";
-  return "bg-red-400/80";
+  if (rate >= 1) return "bg-savings/80";
+  if (rate >= 0.8) return "bg-status-warning/80";
+  return "bg-loss/80";
 }
 </script>
 
@@ -40,8 +40,11 @@ function progressClass(rate: number) {
           />
         </div>
 
-        <div class="w-28 shrink-0 text-right text-caption tabular-nums text-foreground">
-          {{ (result.qualificationRate * 100).toFixed(0) }}%
+        <div
+          class="w-28 shrink-0 text-right text-caption tabular-nums"
+          :class="result.qualificationRate >= 1 ? 'text-savings' : result.qualificationRate >= 0.8 ? 'text-status-warning' : 'text-loss'"
+        >
+          {{ result.qualificationRate >= 1 ? '▲' : '▼' }} {{ (result.qualificationRate * 100).toFixed(0) }}%
         </div>
       </div>
     </div>

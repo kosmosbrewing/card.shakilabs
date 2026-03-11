@@ -112,7 +112,7 @@ const seoDescription = computed(
                 v-for="r in sim.results"
                 :key="r.cardId"
                 class="px-3 py-2 text-right tabular-nums"
-                :class="r.annualNet > 0 ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-red-500'"
+                :class="r.annualNet > 0 ? 'text-savings font-semibold' : 'text-loss'"
               >
                 연 {{ r.annualNet.toLocaleString() }}원
               </td>
@@ -126,14 +126,46 @@ const seoDescription = computed(
     <AdSlot slot="issuer-detail" label="카드사 상세" />
 
     <!-- 다른 카드와 비교 링크 -->
-    <div class="retro-panel-muted p-4">
-      <p class="text-caption font-semibold text-foreground mb-2">다른 카드와 비교하기</p>
-      <RouterLink
-        to="/fuel-card"
-        class="retro-link text-caption"
-      >
-        전체 카드 비교 계산기로 이동 →
-      </RouterLink>
+    <div class="retro-panel-muted p-4 space-y-2">
+      <p class="text-caption font-semibold text-foreground">다른 카드와 비교하기</p>
+      <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
+        <RouterLink
+          to="/fuel-card"
+          class="retro-link text-caption"
+        >
+          전체 카드 비교
+        </RouterLink>
+        <RouterLink
+          to="/annual-fee"
+          class="retro-link text-caption"
+        >
+          연회비 회수 계산기
+        </RouterLink>
+        <RouterLink
+          to="/min-spend"
+          class="retro-link text-caption"
+        >
+          전월 실적 계산기
+        </RouterLink>
+        <RouterLink
+          to="/overseas-payment"
+          class="retro-link text-caption"
+        >
+          해외결제 카드 비교
+        </RouterLink>
+        <RouterLink
+          to="/duty-free"
+          class="retro-link text-caption"
+        >
+          관세 계산기
+        </RouterLink>
+        <RouterLink
+          to="/mileage"
+          class="retro-link text-caption"
+        >
+          마일리지 가치 계산기
+        </RouterLink>
+      </div>
     </div>
   </div>
 </template>

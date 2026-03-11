@@ -57,7 +57,7 @@ function handleAction(action: "kakao" | "link"): void {
         <div class="absolute inset-0 bg-black/60" @click="emit('close')" />
         <div class="relative z-10 w-full max-w-sm mx-4 retro-panel border border-border">
           <div class="retro-titlebar flex items-center justify-between">
-            <h3 id="share-modal-title" class="retro-title text-[1rem]!">공유하기</h3>
+            <h3 id="share-modal-title" class="retro-title">공유하기</h3>
             <button
               class="inline-flex items-center justify-center rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
               aria-label="공유 모달 닫기"
@@ -86,7 +86,7 @@ function handleAction(action: "kakao" | "link"): void {
                   aria-hidden="true"
                   class="h-6 w-6 object-contain"
                 />
-                <span class="text-[0.72rem] font-bold text-center leading-tight whitespace-nowrap">카카오톡 공유</span>
+                <span class="text-tiny font-bold text-center leading-tight whitespace-nowrap">카카오톡 공유</span>
               </button>
 
               <!-- 링크 복사 -->
@@ -96,7 +96,7 @@ function handleAction(action: "kakao" | "link"): void {
                 @click="handleAction('link')"
               >
                 <Link class="h-6 w-6 text-muted-foreground" />
-                <span class="text-[0.72rem] font-bold text-center leading-tight whitespace-nowrap">링크 복사</span>
+                <span class="text-tiny font-bold text-center leading-tight whitespace-nowrap">링크 복사</span>
               </button>
             </div>
           </div>
@@ -107,10 +107,6 @@ function handleAction(action: "kakao" | "link"): void {
 </template>
 
 <style scoped>
-.retro-title {
-  font-size: 1rem !important;
-}
-
 .modal-fade-enter-active,
 .modal-fade-leave-active {
   transition: opacity 0.2s ease, transform 0.2s ease;

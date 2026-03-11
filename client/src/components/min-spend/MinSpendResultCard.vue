@@ -11,9 +11,9 @@ const props = defineProps<{
 
 const progressWidth = computed(() => `${Math.max(props.result.qualificationRate * 100, 4)}%`);
 const progressTone = computed(() => {
-  if (props.result.qualificationRate >= 1) return "bg-emerald-500/80";
-  if (props.result.qualificationRate >= 0.8) return "bg-amber-500/80";
-  return "bg-red-400/80";
+  if (props.result.qualificationRate >= 1) return "bg-savings/80";
+  if (props.result.qualificationRate >= 0.8) return "bg-status-warning/80";
+  return "bg-loss/80";
 });
 </script>
 
@@ -59,7 +59,7 @@ const progressTone = computed(() => {
         </div>
         <div
           class="flex items-center gap-1 text-caption"
-          :class="result.isQualified ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'"
+          :class="result.isQualified ? 'text-savings' : 'text-status-warning'"
         >
           <CheckCircle2 v-if="result.isQualified" class="h-3.5 w-3.5" />
           <AlertTriangle v-else class="h-3.5 w-3.5" />
@@ -70,7 +70,7 @@ const progressTone = computed(() => {
       <div class="grid grid-cols-3 gap-2">
         <div class="text-center">
           <div class="text-tiny text-muted-foreground">월 할인</div>
-          <div class="text-heading font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
+          <div class="text-heading font-bold tabular-nums text-savings">
             {{ result.monthlyDiscount.toLocaleString() }}원
           </div>
         </div>
@@ -84,9 +84,9 @@ const progressTone = computed(() => {
           <div class="text-tiny text-muted-foreground">순 혜택</div>
           <div
             class="text-heading font-bold tabular-nums"
-            :class="result.netBenefitIncludingGap >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'"
+            :class="result.netBenefitIncludingGap >= 0 ? 'text-savings' : 'text-loss'"
           >
-            {{ result.netBenefitIncludingGap.toLocaleString() }}원
+            {{ result.netBenefitIncludingGap >= 0 ? '▲' : '▼' }} {{ Math.abs(result.netBenefitIncludingGap).toLocaleString() }}원
           </div>
         </div>
       </div>
@@ -101,9 +101,9 @@ const progressTone = computed(() => {
         </div>
         <div
           v-if="!result.isQualified"
-          :class="result.netBenefitIncludingGap >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'"
+          :class="result.netBenefitIncludingGap >= 0 ? 'text-savings' : 'text-loss'"
         >
-          추가 {{ result.gap.toLocaleString() }}원 지출 감안 → 순혜택 {{ result.netBenefitIncludingGap.toLocaleString() }}원
+          추가 {{ result.gap.toLocaleString() }}원 지출 감안 → 순혜택 {{ result.netBenefitIncludingGap >= 0 ? '▲' : '▼' }} {{ Math.abs(result.netBenefitIncludingGap).toLocaleString() }}원
         </div>
       </div>
     </div>

@@ -13,6 +13,9 @@ function resolvePriority(route) {
   if (route === "/fuel-card") return "1.0";
   if (route === "/overseas-payment") return "0.9";
   if (route === "/min-spend") return "0.9";
+  if (route === "/annual-fee") return "0.9";
+  if (route === "/duty-free") return "0.9";
+  if (route === "/mileage") return "0.9";
   if (/^\/fuel-card\/(hyundai|shinhan|kb|samsung|lotte|hana)$/.test(route)) return "0.8";
   if (/^\/overseas-payment\/(usd|eur|jpy|gbp|cny|thb|vnd)$/.test(route)) return "0.8";
   if (/^\/fuel-card\/(gasoline|diesel)$/.test(route)) return "0.7";
@@ -24,6 +27,9 @@ function resolveChangeFreq(route) {
   if (route === "/fuel-card") return "weekly";
   if (route === "/overseas-payment") return "weekly";
   if (route === "/min-spend") return "weekly";
+  if (route === "/annual-fee") return "weekly";
+  if (route === "/duty-free") return "weekly";
+  if (route === "/mileage") return "weekly";
   if (/^\/fuel-card\/(gasoline|diesel)$/.test(route)) return "weekly";
   if (/^\/fuel-card\/(hyundai|shinhan|kb|samsung|lotte|hana)$/.test(route)) return "monthly";
   if (/^\/overseas-payment\/(usd|eur|jpy|gbp|cny|thb|vnd)$/.test(route)) return "weekly";

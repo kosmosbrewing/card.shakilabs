@@ -8,6 +8,9 @@ const tabs = [
   { key: "fuel-card", label: "주유 할인카드", to: "/fuel-card" },
   { key: "overseas-payment", label: "해외결제 비교", to: "/overseas-payment" },
   { key: "min-spend", label: "실적 채우기", to: "/min-spend" },
+  { key: "annual-fee", label: "연회비 회수", to: "/annual-fee" },
+  { key: "duty-free", label: "관세 계산", to: "/duty-free" },
+  { key: "mileage", label: "마일리지 가치", to: "/mileage" },
 ] as const;
 
 const activePath = computed(() => route.path);
@@ -16,6 +19,9 @@ function isActiveTab(key: (typeof tabs)[number]["key"]): boolean {
   if (key === "fuel-card") return activePath.value.startsWith("/fuel-card");
   if (key === "overseas-payment") return activePath.value.startsWith("/overseas-payment");
   if (key === "min-spend") return activePath.value.startsWith("/min-spend");
+  if (key === "annual-fee") return activePath.value.startsWith("/annual-fee");
+  if (key === "duty-free") return activePath.value.startsWith("/duty-free");
+  if (key === "mileage") return activePath.value.startsWith("/mileage");
   return activePath.value === tabs.find((t) => t.key === key)?.to;
 }
 </script>

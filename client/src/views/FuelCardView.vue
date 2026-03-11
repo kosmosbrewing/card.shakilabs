@@ -2,7 +2,6 @@
 import { computed } from "vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
-import SectionShareButton from "@/components/common/SectionShareButton.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import FuelCardInput from "@/components/fuel-card/FuelCardInput.vue";
 import TopCardList from "@/components/fuel-card/TopCardList.vue";
@@ -105,18 +104,14 @@ const monthlyLinks = [
       @update:fuel-type="fuelType = $event"
       @update:monthly-spend="monthlySpend = $event"
       @update:preferred-brand="preferredBrand = $event"
+      @share-request="openShare"
     />
 
     <!-- TOP 3 카드 결과 -->
     <TopCardList v-if="topCards.length > 0" :cards="topCards" />
 
     <!-- SummaryBanner -->
-    <div v-if="bestCard" class="space-y-2">
-      <SummaryBanner :message="summaryMessage" />
-      <div class="flex justify-end">
-        <SectionShareButton @click="openShare" />
-      </div>
-    </div>
+    <SummaryBanner v-if="bestCard" :message="summaryMessage" />
 
     <!-- 광고 상단 -->
     <AdSlot slot="fuel-card-top" label="비교 결과 하단" />
@@ -189,6 +184,36 @@ const monthlyLinks = [
           class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground hover:text-primary transition-colors"
         >
           경유 할인카드 비교
+        </RouterLink>
+        <RouterLink
+          to="/annual-fee"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground hover:text-primary transition-colors"
+        >
+          연회비 회수 계산기
+        </RouterLink>
+        <RouterLink
+          to="/duty-free"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground hover:text-primary transition-colors"
+        >
+          관세 계산기
+        </RouterLink>
+        <RouterLink
+          to="/mileage"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground hover:text-primary transition-colors"
+        >
+          마일리지 가치 계산기
+        </RouterLink>
+        <RouterLink
+          to="/overseas-payment"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground hover:text-primary transition-colors"
+        >
+          해외결제 카드 비교
+        </RouterLink>
+        <RouterLink
+          to="/min-spend"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground hover:text-primary transition-colors"
+        >
+          전월 실적 계산기
         </RouterLink>
       </div>
     </div>

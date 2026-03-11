@@ -38,7 +38,7 @@ const maxSavings = computed(() => {
         <div class="flex-1 h-6 bg-muted/50 rounded-md overflow-hidden">
           <div
             class="h-full rounded-md transition-all duration-500 ease-out"
-            :class="r.annualNet > 0 ? 'bg-emerald-500/80' : 'bg-red-400/80'"
+            :class="r.annualNet > 0 ? 'bg-savings/80' : 'bg-loss/80'"
             :style="{ width: `${Math.max((Math.abs(r.annualNet) / maxSavings) * 100, 2)}%` }"
           />
         </div>
@@ -46,9 +46,9 @@ const maxSavings = computed(() => {
         <!-- 금액 -->
         <div
           class="w-20 shrink-0 text-right text-caption font-bold tabular-nums"
-          :class="r.annualNet > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500'"
+          :class="r.annualNet > 0 ? 'text-savings' : 'text-loss'"
         >
-          {{ r.annualNet > 0 ? '+' : '' }}{{ r.annualNet.toLocaleString() }}원
+          {{ r.annualNet > 0 ? '▲' : '▼' }} {{ Math.abs(r.annualNet).toLocaleString() }}원
         </div>
       </div>
     </div>

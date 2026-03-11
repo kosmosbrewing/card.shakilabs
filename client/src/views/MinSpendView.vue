@@ -3,6 +3,8 @@ import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+
+import ShareModal from "@/components/share/ShareModal.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import MinSpendCompareTable from "@/components/min-spend/MinSpendCompareTable.vue";
 import MinSpendDetailSection from "@/components/min-spend/MinSpendDetailSection.vue";
@@ -11,7 +13,10 @@ import MinSpendInput from "@/components/min-spend/MinSpendInput.vue";
 import MinSpendNetBenefitChart from "@/components/min-spend/MinSpendNetBenefitChart.vue";
 import MinSpendTopCards from "@/components/min-spend/MinSpendTopCards.vue";
 import QualificationChart from "@/components/min-spend/QualificationChart.vue";
+import { SPENDING_CATEGORIES } from "@/data/spendingCategories";
 import { useMinSpendCalc } from "@/composables/useMinSpendCalc";
+import { useResultShare } from "@/composables/useResultShare";
+import { buildAbsoluteUrl, buildQuery } from "@/lib/routeState";
 
 const {
   fuelType,
@@ -62,6 +67,42 @@ const summaryMessage = computed(() => {
 
   return `${bestCard.value.card.issuer} ${bestCard.value.card.name}가 그나마 가장 낫습니다. 실적까지 ${bestCard.value.gap.toLocaleString()}원 부족하고, 추가 지출까지 포함한 순혜택은 ${bestCard.value.netBenefitIncludingGap.toLocaleString()}원입니다.`;
 });
+
+const {
+  showShareModal,
+  kakaoBusy,
+  shareSummary,
+  openShare,
+  closeShare,
+  shareKakao,
+  copyLink,
+} = useResultShare({
+  page: "min-spend",
+  summaryText: () => summaryMessage.value,
+  shareUrl: () => {
+    const spendingQuery = Object.fromEntries(
+      SPENDING_CATEGORIES.map((category) => [
+        category.id,
+        spending.value[category.id] !== category.defaultAmount
+          ? spending.value[category.id]
+          : undefined,
+      ])
+    );
+
+    return buildAbsoluteUrl("/min-spend", buildQuery({
+      fuel: fuelType.value !== "gasoline" ? fuelType.value : undefined,
+      fuelSpend: fuelSpend.value !== 200000 ? fuelSpend.value : undefined,
+      brand: preferredBrand.value !== "all" ? preferredBrand.value : undefined,
+      ...spendingQuery,
+    }));
+  },
+  shareTitle: () => {
+    if (!bestCard.value) return "전월 실적 계산기";
+    return `${bestCard.value.card.issuer} ${bestCard.value.card.name} 실적 효율 확인`;
+  },
+  shareDescription: () => "전월 실적 충족 여부와 추가 지출까지 반영한 순혜택을 비교합니다.",
+  buttonTitle: "실적 계산 보기",
+});
 </script>
 
 <template>
@@ -78,6 +119,7 @@ const summaryMessage = computed(() => {
       @update:fuel-spend="fuelSpend = $event"
       @update:preferred-brand="preferredBrand = $event"
       @update:spending="updateSpending($event.categoryId, $event.amount)"
+      @share-request="openShare"
     />
 
     <MinSpendTopCards v-if="topCards.length > 0" :cards="topCards" />
@@ -106,6 +148,15 @@ const summaryMessage = computed(() => {
 
     <AdSlot slot="min-spend-bottom" label="실적 FAQ 하단" />
 
+    <ShareModal
+      :show="showShareModal"
+      :kakao-busy="kakaoBusy"
+      :summary-text="shareSummary"
+      @close="closeShare"
+      @share-kakao="shareKakao"
+      @copy-link="copyLink"
+    />
+
     <div class="space-y-3">
       <div class="section-heading-block">
         <h2 class="section-title">다른 계산기도 함께 보기</h2>
@@ -128,6 +179,24 @@ const summaryMessage = computed(() => {
           class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
         >
           해외결제 카드 비교
+        </RouterLink>
+        <RouterLink
+          to="/annual-fee"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+        >
+          연회비 회수 계산기
+        </RouterLink>
+        <RouterLink
+          to="/duty-free"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+        >
+          관세 계산기
+        </RouterLink>
+        <RouterLink
+          to="/mileage"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+        >
+          마일리지 가치 계산기
         </RouterLink>
       </div>
     </div>
