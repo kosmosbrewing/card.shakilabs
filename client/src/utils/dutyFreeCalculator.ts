@@ -3,6 +3,7 @@ import {
   getDutyFreeCategoryInfo,
   type DutyFreeCategory,
 } from "@/data/dutyFreeRates";
+import { roundWon } from "@/lib/utils";
 
 export interface DutyFreeCalcInput {
   purchaseAmountUsd: number;
@@ -29,10 +30,6 @@ export interface DutyFreeCalcResult {
   finalTaxMethod: "normal" | "simplified";
   effectiveTaxRate: number;
   totalCostKrw: number;
-}
-
-function roundWon(value: number): number {
-  return Math.round(value);
 }
 
 export function calculateDutyFree(input: DutyFreeCalcInput): DutyFreeCalcResult {

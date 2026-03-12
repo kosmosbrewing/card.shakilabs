@@ -12,11 +12,12 @@ import SavingsBarChart from "@/components/fuel-card/SavingsBarChart.vue";
 import FuelCardFAQ from "@/components/fuel-card/FuelCardFAQ.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useFuelCardCalc } from "@/composables/useFuelCardCalc";
-import { useShare } from "@/composables/useShare";
+import { useResultShare } from "@/composables/useResultShare";
 import { FUEL_TYPE_LABELS } from "@/data/fuelPrices";
 import { RouterLink } from "vue-router";
 import { ISSUER_DISPLAY_NAME } from "@/data/fuelCards";
 import { FUEL_COMPARE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
+import { buildAbsoluteUrl } from "@/lib/routeState";
 
 const {
   fuelType,
@@ -37,10 +38,24 @@ const {
   closeShare,
   shareKakao,
   copyLink,
-} = useShare({
-  fuelType,
-  monthlySpend,
-  bestCard,
+} = useResultShare({
+  page: "fuel-card",
+  summaryText: () => {
+    const best = bestCard.value;
+    if (!best) return "";
+    return `월 ${monthlySpend.value.toLocaleString()}원 ${FUEL_TYPE_LABELS[fuelType.value]} 주유 → ${best.card.issuer} ${best.card.name} 연 ${best.annualNet.toLocaleString()}원 절약`;
+  },
+  shareUrl: () => buildAbsoluteUrl("/fuel-card", {
+    fuel: fuelType.value !== "gasoline" ? fuelType.value : null,
+    monthly: monthlySpend.value !== 200000 ? monthlySpend.value : null,
+  }),
+  shareTitle: () => {
+    const best = bestCard.value;
+    if (!best) return "주유 할인카드 비교 계산기";
+    return `월 ${monthlySpend.value.toLocaleString()}원 주유 → ${best.card.issuer} ${best.card.name}가 가장 유리!`;
+  },
+  shareDescription: () => "주유 할인카드 비교 계산기 — 내 주유 패턴에 맞는 최적 카드 찾기",
+  buttonTitle: "카드 비교하기",
 });
 
 const seoTitle = "주유 할인카드 비교 계산기 | 내 주유량에 맞는 최적 카드 찾기 2026";

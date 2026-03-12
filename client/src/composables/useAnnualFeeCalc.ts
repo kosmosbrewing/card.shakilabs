@@ -78,6 +78,7 @@ export function useAnnualFeeCalc() {
   );
 
   let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  const defaultSpending = createDefaultSpendingPattern();
 
   watch(
     [spending, sortKey],
@@ -87,7 +88,7 @@ export function useAnnualFeeCalc() {
         const spendingQuery = Object.fromEntries(
           BENEFIT_CATEGORIES.map((category) => [
             category.id,
-            spending.value[category.id] !== createDefaultSpendingPattern()[category.id]
+            spending.value[category.id] !== defaultSpending[category.id]
               ? spending.value[category.id]
               : undefined,
           ])

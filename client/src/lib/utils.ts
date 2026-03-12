@@ -5,6 +5,16 @@ export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
+// 원 단위 반올림 (계산기 공용)
+export function roundWon(value: number): number {
+  return Math.round(value);
+}
+
+// 브라우저 환경 확인
+export function isBrowser(): boolean {
+  return typeof window !== "undefined";
+}
+
 // 숫자 포맷: 1000 → "1,000"
 export function formatNumber(num: number | null | undefined): string {
   if (num == null) return "-";

@@ -1,8 +1,5 @@
 import { computed, shallowRef } from "vue";
-
-function isBrowser(): boolean {
-  return typeof window !== "undefined";
-}
+import { isBrowser } from "@/lib/utils";
 
 export interface RecentCalcEntry<T> {
   id: string;

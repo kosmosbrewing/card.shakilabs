@@ -1,13 +1,11 @@
+import { isBrowser } from "@/lib/utils";
+
 type UseModalOptions = {
   storageKey: string;
   hideDays?: number;
 };
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-
-function isBrowser(): boolean {
-  return typeof window !== "undefined";
-}
 
 export function useModal(options: UseModalOptions) {
   const hideDays = options.hideDays ?? 3;
