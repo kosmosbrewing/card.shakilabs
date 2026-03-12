@@ -96,18 +96,19 @@ export function useResultShare(options: ResultShareOptions) {
       await ensureKakaoSdk();
       if (!window.Kakao?.Share) throw new Error("Kakao Share not available");
 
+      const url = options.shareUrl();
       window.Kakao.Share.sendDefault({
         objectType: "feed",
         content: {
           title: options.shareTitle(),
           description: options.shareDescription(),
           imageUrl: `${window.location.origin}/favicon.png`,
-          link: { mobileWebUrl: options.shareUrl(), webUrl: options.shareUrl() },
+          link: { mobileWebUrl: url, webUrl: url },
         },
         buttons: [
           {
             title: options.buttonTitle,
-            link: { mobileWebUrl: options.shareUrl(), webUrl: options.shareUrl() },
+            link: { mobileWebUrl: url, webUrl: url },
           },
         ],
       });

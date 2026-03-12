@@ -6,6 +6,7 @@ import {
   type SpendingPatternMap,
   sumSpendingPattern,
 } from "@/data/annualFeeCards";
+import { roundWon } from "@/lib/utils";
 
 export interface AnnualFeeCalcInput {
   spending: SpendingPatternMap;
@@ -38,10 +39,6 @@ export interface AnnualFeeCalcResult {
   minSpendGap: number;
 }
 
-function roundWon(value: number): number {
-  return Math.round(value);
-}
-
 export function calculateAnnualFeeCard(
   card: AnnualFeeCard,
   input: AnnualFeeCalcInput
@@ -50,9 +47,11 @@ export function calculateAnnualFeeCard(
   const isMinSpendMet = totalMonthlySpend >= card.minSpend;
   const minSpendGap = Math.max(0, card.minSpend - totalMonthlySpend);
 
+  const benefitRateMap = new Map(card.benefitRates.map((item) => [item.categoryId, item]));
+
   const categoryBreakdown = BENEFIT_CATEGORIES.map((category) => {
     const spend = input.spending[category.id] ?? 0;
-    const benefitRate = card.benefitRates.find((item) => item.categoryId === category.id);
+    const benefitRate = benefitRateMap.get(category.id);
     const rate = benefitRate?.rate ?? 0;
     const monthlyCap = benefitRate?.monthlyCap ?? 0;
     const rawBenefit = spend * rate;

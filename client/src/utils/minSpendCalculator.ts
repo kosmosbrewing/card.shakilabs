@@ -6,6 +6,7 @@ import {
 import { getFuelPrice, type FuelType } from "@/data/fuelPrices";
 import type { SpendingMap } from "@/data/spendingCategories";
 import { sumSpendingMap } from "@/data/spendingCategories";
+import { roundWon } from "@/lib/utils";
 
 export interface MinSpendCalcInput {
   fuelType: FuelType;
@@ -33,10 +34,6 @@ export interface MinSpendCalcResult {
   netBenefitIncludingGap: number;
   isBrandMismatch: boolean;
   monthlyLiters: number;
-}
-
-function roundWon(value: number): number {
-  return Math.round(value);
 }
 
 export function calculateMinSpendCard(

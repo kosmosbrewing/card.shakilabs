@@ -9,16 +9,12 @@ import {
   type FuelCardCalcInput,
   type FuelCardCalcResult,
 } from "@/utils/calculator";
+import { parseQueryInt } from "@/lib/routeState";
 
 // URL 쿼리 → 상태 파싱
 function parseQueryFuelType(val: unknown): FuelType {
   if (val === "diesel" || val === "lpg") return val;
   return "gasoline";
-}
-
-function parseQueryInt(val: unknown, fallback: number): number {
-  const num = Number(val);
-  return Number.isFinite(num) && num > 0 ? num : fallback;
 }
 
 export type SortKey = "savings" | "annualFee" | "minSpend";
@@ -29,7 +25,7 @@ export function useFuelCardCalc() {
 
   // 입력 상태
   const fuelType = ref<FuelType>(parseQueryFuelType(route.query.fuel));
-  const monthlySpend = ref(parseQueryInt(route.query.monthly, 200000));
+  const monthlySpend = ref((parseQueryInt(route.query.monthly) ?? 200000));
   const preferredBrand = ref<string>(
     typeof route.query.brand === "string" ? route.query.brand : "all"
   );
@@ -107,7 +103,7 @@ export function useFuelCardCalc() {
     () => route.query,
     (q) => {
       fuelType.value = parseQueryFuelType(q.fuel);
-      monthlySpend.value = parseQueryInt(q.monthly, 200000);
+      monthlySpend.value = (parseQueryInt(q.monthly) ?? 200000);
       preferredBrand.value = typeof q.brand === "string" ? q.brand : "all";
     }
   );

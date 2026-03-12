@@ -25,7 +25,7 @@ onErrorCaptured((error, _instance, info) => {
 <template>
   <AppLayout>
     <RouterView v-slot="{ Component, route }">
-      <div :key="route.fullPath">
+      <div :key="route.path">
         <div v-if="routeError" class="container py-10">
           <div class="retro-panel overflow-hidden border-status-danger/30">
             <div class="retro-titlebar rounded-t-2xl">

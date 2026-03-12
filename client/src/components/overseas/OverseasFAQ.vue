@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { ChevronDown } from "lucide-vue-next";
+import FAQSection from "@/components/common/FAQSection.vue";
 
-interface FAQ {
-  question: string;
-  answer: string;
-}
-
-const faqs: FAQ[] = [
+const faqs = [
   {
     question: "DCC(동적통화전환)란 무엇인가요?",
     answer: "해외 가맹점이 현지통화 대신 원화 결제를 제안하는 방식입니다. 편해 보이지만 보통 3~8% 마크업이 붙어 현지통화 결제보다 비싸집니다.",
@@ -29,45 +23,8 @@ const faqs: FAQ[] = [
     answer: "서비스는 매매기준율을 기준으로 추정합니다. 실제 청구 시점에는 카드사 적용 환율, 브랜드 정산일, 해외 가맹점 처리 시점 차이로 금액이 조금 달라질 수 있습니다.",
   },
 ];
-
-const openIndex = ref<number | null>(null);
-
-function toggle(index: number) {
-  openIndex.value = openIndex.value === index ? null : index;
-}
 </script>
 
 <template>
-  <div class="retro-panel overflow-hidden">
-    <div class="retro-titlebar rounded-t-2xl">
-      <h2 class="retro-title">자주 묻는 질문</h2>
-    </div>
-
-    <div class="divide-y divide-border/60">
-      <div
-        v-for="(faq, idx) in faqs"
-        :key="idx"
-      >
-        <button
-          type="button"
-          class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-body font-semibold text-foreground transition-colors hover:bg-muted/30"
-          @click="toggle(idx)"
-        >
-          <span>{{ faq.question }}</span>
-          <ChevronDown
-            :class="[
-              'h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200',
-              openIndex === idx && 'rotate-180',
-            ]"
-          />
-        </button>
-        <div
-          v-if="openIndex === idx"
-          class="border-t border-border/40 bg-muted/10 px-4 py-3 text-caption leading-relaxed text-muted-foreground"
-        >
-          {{ faq.answer }}
-        </div>
-      </div>
-    </div>
-  </div>
+  <FAQSection :faqs="faqs" />
 </template>

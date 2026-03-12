@@ -40,8 +40,10 @@ export function calculateMileageValue(input: MileageCalcInput): MileageCalcResul
   const airline = getAirlineInfo(input.airlineId);
   const data = getAirlineMileageData(input.airlineId);
 
+  const routeMap = new Map(data.routes.map((item) => [item.id, item]));
+
   const allValues = data.redemptions.map((redemption) => {
-    const route = data.routes.find((item) => item.id === redemption.routeId);
+    const route = routeMap.get(redemption.routeId);
     const cashPrice = route?.cashPrice[redemption.seatClass] ?? 0;
     const valuePerMile = redemption.milesRequired > 0 ? cashPrice / redemption.milesRequired : 0;
     const canRedeem = input.mileageBalance >= redemption.milesRequired;

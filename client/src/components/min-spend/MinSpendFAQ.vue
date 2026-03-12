@@ -1,13 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { ChevronDown } from "lucide-vue-next";
+import FAQSection from "@/components/common/FAQSection.vue";
 
-interface FAQ {
-  question: string;
-  answer: string;
-}
-
-const faqs: FAQ[] = [
+const faqs = [
   {
     question: "전월 실적이란 무엇인가요?",
     answer: "카드 혜택을 받기 위해 전월에 일정 금액 이상 결제해야 하는 조건입니다. 보통 주유비뿐 아니라 생활비 결제도 함께 포함됩니다.",
@@ -29,45 +23,8 @@ const faqs: FAQ[] = [
     answer: "각 카드의 실적을 따로 채워야 하므로 오히려 비효율적일 수 있습니다. 주력 카드 한 장에 생활비를 집중하는 편이 실적 관리에는 유리합니다.",
   },
 ];
-
-const openIndex = ref<number | null>(null);
-
-function toggle(index: number) {
-  openIndex.value = openIndex.value === index ? null : index;
-}
 </script>
 
 <template>
-  <div class="retro-panel overflow-hidden">
-    <div class="retro-titlebar rounded-t-2xl">
-      <h2 class="retro-title">자주 묻는 질문</h2>
-    </div>
-
-    <div class="divide-y divide-border/60">
-      <div
-        v-for="(faq, idx) in faqs"
-        :key="idx"
-      >
-        <button
-          type="button"
-          class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-body font-semibold text-foreground transition-colors hover:bg-muted/30"
-          @click="toggle(idx)"
-        >
-          <span>{{ faq.question }}</span>
-          <ChevronDown
-            :class="[
-              'h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200',
-              openIndex === idx && 'rotate-180',
-            ]"
-          />
-        </button>
-        <div
-          v-if="openIndex === idx"
-          class="border-t border-border/40 bg-muted/10 px-4 py-3 text-caption leading-relaxed text-muted-foreground"
-        >
-          {{ faq.answer }}
-        </div>
-      </div>
-    </div>
-  </div>
+  <FAQSection :faqs="faqs" />
 </template>

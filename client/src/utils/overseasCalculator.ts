@@ -1,5 +1,6 @@
 import { getExchangeRate, type Currency, type ExchangeRateEntry } from "@/data/exchangeRates";
 import type { OverseasBenefit, OverseasCard } from "@/data/overseasCards";
+import { roundWon } from "@/lib/utils";
 
 export interface OverseasCalcInput {
   currency: Currency;
@@ -27,10 +28,6 @@ export interface OverseasCalcResult {
   isMinSpendWarning: boolean;
 }
 
-function roundKrw(value: number): number {
-  return Math.round(value);
-}
-
 function calculateSingleBenefit(benefit: OverseasBenefit, amount: number): number {
   const raw =
     benefit.rate != null
@@ -45,7 +42,7 @@ function calculateSingleBenefit(benefit: OverseasBenefit, amount: number): numbe
 
 export function calculateBenefitAmount(card: OverseasCard, localCurrencyTotal: number): number {
   if (card.benefits.length === 0) return 0;
-  return roundKrw(
+  return roundWon(
     card.benefits.reduce(
       (sum, benefit) => sum + calculateSingleBenefit(benefit, localCurrencyTotal),
       0
@@ -58,14 +55,14 @@ export function calculateOverseasPayment(
   input: OverseasCalcInput,
   rateEntry = getExchangeRate(input.currency)
 ): OverseasCalcResult {
-  const baseKrwAmount = roundKrw((input.foreignAmount / rateEntry.unit) * rateEntry.rate);
-  const cardFeeAmount = roundKrw(baseKrwAmount * card.fee.totalFeeRate);
+  const baseKrwAmount = roundWon((input.foreignAmount / rateEntry.unit) * rateEntry.rate);
+  const cardFeeAmount = roundWon(baseKrwAmount * card.fee.totalFeeRate);
   const localCurrencyTotal = baseKrwAmount + cardFeeAmount;
   const benefitAmount = calculateBenefitAmount(card, localCurrencyTotal);
   const localCurrencyNet = Math.max(localCurrencyTotal - benefitAmount, 0);
 
   const dccExchangeRate = rateEntry.rate * (1 + input.dccMarkupRate);
-  const dccTotal = roundKrw((input.foreignAmount / rateEntry.unit) * dccExchangeRate);
+  const dccTotal = roundWon((input.foreignAmount / rateEntry.unit) * dccExchangeRate);
   const dccDifference = dccTotal - localCurrencyNet;
   const dccDifferenceRate = localCurrencyNet > 0 ? dccDifference / localCurrencyNet : 0;
   const isMinSpendWarning = card.benefits.some(

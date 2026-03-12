@@ -1,3 +1,5 @@
+import { isBrowser } from "@/lib/utils";
+
 type GtagFn = (...args: unknown[]) => void;
 
 declare global {
@@ -30,10 +32,6 @@ const GA_MEASUREMENT_ID = normalizeMeasurementId(
 );
 let gaWarningPrinted = false;
 let lastTrackedPath = "";
-
-function isBrowser(): boolean {
-  return typeof window !== "undefined" && typeof document !== "undefined";
-}
 
 function ensureGlobalGtag(): void {
   window.dataLayer = window.dataLayer || [];

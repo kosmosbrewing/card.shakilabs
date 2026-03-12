@@ -1,18 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { ChevronDown } from "lucide-vue-next";
+import FAQSection from "@/components/common/FAQSection.vue";
 
-const props = defineProps<{
-  /** JSON-LD FAQPage 출력용 */
-  pageType?: string;
-}>();
-
-interface FAQ {
-  question: string;
-  answer: string;
-}
-
-const faqs: FAQ[] = [
+const faqs = [
   {
     question: "주유 할인카드는 어떤 기준으로 선택해야 하나요?",
     answer: "월 주유 금액, 선호 주유소 브랜드, 전월 실적 충족 가능 여부를 고려하세요. 리터당 고정 할인 카드는 유가가 낮을 때 유리하고, % 할인 카드는 유가가 높을 때 유리합니다.",
@@ -38,45 +27,8 @@ const faqs: FAQ[] = [
     answer: "유가는 주 1회, 카드 혜택은 변경 시 수동으로 업데이트합니다. 상단의 기준일을 확인하세요. 실제 할인 조건은 반드시 카드사 공식 사이트에서 확인하시기 바랍니다.",
   },
 ];
-
-const openIndex = ref<number | null>(null);
-
-function toggle(idx: number) {
-  openIndex.value = openIndex.value === idx ? null : idx;
-}
 </script>
 
 <template>
-  <div class="retro-panel overflow-hidden">
-    <div class="retro-titlebar rounded-t-2xl">
-      <h2 class="retro-title">자주 묻는 질문</h2>
-    </div>
-
-    <div class="divide-y divide-border/60">
-      <div
-        v-for="(faq, idx) in faqs"
-        :key="idx"
-      >
-        <button
-          type="button"
-          class="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-body font-semibold text-foreground transition-colors hover:bg-muted/30"
-          @click="toggle(idx)"
-        >
-          <span>{{ faq.question }}</span>
-          <ChevronDown
-            :class="[
-              'h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200',
-              openIndex === idx && 'rotate-180',
-            ]"
-          />
-        </button>
-        <div
-          v-if="openIndex === idx"
-          class="border-t border-border/40 bg-muted/10 px-4 py-3 text-caption text-muted-foreground leading-relaxed"
-        >
-          {{ faq.answer }}
-        </div>
-      </div>
-    </div>
-  </div>
+  <FAQSection :faqs="faqs" />
 </template>
