@@ -22,10 +22,10 @@ const showAdvanced = ref(false);
 const defaultSpendingPattern = createDefaultSpendingPattern();
 
 const primaryCategories = computed(() =>
-  BENEFIT_CATEGORIES.filter((category) => category.order <= 4)
+  BENEFIT_CATEGORIES.filter((category) => category.order <= 6)
 );
 const advancedCategories = computed(() =>
-  BENEFIT_CATEGORIES.filter((category) => category.order > 4)
+  BENEFIT_CATEGORIES.filter((category) => category.order > 6)
 );
 const quickPresets = [
   {
@@ -34,8 +34,12 @@ const quickPresets = [
       dining: 220000,
       shopping: 120000,
       transport: 140000,
-      convenience: 90000,
       telecom: 70000,
+      housing: 110000,
+      utilities: 90000,
+      insurance: 70000,
+      education: 40000,
+      convenience: 90000,
       travel: 0,
       culture: 40000,
       general: 100000,
@@ -47,8 +51,12 @@ const quickPresets = [
       dining: 150000,
       shopping: 320000,
       transport: 90000,
-      convenience: 70000,
       telecom: 60000,
+      housing: 90000,
+      utilities: 70000,
+      insurance: 60000,
+      education: 30000,
+      convenience: 70000,
       travel: 20000,
       culture: 30000,
       general: 120000,
@@ -60,8 +68,12 @@ const quickPresets = [
       dining: 180000,
       shopping: 140000,
       transport: 100000,
-      convenience: 70000,
       telecom: 60000,
+      housing: 100000,
+      utilities: 70000,
+      insurance: 50000,
+      education: 20000,
+      convenience: 70000,
       travel: 280000,
       culture: 50000,
       general: 150000,
@@ -73,8 +85,12 @@ const quickPresets = [
       dining: 120000,
       shopping: 80000,
       transport: 70000,
-      convenience: 50000,
       telecom: 60000,
+      housing: 80000,
+      utilities: 60000,
+      insurance: 40000,
+      education: 20000,
+      convenience: 50000,
       travel: 0,
       culture: 20000,
       general: 80000,
@@ -112,7 +128,7 @@ function getCategorySliderMax(categoryId: BenefitCategoryId) {
       </h1>
       <button
         type="button"
-        class="inline-flex items-center gap-1.5 rounded border border-border/70 bg-background/70 px-2.5 py-1 text-caption font-semibold text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+        class="retro-titlebar-button"
         @click="emit('shareRequest')"
       >
         <Share2 class="h-3.5 w-3.5" />
@@ -120,7 +136,7 @@ function getCategorySliderMax(categoryId: BenefitCategoryId) {
       </button>
     </div>
 
-    <div class="retro-panel-content space-y-4">
+    <div class="retro-panel-content space-y-5">
       <div class="space-y-2">
         <div class="flex items-center justify-between gap-3">
           <h2 class="text-caption font-semibold text-muted-foreground">월 소비 패턴</h2>
@@ -138,12 +154,12 @@ function getCategorySliderMax(categoryId: BenefitCategoryId) {
               <input
                 type="text"
                 inputmode="numeric"
-                class="retro-input !pr-10 text-right tabular-nums"
+                class="retro-input retro-input-with-right-affix text-right tabular-nums"
                 :placeholder="category.placeholder"
                 :value="props.spending[category.id].toLocaleString()"
                 @input="handleInput(category.id, $event)"
               />
-              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-caption text-muted-foreground">원</span>
+              <span class="retro-input-affix retro-input-affix-right retro-input-affix-wide">원</span>
             </div>
             <input
               type="range"
@@ -175,12 +191,12 @@ function getCategorySliderMax(categoryId: BenefitCategoryId) {
                 <input
                   type="text"
                   inputmode="numeric"
-                  class="retro-input !pr-10 text-right tabular-nums"
+                  class="retro-input retro-input-with-right-affix text-right tabular-nums"
                   :placeholder="category.placeholder"
                   :value="props.spending[category.id].toLocaleString()"
                   @input="handleInput(category.id, $event)"
                 />
-                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-caption text-muted-foreground">원</span>
+                <span class="retro-input-affix retro-input-affix-right retro-input-affix-wide">원</span>
               </div>
               <input
                 type="range"
@@ -203,7 +219,7 @@ function getCategorySliderMax(categoryId: BenefitCategoryId) {
             v-for="preset in quickPresets"
             :key="preset.label"
             type="button"
-            class="rounded-lg border border-border/70 px-2.5 py-1.5 text-caption font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
+            class="retro-choice-button retro-choice-button-compact border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary"
             @click="applyPreset(preset.values)"
           >
             {{ preset.label }}

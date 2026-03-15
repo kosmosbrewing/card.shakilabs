@@ -64,7 +64,7 @@ function handleDccInput(event: Event) {
       </h1>
       <button
         type="button"
-        class="inline-flex items-center gap-1.5 rounded border border-border/70 bg-background/70 px-2.5 py-1 text-caption font-semibold text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+        class="retro-titlebar-button"
         @click="emit('shareRequest')"
       >
         <Share2 class="h-3.5 w-3.5" />
@@ -72,61 +72,68 @@ function handleDccInput(event: Event) {
       </button>
     </div>
 
-    <div class="retro-panel-content space-y-3">
-      <!-- 통화 선택 -->
-      <div class="flex flex-wrap gap-1.5">
-        <button
-          v-for="item in POPULAR_CURRENCIES"
-          :key="item"
-          type="button"
-          :class="[
-            'rounded-lg border px-3 py-1.5 text-caption font-semibold transition-colors',
-            currency === item
-              ? 'border-primary bg-primary/10 text-primary'
-              : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-          ]"
-          @click="emit('update:currency', item)"
-        >
-          {{ item }}
-        </button>
-        <button
-          type="button"
-          class="rounded-lg border border-border/70 px-3 py-1.5 text-caption font-semibold text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
-          @click="showExtraCurrencies = !showExtraCurrencies"
-        >
-          통화+
-        </button>
-      </div>
-
-      <!-- 금액 입력: 인라인 스테퍼 [−|$ input|+] -->
-      <div class="flex items-stretch overflow-hidden rounded-xl border border-input bg-card">
-        <button
-          type="button"
-          class="shrink-0 px-2.5 text-base font-bold text-muted-foreground transition-colors hover:bg-muted/50 active:bg-muted"
-          aria-label="50 감소"
-          @click="emit('update:foreignAmount', Math.max(MIN, foreignAmount - STEP))"
-        >−</button>
-        <div class="relative min-w-0 flex-1">
-          <span class="absolute left-3 top-1/2 -translate-y-1/2 text-body font-semibold text-muted-foreground">
-            {{ getExchangeRate(currency).symbol }}
-          </span>
-          <input
-            type="text"
-            inputmode="decimal"
-            class="w-full border-x border-input bg-transparent py-2.5 pl-10 pr-3 text-right text-body tabular-nums focus:outline-none"
-            :value="foreignAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })"
-            @input="handleAmountInput"
-          />
+    <div class="retro-panel-content space-y-4">
+      <!-- 통화 + 금액 입력 (2컬럼) -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div class="space-y-1.5">
+          <label class="text-caption font-semibold text-muted-foreground">통화</label>
+          <div class="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
+            <button
+              v-for="item in POPULAR_CURRENCIES"
+              :key="item"
+              type="button"
+              :class="[
+                'retro-choice-button',
+                currency === item
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
+              ]"
+              @click="emit('update:currency', item)"
+            >
+              {{ item }}
+            </button>
+            <button
+              type="button"
+              class="retro-choice-button border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary"
+              @click="showExtraCurrencies = !showExtraCurrencies"
+            >
+              통화+
+            </button>
+          </div>
         </div>
-        <button
-          type="button"
-          class="shrink-0 px-2.5 text-base font-bold text-muted-foreground transition-colors hover:bg-muted/50 active:bg-muted"
-          aria-label="50 증가"
-          @click="emit('update:foreignAmount', Math.min(MAX, foreignAmount + STEP))"
-        >+</button>
+
+        <div class="space-y-1.5">
+          <label class="text-caption font-semibold text-muted-foreground">결제 금액</label>
+          <div class="retro-stepper">
+            <button
+              type="button"
+              class="retro-stepper-button"
+              aria-label="50 감소"
+              @click="emit('update:foreignAmount', Math.max(MIN, foreignAmount - STEP))"
+            >−</button>
+            <div class="retro-stepper-field">
+              <span class="retro-input-affix retro-input-affix-left retro-input-affix-currency text-body font-semibold">
+                {{ getExchangeRate(currency).symbol }}
+              </span>
+              <input
+                type="text"
+                inputmode="decimal"
+                class="retro-stepper-input retro-stepper-input-left"
+                :value="foreignAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })"
+                @input="handleAmountInput"
+              />
+            </div>
+            <button
+              type="button"
+              class="retro-stepper-button"
+              aria-label="50 증가"
+              @click="emit('update:foreignAmount', Math.min(MAX, foreignAmount + STEP))"
+            >+</button>
+          </div>
+        </div>
       </div>
 
-      <!-- 금액 슬라이더 -->
+      <!-- 금액 슬라이더 (full width) -->
       <input
         type="range"
         :min="MIN"
@@ -144,7 +151,7 @@ function handleDccInput(event: Event) {
           :key="item"
           type="button"
           :class="[
-            'rounded-lg border px-2 py-1.5 text-caption font-medium transition-colors',
+            'retro-choice-button retro-choice-button-compact',
             selectedExtraCurrency === item
               ? 'border-primary bg-primary/10 text-primary'
               : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
@@ -189,11 +196,11 @@ function handleDccInput(event: Event) {
                 <input
                   type="text"
                   inputmode="decimal"
-                  class="retro-input !pr-10 text-right tabular-nums"
+                  class="retro-input retro-input-with-right-affix text-right tabular-nums"
                   :value="(dccMarkupRate * 100).toFixed(1)"
                   @input="handleDccInput"
                 />
-                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-caption text-muted-foreground">%</span>
+                <span class="retro-input-affix retro-input-affix-right retro-input-affix-wide">%</span>
               </div>
               <p class="text-tiny text-muted-foreground">
                 일반적으로 {{ (DCC_MARKUP.typicalMinRate * 100).toFixed(0) }}~{{ (DCC_MARKUP.typicalMaxRate * 100).toFixed(0) }}% 범위에서 제시됩니다.

@@ -82,7 +82,7 @@ export function calculateMinSpendCard(
   const gapEfficiency = gap > 0 ? cappedDiscount / gap : null;
   const netBenefitIncludingGap =
     gap > 0
-      ? cappedDiscount - monthlyAnnualFee - gap
+      ? Math.max(0, cappedDiscount - monthlyAnnualFee - gap)
       : monthlyNetBenefit;
 
   return {

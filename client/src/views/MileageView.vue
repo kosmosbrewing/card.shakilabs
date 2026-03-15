@@ -79,7 +79,7 @@ const faqJsonLd = {
     <CompareSourceFooter
       :sources="MILEAGE_SOURCES"
       :updated-at="SOURCE_VERIFIED_AT"
-      note="※ 공제 마일은 공식 항공사 안내를 참고하고, 현금가 비교값은 서비스 내 예시 계산용 추정치입니다."
+      note="※ 공제 마일은 공식 항공사 안내를 참고하고, 현금가 비교값은 서비스 내 예시 운임 가정입니다."
     />
 
     <div class="space-y-3">

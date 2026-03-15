@@ -1,6 +1,6 @@
 // 프리렌더 대상 라우트
 export const CARD_ISSUERS = ["hyundai", "shinhan", "kb", "samsung", "lotte", "hana"];
-export const FUEL_TYPES = ["gasoline", "diesel"];
+export const FUEL_TYPES = ["gasoline", "diesel", "lpg"];
 export const MONTHLY_AMOUNTS = [200000, 300000, 500000];
 export const OVERSEAS_CURRENCIES = ["usd", "eur", "jpy", "gbp", "cny", "thb", "vnd"];
 

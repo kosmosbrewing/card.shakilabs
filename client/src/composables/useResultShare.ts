@@ -42,11 +42,15 @@ export function useResultShare(options: ResultShareOptions) {
   }
 
   async function copyLink(): Promise<void> {
-    const copied = await copyToClipboard(options.shareUrl());
     try {
-      if (!copied) throw new Error("Clipboard API unavailable");
-      trackEvent("ux_share_link_copy_success", { page: options.page });
-      showAlert("링크가 복사되었습니다");
+      const copied = await copyToClipboard(options.shareUrl());
+      if (copied) {
+        trackEvent("ux_share_link_copy_success", { page: options.page });
+        showAlert("링크가 복사되었습니다");
+      } else {
+        trackEvent("ux_share_link_copy_fail", { page: options.page });
+        showAlert("링크 복사에 실패했습니다", { type: "error" });
+      }
     } catch {
       trackEvent("ux_share_link_copy_fail", { page: options.page });
       showAlert("링크 복사에 실패했습니다", { type: "error" });

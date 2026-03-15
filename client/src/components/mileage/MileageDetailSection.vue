@@ -45,7 +45,7 @@ const groupedRoutes = computed(() => {
               {{ formatValuePerMile(item.valuePerMile) }}
             </div>
             <div class="mt-1 text-tiny text-muted-foreground">
-              {{ item.milesRequired.toLocaleString() }}마일 필요 · {{ item.cashPrice.toLocaleString() }}원
+              {{ item.milesRequired.toLocaleString() }}마일 필요 · 예시 운임 {{ item.cashPrice.toLocaleString() }}원
             </div>
           </div>
         </div>

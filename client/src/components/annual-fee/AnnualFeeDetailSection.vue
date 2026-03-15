@@ -60,6 +60,12 @@ defineProps<{
             실적 {{ result.card.minSpend.toLocaleString() }}원
           </span>
           <span
+            v-if="result.appliedTotalMonthlyCap !== null"
+            class="rounded-full border border-border/60 bg-background/60 px-2 py-0.5 text-tiny text-muted-foreground"
+          >
+            월 통합한도 {{ result.appliedTotalMonthlyCap.toLocaleString() }}원
+          </span>
+          <span
             v-for="extra in result.card.extras"
             :key="extra"
             class="rounded-full border border-border/60 bg-background/60 px-2 py-0.5 text-tiny text-muted-foreground"

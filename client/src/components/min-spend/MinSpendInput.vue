@@ -56,7 +56,7 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
       </h1>
       <button
         type="button"
-        class="inline-flex items-center gap-1.5 rounded border border-border/70 bg-background/70 px-2.5 py-1 text-caption font-semibold text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+        class="retro-titlebar-button"
         @click="emit('shareRequest')"
       >
         <Share2 class="h-3.5 w-3.5" />
@@ -64,52 +64,59 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
       </button>
     </div>
 
-    <div class="retro-panel-content space-y-3">
-      <!-- 유종 + 주유비 입력 (1행 병합) -->
-      <div class="flex items-center gap-2">
-        <div class="flex shrink-0 gap-1">
-          <button
-            v-for="ft in fuelTypes"
-            :key="ft"
-            type="button"
-            :class="[
-              'rounded-lg border px-2.5 py-1.5 text-caption font-semibold transition-colors',
-              fuelType === ft
-                ? 'border-primary bg-primary/10 text-primary'
-                : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-            ]"
-            @click="emit('update:fuelType', ft)"
-          >
-            {{ FUEL_TYPE_LABELS[ft] }}
-          </button>
-        </div>
-        <div class="flex flex-1 items-stretch overflow-hidden rounded-xl border border-input bg-card">
-          <button
-            type="button"
-            class="shrink-0 px-2.5 text-base font-bold text-muted-foreground transition-colors hover:bg-muted/50 active:bg-muted"
-            aria-label="5만원 감소"
-            @click="emit('update:fuelSpend', Math.max(MIN, fuelSpend - STEP))"
-          >−</button>
-          <div class="relative min-w-0 flex-1">
-            <input
-              type="text"
-              inputmode="numeric"
-              class="w-full border-x border-input bg-transparent px-3 py-2.5 text-right text-body tabular-nums focus:outline-none"
-              :value="fuelSpend.toLocaleString()"
-              @input="handleFuelSpendInput"
-            />
-            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-caption text-muted-foreground">원</span>
+    <div class="retro-panel-content space-y-4">
+      <!-- 유종 + 주유비 (2컬럼) -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div class="space-y-1.5">
+          <label class="text-caption font-semibold text-muted-foreground">유종</label>
+          <div class="grid grid-cols-3 gap-1.5">
+            <button
+              v-for="ft in fuelTypes"
+              :key="ft"
+              type="button"
+              :class="[
+                'retro-choice-button',
+                fuelType === ft
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
+              ]"
+              @click="emit('update:fuelType', ft)"
+            >
+              {{ FUEL_TYPE_LABELS[ft] }}
+            </button>
           </div>
-          <button
-            type="button"
-            class="shrink-0 px-2.5 text-base font-bold text-muted-foreground transition-colors hover:bg-muted/50 active:bg-muted"
-            aria-label="5만원 증가"
-            @click="emit('update:fuelSpend', Math.min(MAX, fuelSpend + STEP))"
-          >+</button>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-caption font-semibold text-muted-foreground">월 주유비</label>
+          <div class="retro-stepper">
+            <button
+              type="button"
+              class="retro-stepper-button"
+              aria-label="5만원 감소"
+              @click="emit('update:fuelSpend', Math.max(MIN, fuelSpend - STEP))"
+            >−</button>
+            <div class="retro-stepper-field">
+              <input
+                type="text"
+                inputmode="numeric"
+                class="retro-stepper-input retro-stepper-input-right"
+                :value="fuelSpend.toLocaleString()"
+                @input="handleFuelSpendInput"
+              />
+              <span class="retro-input-affix retro-input-affix-right retro-input-affix-wide">원</span>
+            </div>
+            <button
+              type="button"
+              class="retro-stepper-button"
+              aria-label="5만원 증가"
+              @click="emit('update:fuelSpend', Math.min(MAX, fuelSpend + STEP))"
+            >+</button>
+          </div>
         </div>
       </div>
 
-      <!-- 금액 슬라이더 -->
+      <!-- 금액 슬라이더 (full width) -->
       <input
         type="range"
         :min="MIN"
@@ -131,19 +138,19 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
           <label
             v-for="category in orderedCategories"
             :key="category.id"
-            class="flex items-center gap-2"
+            class="grid min-w-0 grid-cols-1 gap-1.5"
           >
-            <span class="w-16 shrink-0 text-caption font-semibold text-foreground">{{ category.label }}</span>
-            <div class="relative flex-1">
+            <span class="text-caption font-semibold text-foreground">{{ category.label }}</span>
+            <div class="relative min-w-0">
               <input
                 type="text"
                 inputmode="numeric"
-                class="retro-input !py-2 !pr-10 text-right tabular-nums"
+                class="retro-input retro-input-with-right-affix !py-2 text-right tabular-nums"
                 :placeholder="category.placeholder"
                 :value="spending[category.id].toLocaleString()"
                 @input="handleSpendingInput(category.id, $event)"
               />
-              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-caption text-muted-foreground">원</span>
+              <span class="retro-input-affix retro-input-affix-right retro-input-affix-wide">원</span>
             </div>
           </label>
         </div>
@@ -171,7 +178,7 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
                 :key="brand.id"
                 type="button"
                 :class="[
-                  'rounded-lg border px-2.5 py-1.5 text-caption font-medium transition-colors',
+                  'retro-choice-button retro-choice-button-compact',
                   preferredBrand === brand.id
                     ? 'border-primary bg-primary/10 text-primary'
                     : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',

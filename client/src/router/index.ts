@@ -24,7 +24,7 @@ const routes: RouteRecordRaw[] = [
   },
   // 유종별 SEO 페이지
   {
-    path: "/fuel-card/:fuelType(gasoline|diesel)",
+    path: "/fuel-card/:fuelType(gasoline|diesel|lpg)",
     name: "FuelType",
     component: () => import("@/views/FuelTypeView.vue"),
     props: true,

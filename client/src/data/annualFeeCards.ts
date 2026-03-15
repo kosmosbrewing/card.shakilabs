@@ -4,6 +4,10 @@ export type BenefitCategoryId =
   | "transport"
   | "convenience"
   | "telecom"
+  | "housing"
+  | "utilities"
+  | "insurance"
+  | "education"
   | "travel"
   | "culture"
   | "general";
@@ -19,11 +23,15 @@ export const BENEFIT_CATEGORIES: BenefitCategory[] = [
   { id: "dining", label: "외식/배달", placeholder: "배달앱, 레스토랑 등", order: 1 },
   { id: "shopping", label: "쇼핑/온라인", placeholder: "쿠팡, 의류 등", order: 2 },
   { id: "transport", label: "교통/주유", placeholder: "대중교통, 택시, 주유", order: 3 },
-  { id: "convenience", label: "편의점/카페", placeholder: "CU, 스타벅스 등", order: 4 },
-  { id: "telecom", label: "통신비", placeholder: "핸드폰, 인터넷", order: 5 },
-  { id: "travel", label: "여행/항공", placeholder: "항공권, 호텔 등", order: 6 },
-  { id: "culture", label: "문화/레저", placeholder: "영화, OTT, 공연", order: 7 },
-  { id: "general", label: "기타", placeholder: "그 외 카드 결제", order: 8 },
+  { id: "telecom", label: "통신비", placeholder: "핸드폰, 인터넷", order: 4 },
+  { id: "housing", label: "아파트관리비", placeholder: "공동관리비", order: 5 },
+  { id: "utilities", label: "공과금/도시가스", placeholder: "전기, 가스, 수도", order: 6 },
+  { id: "insurance", label: "보험료", placeholder: "자동차, 실손 등", order: 7 },
+  { id: "education", label: "학습지/교육", placeholder: "학습지, 교육비", order: 8 },
+  { id: "convenience", label: "편의점/카페", placeholder: "CU, 스타벅스 등", order: 9 },
+  { id: "travel", label: "여행/항공", placeholder: "항공권, 호텔 등", order: 10 },
+  { id: "culture", label: "문화/레저", placeholder: "영화, OTT, 공연", order: 11 },
+  { id: "general", label: "기타", placeholder: "그 외 카드 결제", order: 12 },
 ];
 
 export type SpendingPatternMap = Record<BenefitCategoryId, number>;
@@ -42,6 +50,7 @@ export interface AnnualFeeCard {
   annualFee: number;
   minSpend: number;
   benefitRates: CardBenefitRate[];
+  totalMonthlyCap?: number;
   extras: string[];
   summary: string;
 }
@@ -51,8 +60,12 @@ export function createDefaultSpendingPattern(): SpendingPatternMap {
     dining: 220000,
     shopping: 180000,
     transport: 120000,
-    convenience: 80000,
     telecom: 70000,
+    housing: 120000,
+    utilities: 90000,
+    insurance: 80000,
+    education: 50000,
+    convenience: 80000,
     travel: 40000,
     culture: 40000,
     general: 150000,
@@ -99,12 +112,14 @@ export const ANNUAL_FEE_CARDS: AnnualFeeCard[] = [
     id: "kb-tantan-daero",
     issuer: "KB국민카드",
     issuerColor: "#f59e0b",
-    name: "탄탄대로 올쇼핑",
+    name: "탄탄대로 올쇼핑 티타늄",
     annualFee: 30000,
     minSpend: 400000,
     benefitRates: [
       { categoryId: "shopping", rate: 0.1, monthlyCap: 12000 },
       { categoryId: "telecom", rate: 0.1, monthlyCap: 10000 },
+      { categoryId: "housing", rate: 0.1, monthlyCap: 10000 },
+      { categoryId: "utilities", rate: 0.1, monthlyCap: 10000 },
       { categoryId: "convenience", rate: 0.05, monthlyCap: 8000 },
     ],
     extras: ["마트·홈쇼핑·가전 10%", "통신·아파트관리비·도시가스 10%", "편의점·커피 5%"],
@@ -132,13 +147,18 @@ export const ANNUAL_FEE_CARDS: AnnualFeeCard[] = [
     name: "LOCA 365",
     annualFee: 20000,
     minSpend: 500000,
+    totalMonthlyCap: 35000,
     benefitRates: [
       { categoryId: "telecom", rate: 0.1, monthlyCap: 12000 },
       { categoryId: "transport", rate: 0.1, monthlyCap: 10000 },
+      { categoryId: "housing", rate: 0.1, monthlyCap: 12000 },
+      { categoryId: "utilities", rate: 0.1, monthlyCap: 10000 },
+      { categoryId: "insurance", rate: 0.1, monthlyCap: 10000 },
+      { categoryId: "education", rate: 0.1, monthlyCap: 10000 },
       { categoryId: "dining", rate: 0.1, monthlyCap: 8000 },
     ],
-    extras: ["아파트관리비·공과금·이동통신 10%", "대중교통·보험료·학습지·배달앱 10%", "월 통합한도 35,000원"],
-    summary: "고정지출과 생활비를 넓게 묶어 회수하는 데 유리한 정액 생활비 카드",
+    extras: ["아파트관리비·공과금·이동통신 10%", "대중교통·보험료·학습지 10%", "배달앱은 외식/배달 입력값에 반영", "월 통합한도 35,000원"],
+    summary: "고정지출과 생활비를 넓게 묶어 회수하는 데 유리한 생활비 카드",
   },
   {
     id: "hana-1q-daily",

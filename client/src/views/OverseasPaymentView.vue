@@ -13,7 +13,7 @@ import OverseasDetailSection from "@/components/overseas/OverseasDetailSection.v
 import OverseasFAQ from "@/components/overseas/OverseasFAQ.vue";
 import OverseasInput from "@/components/overseas/OverseasInput.vue";
 import OverseasTopCardList from "@/components/overseas/OverseasTopCardList.vue";
-import { DCC_MARKUP, getCurrencyQueryValue } from "@/data/exchangeRates";
+import { DCC_MARKUP, getCurrencyQueryValue, getExchangeRate } from "@/data/exchangeRates";
 import { useOverseasCalc } from "@/composables/useOverseasCalc";
 import { SEO_CURRENCIES } from "@/data/exchangeRates";
 import { useResultShare } from "@/composables/useResultShare";
@@ -64,14 +64,13 @@ const summaryMessage = computed(() => {
   return `${bestCard.value.card.issuer} ${bestCard.value.card.name} 기준 ${rateEntry.value.symbol}${foreignAmount.value.toLocaleString()} 결제 시 현지통화가 DCC보다 ${bestCard.value.dccDifference.toLocaleString()}원 저렴해요. 평균 추가 비용은 ${avgDccExtra.value.toLocaleString()}원 수준입니다.`;
 });
 
-const currencyLinks = SEO_CURRENCIES.map((item) => {
-  const entry = item === currency.value ? rateEntry.value : null;
-  return {
+const currencyLinks = computed(() =>
+  SEO_CURRENCIES.map((item) => ({
     code: item,
-    label: entry?.label ?? item,
+    label: getExchangeRate(item).label,
     to: `/overseas-payment/${getCurrencyQueryValue(item)}`,
-  };
-});
+  }))
+);
 
 const {
   showShareModal,

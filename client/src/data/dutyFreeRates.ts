@@ -25,6 +25,7 @@ export interface DutyFreeConstants {
   vatRate: number;
   exchangeRate: number;
   lastUpdated: string;
+  note: string;
 }
 
 export const DUTY_FREE_CONSTANTS: DutyFreeConstants = {
@@ -32,6 +33,7 @@ export const DUTY_FREE_CONSTANTS: DutyFreeConstants = {
   vatRate: 0.1,
   exchangeRate: 1380,
   lastUpdated: "2026-03-11",
+  note: "관세청 예상세액 조회 참고용 대표 환율",
 };
 
 export const DUTY_FREE_CATEGORIES: DutyFreeCategoryInfo[] = [

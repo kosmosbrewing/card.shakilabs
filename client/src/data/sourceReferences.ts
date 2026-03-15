@@ -17,8 +17,8 @@ const ASIANA_MAIN = "https://flyasiana.com/";
 export const FUEL_COMPARE_SOURCES: CompareSource[] = [
   { name: "Opinet", url: OPINET_MAIN, basis: "전국 평균 유가 공개" },
   { name: "Opinet", url: OPINET_GUIDE, basis: "가격조사 및 공개기준" },
-  { name: "현대카드", url: "https://www.hyundaicard.com/", basis: "카드상품·혜택 안내" },
-  { name: "신한카드 Mr.Life", url: "https://www.shinhancard.com/conts/person/card_info/major/benefit/propose/1270468_31350.jsp", basis: "공식 혜택 안내" },
+  { name: "현대카드 O", url: "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=O", basis: "공식 혜택 안내" },
+  { name: "신한카드 MY CAR", url: "https://www.shinhancard.com/pconts/html/card/apply/credit/1188247_2207.html", basis: "공식 혜택 안내" },
   { name: "KB국민 탄탄대로 올쇼핑", url: "https://m.kbcard.com/BON/DVIEW/MBEM0009", basis: "공식 혜택 안내" },
   { name: "삼성카드 taptap O", url: "https://www.samsungcard.com/personal/card/taptap/UHPPCA0209M0.jsp", basis: "공식 혜택 안내" },
   { name: "롯데카드 LOCA 365", url: "https://m.lottecard.co.kr/app/LPBNFOA_V100.lc", basis: "공식 혜택 안내" },
@@ -38,8 +38,8 @@ export const ANNUAL_FEE_SOURCES: CompareSource[] = [
 
 export const OVERSEAS_COMPARE_SOURCES: CompareSource[] = [
   { name: "서울외국환중개", url: SMBS_MAIN, basis: "매매기준율 참고" },
-  { name: "현대카드", url: "https://www.hyundaicard.com/", basis: "해외이용·카드상품 안내" },
-  { name: "신한카드", url: "https://www.shinhancard.com/", basis: "해외이용·카드상품 안내" },
+  { name: "현대카드 ZERO Edition3", url: "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ZER3", basis: "공식 상품 안내" },
+  { name: "신한카드 Deep Dream", url: "https://www.shinhancard.com/pconts/html/card/apply/credit/1187946_2207.html", basis: "공식 상품 안내" },
   { name: "KB국민카드", url: "https://card.kbcard.com/", basis: "해외이용·카드상품 안내" },
   { name: "삼성카드", url: "https://www.samsungcard.com/", basis: "해외이용·카드상품 안내" },
   { name: "롯데카드", url: "https://www.lottecard.co.kr/", basis: "해외이용·카드상품 안내" },

@@ -64,6 +64,13 @@ defineProps<{
         <div class="text-muted-foreground">
           월 혜택 {{ result.totalMonthlyBenefit.toLocaleString() }}원 · 연회비 {{ result.annualFee.toLocaleString() }}원
         </div>
+        <div
+          v-if="result.appliedTotalMonthlyCap !== null"
+          class="text-muted-foreground"
+        >
+          월 통합한도 {{ result.appliedTotalMonthlyCap.toLocaleString() }}원
+          <span v-if="result.isTotalCapExceeded" class="text-status-warning"> · 한도 적용</span>
+        </div>
         <div class="text-muted-foreground">
           월 카드 사용 {{ result.totalMonthlySpend.toLocaleString() }}원 · 월 환산 연회비 {{ result.monthlyAnnualFee.toLocaleString() }}원
         </div>

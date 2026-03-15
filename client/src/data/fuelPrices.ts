@@ -12,11 +12,11 @@ export interface FuelPriceData {
 }
 
 export const FUEL_PRICES: FuelPriceData = {
-  lastUpdated: "2026.03.06",
-  gasoline: 1648,
-  diesel: 1498,
-  lpg: 998,
-  source: "Opinet 전국 평균",
+  lastUpdated: "2026-03-02",
+  gasoline: 1707,
+  diesel: 1612,
+  lpg: 1012,
+  source: "Opinet 전국 평균 판매가",
 };
 
 export const FUEL_TYPE_LABELS: Record<FuelType, string> = {

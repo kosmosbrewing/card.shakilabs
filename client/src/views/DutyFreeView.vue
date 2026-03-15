@@ -47,6 +47,10 @@ const faqJsonLd = {
       @update:category="category = $event"
     />
 
+    <div class="rounded-2xl border border-status-warning/30 bg-status-warning/10 px-4 py-3 text-caption leading-relaxed text-foreground">
+      관세청 실시간 세액 조회가 아닌 참고 계산입니다. 통관 시점 환율, 세율, 품목 분류에 따라 실제 세액은 달라질 수 있습니다.
+    </div>
+
     <DutyFreeResult :result="result" />
 
     <AdSlot slot="duty-free-top" label="관세 계산 상단" />

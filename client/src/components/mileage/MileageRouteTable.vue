@@ -49,7 +49,7 @@ const sortOptions: { key: MileageSortKey; label: string }[] = [
               <th class="px-3 py-2 text-left font-semibold">노선</th>
               <th class="px-3 py-2 text-left font-semibold">등급</th>
               <th class="px-3 py-2 text-right font-semibold">필요 마일</th>
-              <th class="px-3 py-2 text-right font-semibold">현금가</th>
+              <th class="px-3 py-2 text-right font-semibold">예시 현금가</th>
               <th class="px-3 py-2 text-right font-semibold">1마일 가치</th>
               <th class="px-3 py-2 text-right font-semibold">상태</th>
             </tr>

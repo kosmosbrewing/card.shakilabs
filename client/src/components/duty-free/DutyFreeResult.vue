@@ -54,7 +54,7 @@ defineProps<{
         class="flex items-center gap-2 rounded-xl border border-loss/25 bg-loss/10 px-3 py-2 text-caption font-semibold text-loss"
       >
         <AlertTriangle class="h-4 w-4" />
-        {{ result.finalTaxMethod === "simplified" ? "간이세율" : "일반세율" }} 기준으로 {{ result.finalTax.toLocaleString() }}원 세금이 예상됩니다.
+        {{ result.finalTaxMethod === "simplified" ? "간이세율" : "일반세율" }} 기준 참고 계산으로 {{ result.finalTax.toLocaleString() }}원 세금이 예상됩니다.
       </div>
 
       <div class="grid gap-2 sm:grid-cols-2">

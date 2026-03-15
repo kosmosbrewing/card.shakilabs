@@ -90,5 +90,5 @@ export function formatTaxBreakdown(result: DutyFreeCalcResult): string {
     return `구매액이 면세 한도 ${result.exemptionUsd}달러 이하여서 예상 세금은 0원입니다.`;
   }
 
-  return `${result.categoryLabel} 기준 과세 대상은 ${result.taxableAmountUsd.toLocaleString()}달러이고, 최종 세액은 ${result.finalTax.toLocaleString()}원입니다.`;
+  return `${result.categoryLabel} 기준 과세 대상은 ${result.taxableAmountUsd.toLocaleString()}달러이고, 참고 환율 ${result.exchangeRate.toLocaleString()}원 적용 시 최종 세액은 ${result.finalTax.toLocaleString()}원입니다.`;
 }

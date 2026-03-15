@@ -1,4 +1,4 @@
-export type AirlineId = "korean-air" | "asiana" | "card-mileage";
+export type AirlineId = "korean-air" | "asiana";
 export type SeatClass = "economy" | "business" | "first";
 
 export interface AirlineInfo {
@@ -31,7 +31,6 @@ export interface AirlineMileageData {
 export const AIRLINES: AirlineInfo[] = [
   { id: "korean-air", name: "대한항공", color: "#2563eb", alliance: "SkyTeam", mileageName: "스카이패스" },
   { id: "asiana", name: "아시아나항공", color: "#dc2626", alliance: "Star Alliance", mileageName: "아시아나클럽" },
-  { id: "card-mileage", name: "전환형 포인트(예시)", color: "#0f766e", alliance: "Transfer", mileageName: "카드 포인트 환산 예시" },
 ];
 
 export const SEAT_CLASS_LABELS: Record<SeatClass, string> = {
@@ -128,30 +127,6 @@ export const MILEAGE_DATA: AirlineMileageData[] = [
       { routeId: "europe", seatClass: "economy", milesRequired: 40000 },
       { routeId: "europe", seatClass: "business", milesRequired: 70000 },
       { routeId: "europe", seatClass: "first", milesRequired: 110000 },
-    ],
-  },
-  {
-    airlineId: "card-mileage",
-    routes: createRoutes(0.9),
-    redemptions: [
-      { routeId: "japan", seatClass: "economy", milesRequired: 18000 },
-      { routeId: "japan", seatClass: "business", milesRequired: 36000 },
-      { routeId: "japan", seatClass: "first", milesRequired: 52000 },
-      { routeId: "china", seatClass: "economy", milesRequired: 22000 },
-      { routeId: "china", seatClass: "business", milesRequired: 38000 },
-      { routeId: "china", seatClass: "first", milesRequired: 54000 },
-      { routeId: "southeast-asia", seatClass: "economy", milesRequired: 30000 },
-      { routeId: "southeast-asia", seatClass: "business", milesRequired: 52000 },
-      { routeId: "southeast-asia", seatClass: "first", milesRequired: 76000 },
-      { routeId: "hawaii", seatClass: "economy", milesRequired: 42000 },
-      { routeId: "hawaii", seatClass: "business", milesRequired: 70000 },
-      { routeId: "hawaii", seatClass: "first", milesRequired: 98000 },
-      { routeId: "usa", seatClass: "economy", milesRequired: 45000 },
-      { routeId: "usa", seatClass: "business", milesRequired: 78000 },
-      { routeId: "usa", seatClass: "first", milesRequired: 110000 },
-      { routeId: "europe", seatClass: "economy", milesRequired: 50000 },
-      { routeId: "europe", seatClass: "business", milesRequired: 85000 },
-      { routeId: "europe", seatClass: "first", milesRequired: 125000 },
     ],
   },
 ];

@@ -36,7 +36,7 @@ const DUTY_FREE_CATEGORY_VALUES = [
   "food",
   "other",
 ] as const;
-const AIRLINE_ID_VALUES = ["korean-air", "asiana", "card-mileage"] as const;
+const AIRLINE_ID_VALUES = ["korean-air", "asiana"] as const;
 
 export const fuelTypeSchema = z.enum(FUEL_TYPE_VALUES);
 export const monthlySpendSchema = z.number().int().min(MONTHLY_SPEND_MIN).max(MONTHLY_SPEND_MAX);

@@ -41,52 +41,59 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
       </h1>
     </div>
 
-    <div class="retro-panel-content space-y-3">
-      <!-- 항공사 선택 -->
-      <div class="flex gap-1.5">
-        <button
-          v-for="airline in AIRLINES"
-          :key="airline.id"
-          type="button"
-          :class="[
-            'flex-1 rounded-lg border px-3 py-1.5 text-caption font-medium transition-colors',
-            airlineId === airline.id
-              ? 'border-primary bg-primary/10 text-primary'
-              : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-          ]"
-          @click="emit('update:airlineId', airline.id)"
-        >
-          {{ airline.name }}
-        </button>
-      </div>
-
-      <!-- 마일리지 입력: 인라인 스테퍼 [−|input 마일|+] -->
-      <div class="flex items-stretch overflow-hidden rounded-xl border border-input bg-card">
-        <button
-          type="button"
-          class="shrink-0 px-2.5 text-base font-bold text-muted-foreground transition-colors hover:bg-muted/50 active:bg-muted"
-          aria-label="5,000마일 감소"
-          @click="emit('update:mileageBalance', Math.max(MIN, mileageBalance - STEP))"
-        >−</button>
-        <div class="relative min-w-0 flex-1">
-          <input
-            type="text"
-            inputmode="numeric"
-            class="w-full border-x border-input bg-transparent px-3 py-2.5 text-right text-body tabular-nums focus:outline-none"
-            :value="mileageBalance.toLocaleString()"
-            @input="handleMileageInput"
-          />
-          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-caption text-muted-foreground">마일</span>
+    <div class="retro-panel-content space-y-4">
+      <!-- 항공사 + 보유 마일리지 (2컬럼) -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div class="space-y-1.5">
+          <label class="text-caption font-semibold text-muted-foreground">항공사</label>
+          <div class="grid grid-cols-2 gap-1.5">
+            <button
+              v-for="airline in AIRLINES"
+              :key="airline.id"
+              type="button"
+              :class="[
+                'retro-choice-button',
+                airlineId === airline.id
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
+              ]"
+              @click="emit('update:airlineId', airline.id)"
+            >
+              {{ airline.name }}
+            </button>
+          </div>
         </div>
-        <button
-          type="button"
-          class="shrink-0 px-2.5 text-base font-bold text-muted-foreground transition-colors hover:bg-muted/50 active:bg-muted"
-          aria-label="5,000마일 증가"
-          @click="emit('update:mileageBalance', Math.min(MAX, mileageBalance + STEP))"
-        >+</button>
+
+        <div class="space-y-1.5">
+          <label class="text-caption font-semibold text-muted-foreground">보유 마일리지</label>
+          <div class="retro-stepper">
+            <button
+              type="button"
+              class="retro-stepper-button"
+              aria-label="5,000마일 감소"
+              @click="emit('update:mileageBalance', Math.max(MIN, mileageBalance - STEP))"
+            >−</button>
+            <div class="retro-stepper-field">
+              <input
+                type="text"
+                inputmode="numeric"
+                class="retro-stepper-input retro-stepper-input-right"
+                :value="mileageBalance.toLocaleString()"
+                @input="handleMileageInput"
+              />
+              <span class="retro-input-affix retro-input-affix-right retro-input-affix-wide">마일</span>
+            </div>
+            <button
+              type="button"
+              class="retro-stepper-button"
+              aria-label="5,000마일 증가"
+              @click="emit('update:mileageBalance', Math.min(MAX, mileageBalance + STEP))"
+            >+</button>
+          </div>
+        </div>
       </div>
 
-      <!-- 마일리지 슬라이더 -->
+      <!-- 마일리지 슬라이더 (full width) -->
       <input
         type="range"
         :min="MIN"
@@ -98,21 +105,24 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
       />
 
       <!-- 좌석 등급 필터 -->
-      <div class="flex flex-wrap gap-1.5">
-        <button
-          v-for="seatClass in classOptions"
-          :key="seatClass"
-          type="button"
-          :class="[
-            'rounded-lg border px-2.5 py-1.5 text-caption font-medium transition-colors',
-            selectedClass === seatClass
-              ? 'border-primary bg-primary/10 text-primary'
-              : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-          ]"
-          @click="emit('update:selectedClass', seatClass)"
-        >
-          {{ seatClass === "all" ? "전체" : SEAT_CLASS_LABELS[seatClass as SeatClass] }}
-        </button>
+      <div class="space-y-1.5">
+        <label class="text-caption font-semibold text-muted-foreground">좌석 등급</label>
+        <div class="grid grid-cols-2 gap-1.5">
+          <button
+            v-for="seatClass in classOptions"
+            :key="seatClass"
+            type="button"
+            :class="[
+              'retro-choice-button',
+              selectedClass === seatClass
+                ? 'border-primary bg-primary/10 text-primary'
+                : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
+            ]"
+            @click="emit('update:selectedClass', seatClass)"
+          >
+            {{ seatClass === "all" ? "전체" : SEAT_CLASS_LABELS[seatClass as SeatClass] }}
+          </button>
+        </div>
       </div>
     </div>
   </div>

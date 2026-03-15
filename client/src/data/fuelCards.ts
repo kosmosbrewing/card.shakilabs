@@ -38,39 +38,39 @@ export interface FuelCard {
 
 export const FUEL_CARDS: FuelCard[] = [
   {
-    id: "hyundai-m-edition3",
+    id: "hyundai-o",
     issuer: "현대카드",
     issuerColor: "#6B21A8",
-    name: "M Edition3",
+    name: "현대카드 O",
+    annualFee: 20000,
+    discount: {
+      type: "percent",
+      amount: 0.1,
+      monthlyCap: 10000,
+      minSpend: 400000,
+      spendTiers: [
+        { minSpend: 400000, monthlyCap: 10000, label: "40만원 이상 80만원 미만" },
+        { minSpend: 800000, monthlyCap: 20000, label: "80만원 이상 120만원 미만" },
+        { minSpend: 1200000, monthlyCap: 35000, label: "120만원 이상" },
+      ],
+      brandRestriction: [],
+    },
+    extras: ["전국 주유소 10% 할인", "전월 이용금액 구간별 월 한도 1만/2만/3.5만원", "생활업종 할인 병행"],
+  },
+  {
+    id: "shinhan-mycar",
+    issuer: "신한카드",
+    issuerColor: "#1D4ED8",
+    name: "MY CAR",
     annualFee: 15000,
     discount: {
       type: "perLiter",
       amount: 80,
-      monthlyCap: 100000,
-      minSpend: 300000,
+      monthlyCap: 10000,
+      minSpend: 400000,
       brandRestriction: [],
     },
-    extras: ["대중교통 10%", "통신비 할인"],
-  },
-  {
-    id: "shinhan-mrlife",
-    issuer: "신한카드",
-    issuerColor: "#1D4ED8",
-    name: "Mr.Life",
-    annualFee: 18000,
-    discount: {
-      type: "perLiter",
-      amount: 60,
-      monthlyCap: 3000,
-      minSpend: 300000,
-      spendTiers: [
-        { minSpend: 300000, monthlyCap: 3000, label: "30만원 이상 50만원 미만" },
-        { minSpend: 500000, monthlyCap: 7000, label: "50만원 이상 100만원 미만" },
-        { minSpend: 1000000, monthlyCap: 10000, label: "100만원 이상" },
-      ],
-      brandRestriction: [],
-    },
-    extras: ["주말 4대 정유사 리터당 60원", "3대 마트 10% 할인", "전월실적 구간별 한도 3천/7천/1만원"],
+    extras: ["주유·충전 리터당 80원", "월 주유/충전금액 15만원까지", "월 통합 할인한도 1만원"],
   },
   {
     id: "kb-tantandaero",
@@ -136,8 +136,8 @@ export const FUEL_CARDS: FuelCard[] = [
 
 /** 카드사 slug → 카드 ID 매핑 (SEO 페이지용) */
 export const ISSUER_SLUG_MAP: Record<string, string[]> = {
-  hyundai: ["hyundai-m-edition3"],
-  shinhan: ["shinhan-mrlife"],
+  hyundai: ["hyundai-o"],
+  shinhan: ["shinhan-mycar"],
   kb: ["kb-tantandaero"],
   samsung: ["samsung-soil"],
   lotte: ["lotte-auto"],

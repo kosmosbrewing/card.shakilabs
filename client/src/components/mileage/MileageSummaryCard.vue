@@ -31,7 +31,7 @@ const airline = computed(() =>
 
       <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
         <div class="retro-panel-muted px-3 py-3">
-          <div class="text-caption text-muted-foreground">총 환산 가치</div>
+          <div class="text-caption text-muted-foreground">최대 환산 가치</div>
           <div class="mt-1 text-heading font-bold tabular-nums text-savings">
             {{ formatTotalValue(result.totalValueKrw) }}
           </div>
@@ -53,7 +53,7 @@ const airline = computed(() =>
       <div class="rounded-xl border border-border/60 bg-background/60 px-3 py-3 text-caption leading-relaxed text-foreground">
         <template v-if="result.bestOption">
           최적 사용처는 {{ result.bestOption.routeLabel }} {{ result.bestOption.seatClassLabel }}이며,
-          {{ result.bestOption.example }} 기준 {{ formatValuePerMile(result.bestOption.valuePerMile) }} 수준입니다.
+          {{ result.bestOption.example }} 예시 운임 기준 {{ formatValuePerMile(result.bestOption.valuePerMile) }} 수준입니다.
         </template>
         <template v-else>
           현재 보유 마일로 즉시 발권 가능한 옵션은 없지만, 노선별 1마일 가치 비교는 계속 확인할 수 있습니다.
