@@ -3,7 +3,7 @@ import { Trophy, AlertTriangle, CheckCircle } from "lucide-vue-next";
 import type { FuelCardCalcResult } from "@/utils/calculator";
 import { formatDiscountType } from "@/utils/calculator";
 
-const props = defineProps<{
+defineProps<{
   result: FuelCardCalcResult;
   rank: number;
 }>();

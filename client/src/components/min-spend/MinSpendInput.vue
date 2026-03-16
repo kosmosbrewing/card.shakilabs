@@ -10,7 +10,7 @@ import {
 } from "@/data/spendingCategories";
 import { FUEL_PRICES, FUEL_TYPE_LABELS, getFuelPrice, type FuelType } from "@/data/fuelPrices";
 
-const props = defineProps<{
+defineProps<{
   fuelType: FuelType;
   fuelSpend: number;
   spending: SpendingMap;

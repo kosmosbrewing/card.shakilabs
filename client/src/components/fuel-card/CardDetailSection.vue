@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FuelCardCalcResult } from "@/utils/calculator";
-import { formatDiscountDetail, formatDiscountType } from "@/utils/calculator";
+import { formatDiscountDetail } from "@/utils/calculator";
 
 defineProps<{
   results: FuelCardCalcResult[];

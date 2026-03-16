@@ -5,7 +5,6 @@ import SEOHead from "@/components/common/SEOHead.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
-import CardDetailSection from "@/components/fuel-card/CardDetailSection.vue";
 import {
   FUEL_CARDS,
   formatFuelCardTierSummary,

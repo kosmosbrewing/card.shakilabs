@@ -9,6 +9,8 @@ interface ImportMetaEnv {
   readonly VITE_GA4_MEASUREMENT_ID?: string;
   readonly VITE_GA_DEBUG?: string;
   readonly VITE_ADSENSE_PUBLISHER_ID?: string;
+  readonly VITE_COUPANG_FUEL_CARD_URL?: string;
+  readonly VITE_COUPANG_FUEL_VOUCHER_URL?: string;
   readonly VITE_KAKAO_JS_KEY?: string;
 }
 
