@@ -15,7 +15,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", ...fontFamily.sans],
-        title: ["Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", ...fontFamily.sans],
+        title: ["GmarketSans", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", ...fontFamily.sans],
         brand: ["GmarketSans", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", ...fontFamily.sans],
       },
       fontSize: {
