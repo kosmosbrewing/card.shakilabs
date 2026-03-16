@@ -64,7 +64,7 @@ function buildMeta(route) {
   if (issuerMatch) {
     const issuer = issuerMatch[1];
     const label = ISSUER_LABELS[issuer] ?? issuer;
-    const title = `${label} 주유 할인카드 비교 | Car Tools`;
+    const title = `${label} 주유 할인카드 비교 | 카드 계산기`;
     const description = `${label} 주유 할인카드를 비교합니다. 월 주유비 기준 연간 절약액과 실적 조건을 한눈에 확인하세요.`;
     const canonical = `${SITE_URL}/fuel-card/${issuer}`;
 
@@ -86,7 +86,7 @@ function buildMeta(route) {
   if (fuelMatch) {
     const fuelType = fuelMatch[1];
     const label = fuelType === "gasoline" ? "휘발유" : "경유";
-    const title = `${label} 주유 할인카드 추천 | Car Tools`;
+    const title = `${label} 주유 할인카드 추천 | 카드 계산기`;
     const description = `${label} 주유 시 가장 유리한 할인카드를 비교합니다. 카드별 리터당 할인액과 연간 절약액을 확인하세요.`;
     const canonical = `${SITE_URL}/fuel-card/${fuelType}`;
 
@@ -108,7 +108,7 @@ function buildMeta(route) {
   if (monthlyMatch) {
     const amount = Number.parseInt(monthlyMatch[1], 10);
     const manWon = Math.round(amount / 10000);
-    const title = `월 ${manWon}만원 주유 시 추천 카드 | Car Tools`;
+    const title = `월 ${manWon}만원 주유 시 추천 카드 | 카드 계산기`;
     const description = `월 주유비 ${manWon}만원 기준 가장 절약되는 주유 할인카드를 비교합니다.`;
     const canonical = `${SITE_URL}/fuel-card/monthly/${amount}`;
 
@@ -162,7 +162,7 @@ function buildMeta(route) {
   }
 
   if (route === "/overseas-payment") {
-    const title = "해외결제 카드 비교 + DCC 수수료 계산기 | Car Tools 2026";
+    const title = "해외결제 카드 비교 + DCC 수수료 계산기 | 카드 계산기";
     const description = "현지통화 결제와 DCC 원화결제를 비교하고, 카드별 해외수수료와 혜택을 한 번에 계산합니다.";
     const canonical = `${SITE_URL}/overseas-payment`;
 
@@ -183,7 +183,7 @@ function buildMeta(route) {
   }
 
   if (route === "/min-spend") {
-    const title = "전월 실적 채우기 최소 비용 계산기 | Car Tools 2026";
+    const title = "전월 실적 채우기 최소 비용 계산기 | 카드 계산기";
     const description = "내 월 지출 패턴을 기준으로 카드별 전월 실적 충족 여부와 추가 지출까지 반영한 순혜택을 계산합니다.";
     const canonical = `${SITE_URL}/min-spend`;
 
@@ -267,7 +267,7 @@ function buildMeta(route) {
   }
 
   if (route === "/about") {
-    const title = "서비스 안내 | Car Tools";
+    const title = "서비스 안내 | 카드 계산기";
     const description = "주유 할인카드와 해외결제 카드를 비교해 실질 비용을 계산하는 도구입니다.";
     const canonical = `${SITE_URL}/about`;
 
@@ -285,7 +285,7 @@ function buildMeta(route) {
   }
 
   if (route === "/privacy") {
-    const title = "개인정보 처리방침 | Car Tools";
+    const title = "개인정보 처리방침 | 카드 계산기";
     const description = "card.shakilabs.com 개인정보 처리방침 안내 페이지입니다.";
     const canonical = `${SITE_URL}/privacy`;
 
