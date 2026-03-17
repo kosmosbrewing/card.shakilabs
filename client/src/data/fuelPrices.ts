@@ -34,11 +34,13 @@ export function getFuelPrice(type: FuelType): number {
 let fuelPricesPromise: Promise<void> | null = null;
 
 function applyFuelPriceSnapshot(snapshot: FuelPriceApiSnapshot): void {
-  FUEL_PRICES.lastUpdated = snapshot.updatedAt;
-  FUEL_PRICES.gasoline = snapshot.gasoline;
-  FUEL_PRICES.diesel = snapshot.diesel;
-  FUEL_PRICES.lpg = snapshot.lpg;
-  FUEL_PRICES.source = snapshot.source;
+  if (!snapshot) return;
+  // API 응답이 부분 실패해도 fallback 값 유지
+  if (snapshot.updatedAt) FUEL_PRICES.lastUpdated = snapshot.updatedAt;
+  if (typeof snapshot.gasoline === "number" && snapshot.gasoline > 0) FUEL_PRICES.gasoline = snapshot.gasoline;
+  if (typeof snapshot.diesel === "number" && snapshot.diesel > 0) FUEL_PRICES.diesel = snapshot.diesel;
+  if (typeof snapshot.lpg === "number" && snapshot.lpg > 0) FUEL_PRICES.lpg = snapshot.lpg;
+  if (snapshot.source) FUEL_PRICES.source = snapshot.source;
 }
 
 type FuelPriceApiSnapshot = Awaited<ReturnType<typeof fetchFuelPriceSnapshot>>;

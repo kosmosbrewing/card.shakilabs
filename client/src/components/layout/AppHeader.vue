@@ -32,14 +32,14 @@ onMounted(() => {
         <div class="retro-titlebar h-11 border-b-0 px-2 bg-transparent">
           <div class="flex h-full w-full items-center gap-4">
             <!-- 로고 -->
-            <RouterLink to="/" aria-label="홈"
+            <RouterLink to="/" aria-label="ShakiLabs 홈"
               class="inline-flex h-8 w-8 sm:w-auto shrink-0 items-center justify-center sm:justify-start gap-1.5 px-0.5 text-muted-foreground transition-colors hover:text-foreground"
             >
               <span class="inline-flex h-6 w-6 items-center justify-center rounded-md bg-muted/60 ring-1 ring-border/60" aria-hidden="true">
                 <img src="/favicon.png" alt="" class="h-4 w-4 shrink-0" />
               </span>
-              <span class="hidden sm:inline font-brand text-tiny font-bold tracking-wide text-foreground/90">
-                Car Tools
+              <span class="hidden sm:inline font-brand text-tiny font-semibold tracking-wide text-foreground/90">
+                ShakiLabs
               </span>
             </RouterLink>
 
