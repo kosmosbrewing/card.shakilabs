@@ -16,9 +16,10 @@ import MinSpendTopCards from "@/components/min-spend/MinSpendTopCards.vue";
 import QualificationChart from "@/components/min-spend/QualificationChart.vue";
 import { SPENDING_CATEGORIES } from "@/data/spendingCategories";
 import { useMinSpendCalc } from "@/composables/useMinSpendCalc";
+import { useCardFuelPrices } from "@/composables/usePublicData";
 import { useResultShare } from "@/composables/useResultShare";
 import { buildAbsoluteUrl, buildQuery } from "@/lib/routeState";
-import { ANNUAL_FEE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
+import { MIN_SPEND_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
 
 const {
   fuelType,
@@ -33,6 +34,8 @@ const {
   mismatchResults,
   updateSpending,
 } = useMinSpendCalc();
+
+useCardFuelPrices();
 
 const seoTitle = "전월 실적 채우기 최소 비용 계산기 | 카드 실적 vs 할인 효율 분석 2026";
 const seoDescription =
@@ -151,7 +154,7 @@ const {
     <AdSlot slot="min-spend-bottom" label="실적 FAQ 하단" />
 
     <CompareSourceFooter
-      :sources="ANNUAL_FEE_SOURCES"
+      :sources="MIN_SPEND_SOURCES"
       :updated-at="SOURCE_VERIFIED_AT"
       note="※ 실적 인정 제외 업종과 할인 적용 조건은 카드사별로 다르므로 실제 카드사 기준을 반드시 함께 확인하세요."
     />

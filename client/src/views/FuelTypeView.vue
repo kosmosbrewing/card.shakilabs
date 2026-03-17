@@ -8,6 +8,7 @@ import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FeeCompareTable from "@/components/fuel-card/FeeCompareTable.vue";
 import SavingsBarChart from "@/components/fuel-card/SavingsBarChart.vue";
 import FuelCardFAQ from "@/components/fuel-card/FuelCardFAQ.vue";
+import { useCardFuelPrices } from "@/composables/usePublicData";
 import { FUEL_CARDS } from "@/data/fuelCards";
 import { FUEL_PRICES, FUEL_TYPE_LABELS, type FuelType } from "@/data/fuelPrices";
 import { FUEL_COMPARE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
@@ -18,6 +19,8 @@ import type { SortKey } from "@/composables/useFuelCardCalc";
 const props = defineProps<{
   fuelType: string;
 }>();
+
+useCardFuelPrices();
 
 const ft = computed<FuelType>(() =>
   props.fuelType === "diesel" ? "diesel" : "gasoline"

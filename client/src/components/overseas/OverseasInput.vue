@@ -10,6 +10,7 @@ import {
   getExchangeRate,
   type Currency,
 } from "@/data/exchangeRates";
+import { DCC_MARKUP_MAX_PERCENT, DCC_MARKUP_MIN_PERCENT } from "@/lib/validators";
 
 const props = defineProps<{
   currency: Currency;
@@ -29,6 +30,8 @@ const showExtraCurrencies = ref(false);
 const STEP = 50;
 const MIN = 10;
 const MAX = 2000;
+const foreignAmountInputId = "overseas-amount";
+const dccInputId = "overseas-dcc";
 const selectedExtraCurrency = computed(() =>
   EXTRA_CURRENCIES.some((item) => item === props.currency) ? props.currency : ""
 );
@@ -76,7 +79,7 @@ function handleDccInput(event: Event) {
       <!-- 통화 + 금액 입력 (2컬럼) -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="space-y-1.5">
-          <label class="text-caption font-semibold text-muted-foreground">통화</label>
+          <p class="text-caption font-semibold text-muted-foreground">통화</p>
           <div class="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
             <button
               v-for="item in POPULAR_CURRENCIES"
@@ -103,7 +106,9 @@ function handleDccInput(event: Event) {
         </div>
 
         <div class="space-y-1.5">
-          <label class="text-caption font-semibold text-muted-foreground">결제 금액</label>
+          <label :for="foreignAmountInputId" class="text-caption font-semibold text-muted-foreground">
+            결제 금액
+          </label>
           <div class="retro-stepper">
             <button
               type="button"
@@ -116,6 +121,7 @@ function handleDccInput(event: Event) {
                 {{ getExchangeRate(currency).symbol }}
               </span>
               <input
+                :id="foreignAmountInputId"
                 type="text"
                 inputmode="decimal"
                 class="retro-stepper-input retro-stepper-input-left"
@@ -175,15 +181,15 @@ function handleDccInput(event: Event) {
           <div v-if="showAdvanced" class="space-y-3 px-3 py-3">
             <div class="space-y-2">
               <div class="flex items-center justify-between gap-3">
-                <label class="text-caption font-semibold text-muted-foreground">DCC 마크업</label>
+                <p class="text-caption font-semibold text-muted-foreground">DCC 마크업</p>
                 <span class="text-caption font-semibold tabular-nums text-foreground">
                   {{ (dccMarkupRate * 100).toFixed(1) }}%
                 </span>
               </div>
               <input
                 type="range"
-                min="3"
-                max="8"
+                :min="DCC_MARKUP_MIN_PERCENT"
+                :max="DCC_MARKUP_MAX_PERCENT"
                 step="0.5"
                 class="retro-range"
                 :value="dccMarkupRate * 100"
@@ -191,9 +197,12 @@ function handleDccInput(event: Event) {
               />
             </div>
             <div class="space-y-1.5">
-              <label class="text-tiny font-semibold text-muted-foreground">직접 입력</label>
+              <label :for="dccInputId" class="text-tiny font-semibold text-muted-foreground">
+                직접 입력
+              </label>
               <div class="relative">
                 <input
+                  :id="dccInputId"
                   type="text"
                   inputmode="decimal"
                   class="retro-input retro-input-with-right-affix text-right tabular-nums"

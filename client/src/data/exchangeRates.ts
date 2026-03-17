@@ -1,3 +1,6 @@
+import { reactive } from "vue";
+import { fetchExchangeRateSnapshot } from "@/lib/publicDataApi";
+
 export const SUPPORTED_CURRENCIES = [
   "USD",
   "EUR",
@@ -47,7 +50,7 @@ export interface DCCMarkupData {
   source: string;
 }
 
-export const EXCHANGE_RATES: ExchangeRateData = {
+const fallbackExchangeRates: ExchangeRateData = {
   lastUpdated: "2026-03-09",
   source: "서울외국환중개 매매기준율 참고, 서비스 내 수동 업데이트",
   rates: [
@@ -63,6 +66,11 @@ export const EXCHANGE_RATES: ExchangeRateData = {
     { currency: "AUD", label: "호주 달러", symbol: "A$", rate: 904, unit: 1 },
   ],
 };
+
+export const EXCHANGE_RATES = reactive<ExchangeRateData>({
+  ...fallbackExchangeRates,
+  rates: [...fallbackExchangeRates.rates],
+});
 
 export const DCC_MARKUP: DCCMarkupData = {
   typicalMinRate: 0.03,
@@ -86,4 +94,54 @@ export function parseCurrencyQueryValue(value: string | null | undefined): Curre
   if (!value) return null;
   const normalized = value.trim().toUpperCase();
   return SUPPORTED_CURRENCIES.find((currency) => currency === normalized) ?? null;
+}
+
+type ExchangeRateApiSnapshot = Awaited<ReturnType<typeof fetchExchangeRateSnapshot>>;
+
+let exchangeRatesPromise: Promise<void> | null = null;
+
+function buildRateEntry(
+  snapshot: ExchangeRateApiSnapshot,
+  fallbackEntry: ExchangeRateEntry
+): ExchangeRateEntry {
+  const krwRate = snapshot.rates.KRW;
+  const currencyRate = snapshot.rates[fallbackEntry.currency];
+
+  if (!krwRate || !currencyRate) {
+    return fallbackEntry;
+  }
+
+  const multiplier = fallbackEntry.unit > 1 ? fallbackEntry.unit : 1;
+  return {
+    ...fallbackEntry,
+    rate: Number(((krwRate / currencyRate) * multiplier).toFixed(2)),
+  };
+}
+
+function applyExchangeRateSnapshot(snapshot: ExchangeRateApiSnapshot): void {
+  EXCHANGE_RATES.lastUpdated = snapshot.fetchedAt;
+  EXCHANGE_RATES.source = snapshot.source
+    ? `${snapshot.source} 자동 수집`
+    : fallbackExchangeRates.source;
+  EXCHANGE_RATES.rates = fallbackExchangeRates.rates.map((entry) =>
+    buildRateEntry(snapshot, entry)
+  );
+}
+
+export async function loadExchangeRates(forceRefresh = false): Promise<void> {
+  if (exchangeRatesPromise && !forceRefresh) return exchangeRatesPromise;
+
+  exchangeRatesPromise = (async () => {
+    try {
+      applyExchangeRateSnapshot(await fetchExchangeRateSnapshot());
+    } catch {
+      if (forceRefresh) {
+        EXCHANGE_RATES.lastUpdated = fallbackExchangeRates.lastUpdated;
+        EXCHANGE_RATES.source = fallbackExchangeRates.source;
+        EXCHANGE_RATES.rates = [...fallbackExchangeRates.rates];
+      }
+    }
+  })();
+
+  await exchangeRatesPromise;
 }

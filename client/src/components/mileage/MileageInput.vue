@@ -23,6 +23,7 @@ const emit = defineEmits<{
 const STEP = 5_000;
 const MIN = 1_000;
 const MAX = 200_000;
+const mileageInputId = "mileage-balance";
 
 function handleMileageInput(event: Event) {
   const value = Number((event.target as HTMLInputElement).value.replace(/[^0-9]/g, ""));
@@ -45,7 +46,7 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
       <!-- 항공사 + 보유 마일리지 (2컬럼) -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="space-y-1.5">
-          <label class="text-caption font-semibold text-muted-foreground">항공사</label>
+          <p class="text-caption font-semibold text-muted-foreground">항공사</p>
           <div class="grid grid-cols-2 gap-1.5">
             <button
               v-for="airline in AIRLINES"
@@ -65,7 +66,9 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
         </div>
 
         <div class="space-y-1.5">
-          <label class="text-caption font-semibold text-muted-foreground">보유 마일리지</label>
+          <label :for="mileageInputId" class="text-caption font-semibold text-muted-foreground">
+            보유 마일리지
+          </label>
           <div class="retro-stepper">
             <button
               type="button"
@@ -75,6 +78,7 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
             >−</button>
             <div class="retro-stepper-field">
               <input
+                :id="mileageInputId"
                 type="text"
                 inputmode="numeric"
                 class="retro-stepper-input retro-stepper-input-right"
@@ -106,7 +110,7 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
 
       <!-- 좌석 등급 필터 -->
       <div class="space-y-1.5">
-        <label class="text-caption font-semibold text-muted-foreground">좌석 등급</label>
+        <p class="text-caption font-semibold text-muted-foreground">좌석 등급</p>
         <div class="grid grid-cols-2 gap-1.5">
           <button
             v-for="seatClass in classOptions"

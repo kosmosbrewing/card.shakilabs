@@ -12,6 +12,7 @@ import OverseasCompareTable from "@/components/overseas/OverseasCompareTable.vue
 import OverseasFAQ from "@/components/overseas/OverseasFAQ.vue";
 import OverseasTopCardList from "@/components/overseas/OverseasTopCardList.vue";
 import type { OverseasSortKey } from "@/composables/useOverseasCalc";
+import { useCardExchangeRates } from "@/composables/usePublicData";
 import {
   DCC_MARKUP,
   EXCHANGE_RATES,
@@ -26,6 +27,8 @@ import { calculateAllOverseasCards } from "@/utils/overseasCalculator";
 const props = defineProps<{
   currency: string;
 }>();
+
+useCardExchangeRates();
 
 const selectedCurrency = computed(
   () => parseCurrencyQueryValue(props.currency) ?? "USD"

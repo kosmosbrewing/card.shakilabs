@@ -5,6 +5,7 @@ import SEOHead from "@/components/common/SEOHead.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
+import { useCardFuelPrices } from "@/composables/usePublicData";
 import {
   FUEL_CARDS,
   formatFuelCardTierSummary,
@@ -18,6 +19,8 @@ import { calculateCardSavings, formatDiscountType } from "@/utils/calculator";
 const props = defineProps<{
   issuer: string;
 }>();
+
+useCardFuelPrices();
 
 const issuerName = computed(
   () => ISSUER_DISPLAY_NAME[props.issuer] ?? props.issuer

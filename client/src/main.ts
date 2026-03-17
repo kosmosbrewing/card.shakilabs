@@ -5,6 +5,7 @@ import App from "./App.vue";
 import router from "./router";
 import "./assets/css/main.css";
 import { initAnalytics, trackEvent } from "./lib/analytics";
+import { captureSentryException, initSentry } from "./lib/sentry";
 
 function normalizeErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
@@ -43,6 +44,7 @@ async function bootstrap(): Promise<void> {
     });
   });
 
+  initSentry(app);
   app.use(pinia);
   app.use(router);
   app.use(head);
@@ -59,5 +61,6 @@ async function bootstrap(): Promise<void> {
 }
 
 void bootstrap().catch((error) => {
+  captureSentryException(error, "bootstrap");
   console.error("[bootstrap] failed", error);
 });

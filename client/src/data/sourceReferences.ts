@@ -36,6 +36,8 @@ export const ANNUAL_FEE_SOURCES: CompareSource[] = [
   { name: "NH농협카드", url: "https://card.nonghyup.com/", basis: "카드상품·혜택 안내" },
 ];
 
+export const MIN_SPEND_SOURCES: CompareSource[] = [...ANNUAL_FEE_SOURCES];
+
 export const OVERSEAS_COMPARE_SOURCES: CompareSource[] = [
   { name: "서울외국환중개", url: SMBS_MAIN, basis: "매매기준율 참고" },
   { name: "현대카드 ZERO Edition3", url: "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ZER3", basis: "공식 상품 안내" },

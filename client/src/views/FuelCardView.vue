@@ -6,6 +6,7 @@ import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
+import RelatedServices from "@/components/common/RelatedServices.vue";
 import FuelCardInput from "@/components/fuel-card/FuelCardInput.vue";
 import TopCardList from "@/components/fuel-card/TopCardList.vue";
 import FuelCardInternalLinks from "@/components/fuel-card/FuelCardInternalLinks.vue";
@@ -15,6 +16,7 @@ import SavingsBarChart from "@/components/fuel-card/SavingsBarChart.vue";
 import FuelCardFAQ from "@/components/fuel-card/FuelCardFAQ.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useFuelCardCalc } from "@/composables/useFuelCardCalc";
+import { useCardFuelPrices } from "@/composables/usePublicData";
 import { useResultShare } from "@/composables/useResultShare";
 import { fuelAffiliateItems } from "@/data/affiliateLinks";
 import { FUEL_TYPE_LABELS } from "@/data/fuelPrices";
@@ -31,6 +33,8 @@ const {
   bestCard,
   mismatchResults,
 } = useFuelCardCalc();
+
+useCardFuelPrices();
 
 const {
   showShareModal,
@@ -169,6 +173,7 @@ const summaryMessage = computed(() => {
     />
 
     <FuelCardInternalLinks />
+    <RelatedServices />
     <AffiliateDisclosure v-if="fuelAffiliateItems.length > 0" />
   </div>
 </template>

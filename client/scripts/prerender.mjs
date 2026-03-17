@@ -266,6 +266,90 @@ function buildMeta(route) {
     };
   }
 
+  if (route === "/credit-vs-debit") {
+    const title = "신용카드 vs 체크카드 비교 | 연회비까지 반영한 실속 계산";
+    const description = "월 카드 사용액과 연회비를 기준으로 신용카드와 체크카드 중 어떤 쪽이 더 실속인지 계산합니다.";
+    const canonical = `${SITE_URL}/credit-vs-debit`;
+
+    return {
+      title,
+      description,
+      canonical,
+      appPath: "/credit-vs-debit",
+      jsonLd: [
+        { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
+        { "@context": "https://schema.org", "@type": "WebApplication", name: title, url: canonical, applicationCategory: "FinanceApplication", operatingSystem: "Any", inLanguage: "ko", offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" } },
+      ],
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "신용카드 vs 체크카드" },
+      ]),
+    };
+  }
+
+  if (route === "/point-convert") {
+    const title = "포인트 전환 비교 | 항공·호텔·현금성 포인트 가치 계산";
+    const description = "보유 포인트를 어디로 넘겨야 가치가 큰지 예상 환산가치 기준으로 비교합니다.";
+    const canonical = `${SITE_URL}/point-convert`;
+
+    return {
+      title,
+      description,
+      canonical,
+      appPath: "/point-convert",
+      jsonLd: [
+        { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
+        { "@context": "https://schema.org", "@type": "WebApplication", name: title, url: canonical, applicationCategory: "FinanceApplication", operatingSystem: "Any", inLanguage: "ko", offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" } },
+      ],
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "포인트 전환 비교" },
+      ]),
+    };
+  }
+
+  if (route === "/billing-cycle") {
+    const title = "결제일별 이용기간 계산기 | 카드 결제일에 따른 최대 유예일";
+    const description = "카드 결제일과 사용일을 기준으로 실제 결제까지 남는 이용 가능 기간을 계산합니다.";
+    const canonical = `${SITE_URL}/billing-cycle`;
+
+    return {
+      title,
+      description,
+      canonical,
+      appPath: "/billing-cycle",
+      jsonLd: [
+        { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
+        { "@context": "https://schema.org", "@type": "WebApplication", name: title, url: canonical, applicationCategory: "FinanceApplication", operatingSystem: "Any", inLanguage: "ko", offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" } },
+      ],
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "결제일별 이용기간" },
+      ]),
+    };
+  }
+
+  if (route === "/customs") {
+    const title = "해외직구 관세 계산기 | 상품가+배송비 기준 예상 세금";
+    const description = "해외직구 상품가와 배송비를 입력하면 품목별 예상 관부가세를 계산합니다.";
+    const canonical = `${SITE_URL}/customs`;
+
+    return {
+      title,
+      description,
+      canonical,
+      appPath: "/customs",
+      jsonLd: [
+        { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
+        { "@context": "https://schema.org", "@type": "WebApplication", name: title, url: canonical, applicationCategory: "FinanceApplication", operatingSystem: "Any", inLanguage: "ko", offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" } },
+      ],
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "해외직구 관세 계산기" },
+      ]),
+    };
+  }
+
   if (route === "/about") {
     const title = "서비스 안내 | 카드 계산기";
     const description = "주유 할인카드와 해외결제 카드를 비교해 실질 비용을 계산하는 도구입니다.";

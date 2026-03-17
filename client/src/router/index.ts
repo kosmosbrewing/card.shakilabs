@@ -78,6 +78,30 @@ const routes: RouteRecordRaw[] = [
     meta: { title: "마일리지 가치 계산기 | 카드 계산기" },
   },
   {
+    path: "/credit-vs-debit",
+    name: "CreditVsDebit",
+    component: () => import("@/views/CreditVsDebitView.vue"),
+    meta: { title: "신용카드 vs 체크카드 비교 | 카드 계산기" },
+  },
+  {
+    path: "/point-convert",
+    name: "PointConvert",
+    component: () => import("@/views/PointConvertView.vue"),
+    meta: { title: "포인트 전환 비교 | 카드 계산기" },
+  },
+  {
+    path: "/billing-cycle",
+    name: "BillingCycle",
+    component: () => import("@/views/BillingCycleView.vue"),
+    meta: { title: "결제일별 이용기간 계산기 | 카드 계산기" },
+  },
+  {
+    path: "/customs",
+    name: "Customs",
+    component: () => import("@/views/CustomsView.vue"),
+    meta: { title: "해외직구 관세 계산기 | 카드 계산기" },
+  },
+  {
     path: "/about",
     name: "About",
     component: () => import("@/views/AboutView.vue"),

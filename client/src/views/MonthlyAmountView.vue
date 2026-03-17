@@ -9,6 +9,7 @@ import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import TopCardList from "@/components/fuel-card/TopCardList.vue";
 import FeeCompareTable from "@/components/fuel-card/FeeCompareTable.vue";
 import FuelCardFAQ from "@/components/fuel-card/FuelCardFAQ.vue";
+import { useCardFuelPrices } from "@/composables/usePublicData";
 import { FUEL_CARDS } from "@/data/fuelCards";
 import { FUEL_PRICES } from "@/data/fuelPrices";
 import { FUEL_COMPARE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
@@ -18,6 +19,8 @@ import type { SortKey } from "@/composables/useFuelCardCalc";
 const props = defineProps<{
   amount: number;
 }>();
+
+useCardFuelPrices();
 
 const sortKey = ref<SortKey>("savings");
 

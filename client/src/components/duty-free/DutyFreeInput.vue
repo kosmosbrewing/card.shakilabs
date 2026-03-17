@@ -5,6 +5,7 @@ import {
   DUTY_FREE_CONSTANTS,
   type DutyFreeCategory,
 } from "@/data/dutyFreeRates";
+import { DUTY_FREE_AMOUNT_MAX } from "@/lib/validators";
 
 defineProps<{
   purchaseAmountUsd: number;
@@ -18,7 +19,8 @@ const emit = defineEmits<{
 
 const STEP = 100;
 const MIN = 100;
-const MAX = 5000;
+const MAX = DUTY_FREE_AMOUNT_MAX;
+const amountInputId = "duty-free-amount";
 
 function handleAmountInput(event: Event) {
   const value = Number((event.target as HTMLInputElement).value.replace(/[^0-9.]/g, ""));
@@ -39,7 +41,9 @@ function handleAmountInput(event: Event) {
       <!-- 금액 + 카테고리 (2컬럼) -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="space-y-1.5">
-          <label class="text-caption font-semibold text-muted-foreground">구매 예상 금액</label>
+          <label :for="amountInputId" class="text-caption font-semibold text-muted-foreground">
+            구매 예상 금액
+          </label>
           <div class="retro-stepper">
             <button
               type="button"
@@ -50,6 +54,7 @@ function handleAmountInput(event: Event) {
             <div class="retro-stepper-field">
               <span class="retro-input-affix retro-input-affix-left retro-input-affix-currency text-body font-semibold">$</span>
               <input
+                :id="amountInputId"
                 type="text"
                 inputmode="decimal"
                 class="retro-stepper-input retro-stepper-input-left"
@@ -76,7 +81,7 @@ function handleAmountInput(event: Event) {
         </div>
 
         <div class="space-y-1.5">
-          <label class="text-caption font-semibold text-muted-foreground">물품 카테고리</label>
+          <p class="text-caption font-semibold text-muted-foreground">물품 카테고리</p>
           <div class="grid grid-cols-2 gap-1.5">
             <button
               v-for="item in DUTY_FREE_CATEGORIES"

@@ -13,6 +13,7 @@ import OverseasDetailSection from "@/components/overseas/OverseasDetailSection.v
 import OverseasFAQ from "@/components/overseas/OverseasFAQ.vue";
 import OverseasInput from "@/components/overseas/OverseasInput.vue";
 import OverseasTopCardList from "@/components/overseas/OverseasTopCardList.vue";
+import { useCardExchangeRates } from "@/composables/usePublicData";
 import { DCC_MARKUP, getCurrencyQueryValue, getExchangeRate } from "@/data/exchangeRates";
 import { useOverseasCalc } from "@/composables/useOverseasCalc";
 import { SEO_CURRENCIES } from "@/data/exchangeRates";
@@ -31,6 +32,8 @@ const {
   bestCard,
   avgDccExtra,
 } = useOverseasCalc();
+
+useCardExchangeRates();
 
 const seoTitle = "해외결제 카드 비교 + DCC 수수료 계산기 | Car Tools 2026";
 const seoDescription =
