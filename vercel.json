@@ -5,6 +5,10 @@
   "buildCommand": "cd client && npm run build",
   "outputDirectory": "client/dist",
   "rewrites": [
+    { "source": "/card/assets/:path*", "destination": "/assets/:path*" },
+    { "source": "/card/fonts/:path*", "destination": "/fonts/:path*" },
+    { "source": "/card/favicon.png", "destination": "/favicon.png" },
+    { "source": "/card/:path*", "destination": "/index.html" },
     { "source": "/((?!assets|fonts|favicon|sitemap|robots).*)", "destination": "/index.html" }
   ],
   "headers": [
