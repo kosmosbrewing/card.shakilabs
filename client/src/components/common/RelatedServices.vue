@@ -13,19 +13,19 @@ const items: RelatedServiceItem[] = [
   {
     title: "연봉 실수령액 계산",
     description: "카드값을 줄이기 전에 월 실수령과 고정지출 여력을 먼저 점검합니다.",
-    href: "https://finance.shakilabs.com/salary",
+    href: "/finance/salary",
     icon: Calculator,
   },
   {
     title: "자동차 취등록세 계산",
     description: "차량 구매 직후 드는 세금과 초기비용까지 한 번에 계산합니다.",
-    href: "https://car.shakilabs.com/tax",
+    href: "/car/tax",
     icon: CarFront,
   },
   {
     title: "여행 환전 계산",
     description: "해외결제 카드와 함께 환전 비용까지 비교해 여행 지출을 줄입니다.",
-    href: "https://travel.shakilabs.com/exchange",
+    href: "/travel/exchange",
     icon: Plane,
   },
 ];

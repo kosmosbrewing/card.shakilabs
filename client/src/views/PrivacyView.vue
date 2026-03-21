@@ -5,7 +5,7 @@ import SEOHead from "@/components/common/SEOHead.vue";
 <template>
   <SEOHead
     title="개인정보 처리방침 | Car Tools"
-    description="card.shakilabs.com 개인정보 처리방침"
+    description="shakilabs.com/card 개인정보 처리방침"
   />
 
   <div class="container space-y-5 py-5">
@@ -15,7 +15,7 @@ import SEOHead from "@/components/common/SEOHead.vue";
       </div>
       <div class="retro-panel-content space-y-4 text-body text-foreground leading-relaxed">
         <p>
-          <strong>card.shakilabs.com</strong>(이하 "서비스")은 이용자의 개인정보를 중요시하며,
+          <strong>shakilabs.com/card</strong>(이하 "서비스")은 이용자의 개인정보를 중요시하며,
           개인정보 보호법을 준수합니다.
         </p>
 

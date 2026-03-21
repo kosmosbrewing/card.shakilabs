@@ -1,5 +1,6 @@
 import type { LocationQuery, LocationQueryRaw } from "vue-router";
 import { copyUsingExecCommand } from "@/lib/utils";
+import { getCanonicalSiteUrl } from "@/lib/site";
 
 type QueryPrimitive = string | number | boolean | null | undefined;
 type QueryLike = LocationQuery | LocationQueryRaw | Record<string, unknown>;
@@ -100,11 +101,11 @@ export function buildAbsoluteUrl(
   query?: Record<string, QueryPrimitive>
 ): string {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const basePath = new URL(getCanonicalSiteUrl()).pathname.replace(/\/+$/, "");
+  const fullPath = `${window.location.origin}${basePath}${normalizedPath}`;
   const queryString = query ? toQueryString(buildQuery(query)) : "";
 
-  return queryString
-    ? `${window.location.origin}${normalizedPath}?${queryString}`
-    : `${window.location.origin}${normalizedPath}`;
+  return queryString ? `${fullPath}?${queryString}` : fullPath;
 }
 
 export async function copyToClipboard(text: string): Promise<boolean> {

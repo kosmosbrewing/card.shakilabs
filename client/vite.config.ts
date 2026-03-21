@@ -11,7 +11,7 @@ export default defineConfig({
   test: {
     include: ["src/**/*.test.ts"],
   },
-  base: "/",
+  base: "/card/",
   css: {
     postcss: {
       plugins: [tailwind(), autoprefixer()],

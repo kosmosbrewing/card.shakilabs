@@ -5,7 +5,7 @@ import { SEO_ROUTES } from "./seo-routes.mjs";
 
 const DIST_DIR = resolve(import.meta.dirname, "../dist");
 const INDEX_HTML = resolve(DIST_DIR, "index.html");
-const SITE_URL = "https://card.shakilabs.com";
+const SITE_URL = "https://shakilabs.com/card";
 
 const ISSUER_LABELS = {
   hyundai: "현대카드",
@@ -370,7 +370,7 @@ function buildMeta(route) {
 
   if (route === "/privacy") {
     const title = "개인정보 처리방침 | 카드 계산기";
-    const description = "card.shakilabs.com 개인정보 처리방침 안내 페이지입니다.";
+    const description = "shakilabs.com/card 개인정보 처리방침 안내 페이지입니다.";
     const canonical = `${SITE_URL}/privacy`;
 
     return {
@@ -396,7 +396,7 @@ function buildMeta(route) {
     canonical,
     appPath: "/fuel-card",
     jsonLd: [
-      { "@context": "https://schema.org", "@type": "WebSite", name: "card.shakilabs.com", url: SITE_URL, description, inLanguage: "ko" },
+      { "@context": "https://schema.org", "@type": "WebSite", name: "shakilabs.com/card", url: SITE_URL, description, inLanguage: "ko" },
       { "@context": "https://schema.org", "@type": "WebApplication", name: title, url: canonical, applicationCategory: "FinanceApplication", operatingSystem: "Any", inLanguage: "ko", offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" } },
     ],
     breadcrumb: buildBreadcrumb([
@@ -411,7 +411,7 @@ function buildPrerenderSection(meta) {
     <section data-seo-prerender style="max-width:920px;margin:0 auto;padding:20px 16px;line-height:1.6;">
       <h1 style="font-size:28px;line-height:1.3;margin:0 0 12px;">${meta.title.split(" | ")[0]}</h1>
       <p style="margin:0 0 10px;">${meta.description}</p>
-      <p style="margin:0;"><a href="${meta.appPath}">계산기 열기</a></p>
+      <p style="margin:0;"><a href="/card${meta.appPath}">계산기 열기</a></p>
     </section>`;
 }
 

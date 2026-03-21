@@ -7,7 +7,7 @@ import { ABOUT_PAGE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences"
 <template>
   <SEOHead
     title="서비스 안내 | Car Tools"
-    description="card.shakilabs.com은 자동차 관련 비교 계산기를 제공하는 무료 서비스입니다."
+    description="shakilabs.com/card은 자동차 관련 비교 계산기를 제공하는 무료 서비스입니다."
   />
 
   <div class="container space-y-5 py-5">
@@ -17,7 +17,7 @@ import { ABOUT_PAGE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences"
       </div>
       <div class="retro-panel-content space-y-4 text-body text-foreground leading-relaxed">
         <p>
-          <strong>card.shakilabs.com</strong>은 자동차 유지비를 스마트하게 관리할 수 있도록
+          <strong>shakilabs.com/card</strong>은 자동차 유지비를 스마트하게 관리할 수 있도록
           다양한 비교 계산기를 제공하는 무료 서비스입니다.
         </p>
         <h2 class="text-heading font-bold">주유 할인카드 비교 계산기</h2>
