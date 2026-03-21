@@ -1,0 +1,31 @@
+# 카드 비교 계산기 — shakilabs.com/card
+
+> 주유 할인카드, 해외결제 수수료, 연회비, 면세점, 마일리지 등 신용카드·체크카드를 비교하는 무료 서비스입니다. 2026년 카드사 공식 혜택 기준.
+
+## 사이트 정보
+
+- URL: https://shakilabs.com/card
+- 언어: 한국어
+- 데이터 기준: 2026년 카드사 공식 혜택·수수료
+
+## 주요 계산기
+
+- [주유 할인카드 비교](https://shakilabs.com/card/fuel-card): 카드사별 주유 할인율·월 할인 한도 비교 (현대, 신한, KB, 삼성, 롯데, 하나)
+- [해외결제 수수료 비교](https://shakilabs.com/card/overseas-payment): 통화별 해외결제 수수료 비교 (USD, EUR, JPY, GBP, CNY, THB, VND)
+- [전월실적 비교](https://shakilabs.com/card/min-spend): 카드별 전월실적 조건과 혜택 비교
+- [연회비 비교](https://shakilabs.com/card/annual-fee): 카드별 연회비 대비 혜택 분석
+- [면세점 할인카드](https://shakilabs.com/card/duty-free): 면세점 할인·적립 카드 비교
+- [마일리지 카드](https://shakilabs.com/card/mileage): 항공 마일리지 적립 카드 비교
+- [신용카드 vs 체크카드](https://shakilabs.com/card/credit-vs-debit): 소득공제율·혜택 차이 비교
+- [포인트 전환 계산기](https://shakilabs.com/card/point-convert): 카드 포인트 현금·마일리지 전환 비교
+- [결제일별 이용기간](https://shakilabs.com/card/billing-cycle): 카드사별 결제일·이용기간 안내
+- [관부가세 계산기](https://shakilabs.com/card/customs): 해외직구 관세·부가세 계산
+
+## 데이터 출처
+
+- 각 카드사 공식 홈페이지 혜택 안내
+- 관세청 해외직구 관부가세 기준
+
+## 연락처
+
+- 이메일: skdba1313@gmail.com
