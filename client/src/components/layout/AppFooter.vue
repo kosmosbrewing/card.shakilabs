@@ -14,6 +14,9 @@ const year = new Date().getFullYear();
           <RouterLink to="/about" class="text-muted-foreground hover:text-foreground transition-colors">
             사이트 안내
           </RouterLink>
+          <RouterLink to="/terms" class="text-muted-foreground hover:text-foreground transition-colors">
+            이용약관
+          </RouterLink>
           <RouterLink to="/privacy" class="text-muted-foreground hover:text-foreground transition-colors">
             개인정보 처리방침
           </RouterLink>

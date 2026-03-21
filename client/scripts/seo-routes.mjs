@@ -20,5 +20,6 @@ export const SEO_ROUTES = [
   "/customs",
   ...OVERSEAS_CURRENCIES.map((currency) => `/overseas-payment/${currency}`),
   "/about",
+  "/terms",
   "/privacy",
 ];

@@ -108,6 +108,12 @@ const routes: RouteRecordRaw[] = [
     meta: { title: "서비스 안내 | 카드 계산기" },
   },
   {
+    path: "/terms",
+    name: "Terms",
+    component: () => import("@/views/TermsView.vue"),
+    meta: { title: "이용약관 | 카드 계산기" },
+  },
+  {
     path: "/privacy",
     name: "Privacy",
     component: () => import("@/views/PrivacyView.vue"),

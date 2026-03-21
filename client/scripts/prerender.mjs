@@ -386,6 +386,24 @@ function buildMeta(route) {
     };
   }
 
+  if (route === "/terms") {
+    const title = "이용약관 | 카드 계산기";
+    const description = "shakilabs.com/card 이용약관 안내 페이지입니다.";
+    const canonical = `${SITE_URL}/terms`;
+
+    return {
+      title,
+      description,
+      canonical,
+      appPath: "/fuel-card",
+      jsonLd: { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
+      breadcrumb: buildBreadcrumb([
+        { name: "홈", url: SITE_URL },
+        { name: "이용약관" },
+      ]),
+    };
+  }
+
   const title = "주유 할인카드 비교 계산기 | 내 주유량에 맞는 최적 카드 찾기 2026";
   const description = "월 주유 금액만 입력하면 카드별 절약액을 즉시 비교합니다. 현대카드, 신한카드, KB국민, 삼성카드 주유 할인 한눈에.";
   const canonical = `${SITE_URL}/fuel-card`;
