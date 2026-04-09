@@ -4,12 +4,13 @@
   "installCommand": "cd client && npm ci",
   "buildCommand": "cd client && npm run build",
   "outputDirectory": "client/dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     { "source": "/card/assets/:path*", "destination": "/assets/:path*" },
     { "source": "/card/fonts/:path*", "destination": "/fonts/:path*" },
     { "source": "/card/favicon.png", "destination": "/favicon.png" },
-    { "source": "/card/:path*", "destination": "/index.html" },
-    { "source": "/((?!assets|fonts|favicon|sitemap|robots).*)", "destination": "/index.html" }
+    { "source": "/((?!assets/|fonts/|favicon|og-image|sitemap|robots|ads\\.txt).*)", "destination": "/index.html" }
   ],
   "headers": [
     {

@@ -2,6 +2,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { dirname, resolve } from "path";
 import { SEO_ROUTES } from "./seo-routes.mjs";
+import { buildPrerenderHeader, buildPrerenderFooter } from "./prerender-layout.mjs";
+import { buildRichContent } from "./prerender-content.mjs";
 
 const DIST_DIR = resolve(import.meta.dirname, "../dist");
 const INDEX_HTML = resolve(DIST_DIR, "index.html");
@@ -438,7 +440,7 @@ function replaceTag(html, pattern, next) {
   return html;
 }
 
-function applyMeta(html, meta) {
+function applyMeta(html, meta, route) {
   const escapedTitle = escapeAttr(meta.title);
   const escapedDescription = escapeAttr(meta.description);
   const escapedCanonical = escapeAttr(meta.canonical);
@@ -461,12 +463,24 @@ function applyMeta(html, meta) {
   output = output.replace(/\n?\s*<script type="application\/ld\+json" data-seo-prerender="jsonld">[\s\S]*?<\/script>/i, "");
   output = output.replace("</head>", `${jsonLdTag}\n  </head>`);
 
-  const prerenderSection = buildPrerenderSection(meta);
+  // 기존 prerender 요소 제거 (재빌드 대비)
+  output = output.replace(/\n?\s*<header data-seo-prerender[\s\S]*?<\/header>/i, "");
   output = output.replace(/\n?\s*<section data-seo-prerender[\s\S]*?<\/section>/i, "");
+  output = output.replace(/\n?\s*<article data-seo-prerender[\s\S]*?<\/article>/i, "");
+  output = output.replace(/\n?\s*<footer data-seo-prerender[\s\S]*?<\/footer>/i, "");
+
+  // 리치 콘텐츠 우선 → 없으면 기본 스텁
+  const rich = buildRichContent(route);
+  const mainContent = rich || buildPrerenderSection(meta);
+  const headerHtml = buildPrerenderHeader();
+  const footerHtml = buildPrerenderFooter();
+
+  const injection = `${headerHtml}${mainContent}${footerHtml}`;
+
   if (output.includes('<div id="app"></div>')) {
-    output = output.replace('<div id="app"></div>', `<div id="app"></div>${prerenderSection}`);
+    output = output.replace('<div id="app"></div>', `<div id="app"></div>${injection}`);
   } else {
-    output = output.replace("</body>", `${prerenderSection}\n  </body>`);
+    output = output.replace("</body>", `${injection}\n  </body>`);
   }
 
   return output;
@@ -483,7 +497,7 @@ for (const route of SEO_ROUTES) {
   }
 
   const meta = buildMeta(route);
-  const html = applyMeta(template, meta);
+  const html = applyMeta(template, meta, route);
   writeFileSync(filePath, html, "utf-8");
   console.log(`[prerender] ${route} -> ${filePath}`);
 }
