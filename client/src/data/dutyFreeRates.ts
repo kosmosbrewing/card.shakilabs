@@ -32,8 +32,8 @@ export const DUTY_FREE_CONSTANTS: DutyFreeConstants = {
   exemptionLimitUsd: 800,
   vatRate: 0.1,
   exchangeRate: 1380,
-  lastUpdated: "2026-03-11",
-  note: "관세청 예상세액 조회 참고용 대표 환율",
+  lastUpdated: "2026-07-10 검증",
+  note: "비교용 가정환율 1달러=1,380원 (관세청 고시환율 아님)",
 };
 
 export const DUTY_FREE_CATEGORIES: DutyFreeCategoryInfo[] = [
