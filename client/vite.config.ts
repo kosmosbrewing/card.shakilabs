@@ -39,22 +39,11 @@ export default defineConfig({
         assetFileNames: "assets/[name].[hash][extname]",
         chunkFileNames: "assets/[name].[hash].js",
         entryFileNames: "assets/[name].[hash].js",
+        onlyExplicitManualChunks: true,
         manualChunks(id) {
-          if (!id.includes("node_modules")) return;
-          // 프레임워크 코어 (변경 빈도 낮음 → 장기 캐시)
-          if (id.includes("vue") || id.includes("pinia") || id.includes("vue-router")) {
+          if (id.includes("node_modules")) {
             return "vendor";
           }
-          // 아이콘 (트리쉐이킹 대상, 별도 캐시)
-          if (id.includes("lucide-vue-next")) {
-            return "icons";
-          }
-          // UI 라이브러리
-          if (id.includes("radix-vue")) {
-            return "ui";
-          }
-          // 기타 라이브러리
-          return "libs";
         },
       },
     },
