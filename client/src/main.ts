@@ -6,6 +6,7 @@ import router from "./router";
 import "./assets/css/main.css";
 import { initAnalytics, trackEvent } from "./lib/analytics";
 import { captureSentryException, initSentry } from "./lib/sentry";
+import { removePrerenderFallback } from "./utils/prerenderFallback";
 
 function normalizeErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
@@ -51,6 +52,7 @@ async function bootstrap(): Promise<void> {
 
   await router.isReady();
   app.mount("#app");
+  removePrerenderFallback();
 
   // GA 초기화를 LCP 이후로 미룸
   if (typeof requestIdleCallback === "function") {
