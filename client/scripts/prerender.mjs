@@ -84,10 +84,14 @@ function buildMeta(route) {
     };
   }
 
-  const fuelMatch = route.match(/^\/fuel-card\/(gasoline|diesel)$/);
+  const fuelMatch = route.match(/^\/fuel-card\/(gasoline|diesel|lpg)$/);
   if (fuelMatch) {
     const fuelType = fuelMatch[1];
-    const label = fuelType === "gasoline" ? "휘발유" : "경유";
+    const label = fuelType === "gasoline"
+      ? "휘발유"
+      : fuelType === "diesel"
+        ? "경유"
+        : "LPG";
     const title = `${label} 주유 할인카드 추천 | 카드 계산기`;
     const description = `${label} 주유 시 가장 유리한 할인카드를 비교합니다. 카드별 리터당 할인액과 연간 절약액을 확인하세요.`;
     const canonical = `${SITE_URL}/fuel-card/${fuelType}`;
@@ -487,9 +491,7 @@ function applyMeta(html, meta, route) {
 }
 
 for (const route of SEO_ROUTES) {
-  const filePath = route === "/fuel-card"
-    ? INDEX_HTML
-    : resolve(DIST_DIR, route.slice(1), "index.html");
+  const filePath = resolve(DIST_DIR, route.slice(1), "index.html");
   const dir = dirname(filePath);
 
   if (!existsSync(dir)) {
@@ -501,5 +503,20 @@ for (const route of SEO_ROUTES) {
   writeFileSync(filePath, html, "utf-8");
   console.log(`[prerender] ${route} -> ${filePath}`);
 }
+
+const notFoundHtml = applyMeta(template, {
+  title: "페이지를 찾을 수 없습니다 | 카드 계산기",
+  description: "요청한 카드 계산기 페이지를 찾을 수 없습니다.",
+  canonical: `${SITE_URL}/404`,
+  appPath: "/404",
+  jsonLd: null,
+  breadcrumb: null,
+}, "/404")
+  .replace("</head>", '    <meta name="robots" content="noindex,nofollow" />\n  </head>')
+  .replace(
+    /<noscript>[\s\S]*?<\/noscript>/i,
+    '<noscript><main><h1>페이지를 찾을 수 없습니다</h1><a href="/card/fuel-card">주유 할인카드 비교로 이동</a></main></noscript>',
+  );
+writeFileSync(resolve(DIST_DIR, "404.html"), notFoundHtml, "utf-8");
 
 console.log(`[prerender] Done. ${SEO_ROUTES.length} routes processed.`);
