@@ -100,6 +100,7 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
       <!-- 마일리지 슬라이더 (full width) -->
       <input
         type="range"
+        aria-label="보유 마일리지 슬라이더"
         :min="MIN"
         :max="MAX"
         step="1000"
