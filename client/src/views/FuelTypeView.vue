@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { RouterLink } from "vue-router";
 import SEOHead from "@/components/common/SEOHead.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
@@ -13,7 +13,7 @@ import { FUEL_CARDS } from "@/data/fuelCards";
 import { FUEL_PRICES, FUEL_TYPE_LABELS, type FuelType } from "@/data/fuelPrices";
 import { FUEL_COMPARE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
 import { calculateAllCards } from "@/utils/calculator";
-import { ref } from "vue";
+import { normalizeFuelType } from "@/utils/fuelType";
 import type { SortKey } from "@/composables/useFuelCardCalc";
 
 const props = defineProps<{
@@ -22,9 +22,7 @@ const props = defineProps<{
 
 useCardFuelPrices();
 
-const ft = computed<FuelType>(() =>
-  props.fuelType === "diesel" ? "diesel" : "gasoline"
-);
+const ft = computed<FuelType>(() => normalizeFuelType(props.fuelType));
 
 const sortKey = ref<SortKey>("savings");
 const monthlySpend = 200000;

@@ -78,9 +78,22 @@ function validateAliasesAndNotFound() {
     "404.html must contain a recovery link");
 }
 
+function validateFuelTypeContent() {
+  const diesel = readFileSync(resolve(distRoot, "fuel-card/diesel/index.html"), "utf8");
+  const lpg = readFileSync(resolve(distRoot, "fuel-card/lpg/index.html"), "utf8");
+  assert(lpg.includes("LPG 주유 할인카드 추천 (2026년)"),
+    "LPG prerender must contain its own heading");
+  assert(lpg.includes("LPG 충전도 주유 할인 대상인가요?"),
+    "LPG prerender must contain LPG-specific guidance");
+  assert(!lpg.includes("경유 차량 운전자를 위한"),
+    "LPG prerender must not reuse diesel guidance");
+  assert(lpg !== diesel, "LPG and diesel prerenders must be unique");
+}
+
 validateVercelConfig();
 validateRoutes();
 validateSitemap();
 validateAliasesAndNotFound();
+validateFuelTypeContent();
 
 console.log(`Validated ${SEO_ROUTES.length} card routes and custom 404 output.`);

@@ -258,12 +258,32 @@ function buildFuelCardIssuerContent(issuer) {
 }
 
 // =========================
-// 주유카드 유종별 (휘발유/경유)
+// 주유카드 유종별 (휘발유/경유/LPG)
 // =========================
+const FUEL_TYPE_CONTENT = {
+  gasoline: {
+    label: "휘발유",
+    avgPrice: "약 1,710원/L",
+    vehicleContext: "휘발유 차량은 차급과 주행 거리에 따라 월 주유비가 크게 달라집니다.",
+    priceContext: "휘발유 가격과 리터당 할인액을 함께 비교해야 실제 할인율을 판단할 수 있습니다.",
+  },
+  diesel: {
+    label: "경유",
+    avgPrice: "약 1,610원/L",
+    vehicleContext: "경유 차량은 SUV·화물·상용차 비중과 운행 거리에 따라 월 주유비 차이가 큽니다.",
+    priceContext: "경유 가격과 유가 보조금 적용 여부를 구분해 카드 할인 후 비용을 비교해야 합니다.",
+  },
+  lpg: {
+    label: "LPG",
+    avgPrice: "약 1,010원/L",
+    vehicleContext: "LPG 차량은 차종별 연비와 주행 거리뿐 아니라 생활권의 충전소 접근성도 함께 확인해야 합니다.",
+    priceContext: "LPG는 리터당 가격이 상대적으로 낮지만 같은 거리의 연료 소모량과 월 할인 한도를 함께 비교해야 합니다.",
+  },
+};
+
 function buildFuelTypeContent(fuelType) {
-  const isGasoline = fuelType === "gasoline";
-  const label = isGasoline ? "휘발유" : "경유";
-  const avgPrice = isGasoline ? "약 1,750원/L" : "약 1,620원/L";
+  const data = FUEL_TYPE_CONTENT[fuelType] ?? FUEL_TYPE_CONTENT.gasoline;
+  const { label, avgPrice } = data;
 
   return `
     <article data-seo-prerender="fuel-card-type" style="${ARTICLE}">
@@ -276,13 +296,12 @@ function buildFuelTypeContent(fuelType) {
       <h1 style="${H1}">${label} 주유 할인카드 추천 (2026년)</h1>
 
       <p style="${P}">
-        ${label} 차량 운전자를 위한 주유 할인카드 가이드입니다. 2026년 현재 ${label} 평균 가격은
-        <strong>${avgPrice}</strong> 수준이며, 월 평균 주유비가 30~50만원인 일반 운전자의 경우 할인카드 이용 시
-        <strong style="color:#047857;">연 15만원~30만원</strong>을 절약할 수 있습니다.
+        ${label} 차량 운전자를 위한 주유 할인카드 가이드입니다. 정적 비교 기준 가격은
+        <strong>${avgPrice}</strong>이며, 실제 절약액은 결제 금액·할인율·월 한도와 전월 실적 충족 여부에 따라 달라집니다.
       </p>
 
       <p style="${P}">
-        ${isGasoline ? "휘발유" : "경유"} 차량은 차량 유형(세단·SUV·트럭)과 운행 거리에 따라 월 주유비가 크게 다릅니다.
+        ${data.vehicleContext}
         본 페이지에서는 ${label} 주유 특화 카드의 혜택 구조, 실적 조건, 월 주유비별 최적 카드를 정리합니다.
       </p>
 
@@ -319,18 +338,22 @@ function buildFuelTypeContent(fuelType) {
 
       <h2 style="${H2}">3. ${label} 가격 변동과 카드 선택</h2>
       <p style="${P}">
-        ${label} 가격은 국제 유가·환율·세금에 따라 변동합니다. ${isGasoline
-          ? "2026년 현재 휘발유 유류세는 리터당 약 740원으로, 국제 유가가 상승해도 소비자 가격 변동폭이 제한적입니다."
-          : "경유는 화물·상용차 사용이 많아 유가 보조금 영향을 받으며, 휘발유보다 약 100~150원 저렴합니다."}
-        가격이 높아질수록 리터당 할인카드의 효과가 커집니다.
+        ${label} 가격은 국제 유가·환율·세금에 따라 변동합니다. ${data.priceContext}
+        화면의 최신 유가와 카드 상품별 할인 대상 업종을 최종 선택 전에 다시 확인하세요.
       </p>
 
-      <h2 style="${H2}">4. 제휴 주유소 브랜드</h2>
+      <h2 style="${H2}">4. 제휴 ${fuelType === "lpg" ? "충전소" : "주유소"} 확인</h2>
       <ul style="${UL}">
-        <li style="${LI}"><strong>SK에너지</strong>: 전국 최대 주유소 네트워크, 엔크린카드 연동 혜택</li>
-        <li style="${LI}"><strong>GS칼텍스</strong>: 카드사 제휴가 광범위, 보너스카드 포인트 적립</li>
-        <li style="${LI}"><strong>현대오일뱅크</strong>: 중형 주유소, 특정 카드 리터당 추가 할인</li>
-        <li style="${LI}"><strong>S-Oil</strong>: 프리미엄 시설, 일부 카드만 제휴</li>
+        ${fuelType === "lpg" ? `
+          <li style="${LI}"><strong>LPG 업종 포함 여부</strong>: 상품 설명서에서 LPG 충전 결제가 주유 할인 대상인지 확인</li>
+          <li style="${LI}"><strong>브랜드 제한</strong>: E1·SK가스 등 특정 충전소만 적용되는지 확인</li>
+          <li style="${LI}"><strong>가맹점 업종</strong>: 같은 브랜드라도 충전소 등록 업종에 따라 할인이 달라질 수 있음</li>
+        ` : `
+          <li style="${LI}"><strong>SK에너지</strong>: 카드 상품별 제휴와 리터당 할인 여부 확인</li>
+          <li style="${LI}"><strong>GS칼텍스</strong>: 보너스카드 적립과 카드 할인 중복 여부 확인</li>
+          <li style="${LI}"><strong>현대오일뱅크</strong>: 특정 카드의 추가 할인과 월 한도 확인</li>
+          <li style="${LI}"><strong>S-Oil</strong>: 제휴 카드와 전월 실적 제외 항목 확인</li>
+        `}
       </ul>
 
       <h2 style="${H2}">5. 자주 묻는 질문 (FAQ)</h2>
@@ -342,16 +365,18 @@ function buildFuelTypeContent(fuelType) {
         단, 모두 전월 실적 조건이 있으므로 본인 소비 패턴에 맞는 카드를 선택해야 합니다.
       </p>
 
-      <h3 style="${H3}">Q2. 경차도 혜택이 있나요?</h3>
+      <h3 style="${H3}">Q2. ${fuelType === "lpg" ? "LPG 충전도 주유 할인 대상인가요?" : "경차도 혜택이 있나요?"}</h3>
       <p style="${P}">
-        경차는 유류세 환급 제도(연 20만원 한도)가 별도로 있어, 카드 할인과 중복 이용 가능합니다.
-        경차 등록증 사본을 국세청에 제출하면 자동 환급됩니다.
+        ${fuelType === "lpg"
+          ? "카드마다 다릅니다. 상품 설명서의 할인 대상에 LPG 충전소가 포함되는지와 실제 가맹점 업종을 확인해야 합니다."
+          : "경차 유류세 환급과 카드 할인은 적용 조건이 서로 다르므로, 전용 카드의 대상 차량·한도와 중복 가능 여부를 확인해야 합니다."}
       </p>
 
-      <h3 style="${H3}">Q3. LPG 차량도 같은 카드를 쓸 수 있나요?</h3>
+      <h3 style="${H3}">Q3. ${fuelType === "lpg" ? "LPG 전용 카드가 항상 유리한가요?" : "LPG 차량도 같은 카드를 쓸 수 있나요?"}</h3>
       <p style="${P}">
-        대부분의 주유 할인카드는 LPG 충전도 실적 인정·할인 대상에 포함됩니다.
-        단, LPG 전용 카드(현대 O Petro 등)가 별도로 있으므로 LPG 운전자는 전용 카드를 검토하세요.
+        ${fuelType === "lpg"
+          ? "전용 카드라도 전월 실적과 월 할인 한도가 낮으면 일반 생활 할인카드보다 불리할 수 있습니다. 월 충전비 기준 순절약액으로 비교하세요."
+          : "일부 주유 할인카드는 LPG 충전을 별도 업종으로 분류합니다. 상품 설명서에서 LPG 포함 여부를 확인한 뒤 사용하세요."}
       </p>
 
       <h2 style="${H2}">6. 관련 페이지</h2>
