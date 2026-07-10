@@ -72,9 +72,9 @@ const sortOptions: { key: MileageSortKey; label: string }[] = [
               </td>
               <td
                 class="px-3 py-2 text-right font-semibold tabular-nums"
-                :class="item.canRedeem ? 'text-savings' : 'text-status-warning'"
+                :class="item.hasEnoughMiles ? 'text-savings' : 'text-status-warning'"
               >
-                {{ item.canRedeem ? "발권 가능" : `${item.milesShortage.toLocaleString()} 부족` }}
+                {{ item.hasEnoughMiles ? "마일 충족" : `${item.milesShortage.toLocaleString()} 부족` }}
               </td>
             </tr>
           </tbody>

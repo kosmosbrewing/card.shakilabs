@@ -2,7 +2,7 @@
 import { Plane } from "lucide-vue-next";
 import {
   AIRLINES,
-  SEAT_CLASS_LABELS,
+  getSeatClassLabel,
   type AirlineId,
   type SeatClass,
 } from "@/data/mileageData";
@@ -124,7 +124,7 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
             ]"
             @click="emit('update:selectedClass', seatClass)"
           >
-            {{ seatClass === "all" ? "전체" : SEAT_CLASS_LABELS[seatClass as SeatClass] }}
+            {{ seatClass === "all" ? "전체" : getSeatClassLabel(airlineId, seatClass as SeatClass) }}
           </button>
         </div>
       </div>

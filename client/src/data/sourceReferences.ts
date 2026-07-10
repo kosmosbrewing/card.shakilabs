@@ -4,15 +4,17 @@ export interface CompareSource {
   basis: string;
 }
 
-export const SOURCE_VERIFIED_AT = "2026-03-11";
+export const SOURCE_VERIFIED_AT = "2026-07-10";
 
 const OPINET_MAIN = "https://www.opinet.co.kr/user/main/opinetIntro.do";
 const OPINET_GUIDE = "https://www.opinet.co.kr/user/dopds/dopDs_4.do";
 const CUSTOMS_TAX = "https://www.customs.go.kr/kcs/ad/tax/ItemTaxCalculation.do";
 const CUSTOMS_MAIN = "https://customs.go.kr/kcs/main.do";
 const SMBS_MAIN = "https://www.smbs.biz/";
-const KOREAN_AIR_MAIN = "https://www.koreanair.com/";
-const ASIANA_MAIN = "https://flyasiana.com/";
+const KOREAN_AIR_MILEAGE =
+  "https://www.koreanair.com/contents/skypass/use-miles/award-ticket/redemption";
+const ASIANA_MILEAGE =
+  "https://flyasiana.com/C/KR/KO/contents/mileage-tickets";
 
 export const FUEL_COMPARE_SOURCES: CompareSource[] = [
   { name: "Opinet", url: OPINET_MAIN, basis: "전국 평균 유가 공개" },
@@ -58,14 +60,14 @@ export const DUTY_FREE_SOURCES: CompareSource[] = [
 ];
 
 export const MILEAGE_SOURCES: CompareSource[] = [
-  { name: "대한항공", url: KOREAN_AIR_MAIN, basis: "스카이패스·보너스 항공권 안내" },
-  { name: "아시아나항공", url: ASIANA_MAIN, basis: "아시아나클럽·보너스 항공권 안내" },
+  { name: "대한항공 공제 마일리지", url: KOREAN_AIR_MILEAGE, basis: "대한항공 평수기 성인 왕복 보너스 항공권 공제표" },
+  { name: "아시아나 마일리지 항공권", url: ASIANA_MILEAGE, basis: "아시아나 평수기 성인 1명 왕복 공제표·성수기 50% 추가·제세공과금 안내" },
 ];
 
 export const ABOUT_PAGE_SOURCES: CompareSource[] = [
   { name: "Opinet", url: OPINET_MAIN, basis: "유가 정보" },
   { name: "서울외국환중개", url: SMBS_MAIN, basis: "환율 참고" },
   { name: "관세청", url: CUSTOMS_TAX, basis: "휴대품 예상세액 조회" },
-  { name: "대한항공", url: KOREAN_AIR_MAIN, basis: "마일리지 안내" },
-  { name: "아시아나항공", url: ASIANA_MAIN, basis: "마일리지 안내" },
+  { name: "대한항공", url: KOREAN_AIR_MILEAGE, basis: "마일리지 안내" },
+  { name: "아시아나항공", url: ASIANA_MILEAGE, basis: "마일리지 안내" },
 ];
