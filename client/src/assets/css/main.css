@@ -425,3 +425,16 @@
   opacity: 0;
   transform: translateY(6px);
 }
+
+/* 탭 텍스트가 모바일과 데스크톱 모두 WCAG AA 대비를 유지하도록 보정 */
+nav[aria-label="주요 메뉴"].bg-primary {
+  background-color: #07665d !important;
+}
+
+nav[aria-label="주요 메뉴"] .tab-scroll > a {
+  color: #fff !important;
+}
+
+nav[aria-label="주요 메뉴"] .tab-scroll > a[aria-current="page"] {
+  background-color: rgb(255 255 255 / 12%) !important;
+}
