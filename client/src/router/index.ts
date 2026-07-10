@@ -1,5 +1,7 @@
+import { nextTick } from "vue";
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 import { trackPageView } from "@/lib/analytics";
+import { buildPublicPagePath, shouldTrackPageView } from "@/utils/pageTracking";
 
 const routes: RouteRecordRaw[] = [
   // 루트 → /fuel-card로 리다이렉트
@@ -146,10 +148,13 @@ router.beforeEach(async (to) => {
   return true;
 });
 
-router.afterEach((to, _from, failure) => {
+router.afterEach((to, from, failure) => {
   if (failure) return;
+  if (!shouldTrackPageView(to.path, from.path, from.matched.length > 0)) return;
   const title = typeof to.meta.title === "string" ? to.meta.title : document.title;
-  trackPageView(to.fullPath, title);
+  void nextTick(() => {
+    trackPageView(buildPublicPagePath("/card", to.path), title);
+  });
 });
 
 export default router;

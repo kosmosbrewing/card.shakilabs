@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
@@ -48,14 +49,16 @@ const faqJsonLd = {
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5">
-    <MileageInput
-      :airline-id="airlineId"
-      :mileage-balance="mileageBalance"
-      :selected-class="selectedClass"
-      @update:airline-id="airlineId = $event"
-      @update:mileage-balance="mileageBalance = $event"
-      @update:selected-class="selectedClass = $event"
-    />
+    <CalculatorInteractionTracker calculator-id="mileage_value" page-path="/card/mileage">
+      <MileageInput
+        :airline-id="airlineId"
+        :mileage-balance="mileageBalance"
+        :selected-class="selectedClass"
+        @update:airline-id="airlineId = $event"
+        @update:mileage-balance="mileageBalance = $event"
+        @update:selected-class="selectedClass = $event"
+      />
+    </CalculatorInteractionTracker>
 
     <div class="rounded-xl border border-primary/25 bg-primary/5 p-4 text-caption leading-relaxed text-foreground">
       <p class="font-semibold">공식 공제 기준: {{ MILEAGE_ASSUMPTIONS.journey }}</p>

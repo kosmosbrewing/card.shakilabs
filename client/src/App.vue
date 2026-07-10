@@ -4,6 +4,7 @@ import { useRoute } from "vue-router";
 import AppLayout from "@/components/layout/AppLayout.vue";
 import AlertHost from "@/components/ui/alert/AlertHost.vue";
 import LoadingSpinner from "@/components/ui/loading/LoadingSpinner.vue";
+import { getPageGroup } from "@/utils/pageTracking";
 
 const route = useRoute();
 const routeError = ref("");
@@ -26,7 +27,7 @@ onErrorCaptured((error, _instance, info) => {
   <AppLayout>
     <RouterView v-slot="{ Component, route }">
       <Transition name="page-fade" mode="out-in">
-        <div :key="route.path">
+        <div :key="getPageGroup(route.path)">
           <div v-if="routeError" class="container py-10">
             <div class="retro-panel overflow-hidden border-status-danger/30">
               <div class="retro-titlebar rounded-t-2xl">
