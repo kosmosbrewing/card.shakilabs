@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "fonts:subset": "node scripts/subset-fonts.mjs",
     "prebuild": "node scripts/generate-sitemap.mjs",
-    "build": "vite build && node scripts/prerender.mjs && npm run verify:static",
+    "build": "vite build && node scripts/prerender.mjs && npm run verify:static && node scripts/verify-fonts.mjs",
     "verify:static": "node scripts/validate-static-output.mjs",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
