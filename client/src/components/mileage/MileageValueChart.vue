@@ -31,13 +31,13 @@ const maxValue = computed(() =>
         <div class="h-6 flex-1 overflow-hidden rounded-md bg-muted/50">
           <div
             class="h-full rounded-md transition-all duration-500 ease-out"
-            :class="item.canRedeem ? 'bg-savings/80' : 'bg-status-warning/80'"
+            :class="item.hasEnoughMiles ? 'bg-savings/80' : 'bg-status-warning/80'"
             :style="{ width: `${Math.max((item.valuePerMile / maxValue) * 100, 8)}%` }"
           />
         </div>
         <div
           class="w-24 shrink-0 text-right text-caption font-bold tabular-nums"
-          :class="item.canRedeem ? 'text-savings' : 'text-status-warning'"
+          :class="item.hasEnoughMiles ? 'text-savings' : 'text-status-warning'"
         >
           {{ formatValuePerMile(item.valuePerMile) }}
         </div>

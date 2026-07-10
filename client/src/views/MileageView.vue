@@ -11,6 +11,7 @@ import MileageSummaryCard from "@/components/mileage/MileageSummaryCard.vue";
 import MileageValueChart from "@/components/mileage/MileageValueChart.vue";
 import { useMileageCalc } from "@/composables/useMileageCalc";
 import { MILEAGE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
+import { MILEAGE_ASSUMPTIONS } from "@/data/mileageData";
 
 const {
   airlineId,
@@ -56,6 +57,14 @@ const faqJsonLd = {
       @update:selected-class="selectedClass = $event"
     />
 
+    <div class="rounded-xl border border-primary/25 bg-primary/5 p-4 text-caption leading-relaxed text-foreground">
+      <p class="font-semibold">공식 공제 기준: {{ MILEAGE_ASSUMPTIONS.journey }}</p>
+      <p class="mt-1 text-muted-foreground">
+        원/마일은 {{ MILEAGE_ASSUMPTIONS.cashFare }}로 계산하며,
+        {{ MILEAGE_ASSUMPTIONS.exclusions }}입니다. “마일 충족”은 좌석 예약 가능을 뜻하지 않습니다.
+      </p>
+    </div>
+
     <MileageSummaryCard :result="result" />
 
     <AdSlot slot="mileage-top" label="마일리지 상단" />
@@ -79,7 +88,7 @@ const faqJsonLd = {
     <CompareSourceFooter
       :sources="MILEAGE_SOURCES"
       :updated-at="SOURCE_VERIFIED_AT"
-      note="※ 공제 마일은 공식 항공사 안내를 참고하고, 현금가 비교값은 서비스 내 예시 운임 가정입니다."
+      note="※ 공식 평수기 성인 왕복 공제표 기준입니다. 현금가는 내부 예시이며 성수기, 제세공과금, 보너스 좌석 재고는 별도 확인해야 합니다."
     />
 
     <div class="space-y-3">

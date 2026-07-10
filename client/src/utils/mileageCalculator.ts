@@ -1,7 +1,7 @@
 import {
   getAirlineInfo,
   getAirlineMileageData,
-  SEAT_CLASS_LABELS,
+  getSeatClassLabel,
   type AirlineId,
   type SeatClass,
 } from "@/data/mileageData";
@@ -19,7 +19,7 @@ export interface MileageValuePerMile {
   milesRequired: number;
   cashPrice: number;
   valuePerMile: number;
-  canRedeem: boolean;
+  hasEnoughMiles: boolean;
   milesShortage: number;
   example: string;
 }
@@ -31,9 +31,9 @@ export interface MileageCalcResult {
   bestValuePerMile: number;
   totalValueKrw: number;
   allValues: MileageValuePerMile[];
-  redeemable: MileageValuePerMile[];
+  balanceEligible: MileageValuePerMile[];
   avgValueByClass: Record<SeatClass, number>;
-  bestOption: MileageValuePerMile | null;
+  bestBalanceEligibleOption: MileageValuePerMile | null;
 }
 
 export function calculateMileageValue(input: MileageCalcInput): MileageCalcResult {
@@ -46,25 +46,27 @@ export function calculateMileageValue(input: MileageCalcInput): MileageCalcResul
     const route = routeMap.get(redemption.routeId);
     const cashPrice = route?.cashPrice[redemption.seatClass] ?? 0;
     const valuePerMile = redemption.milesRequired > 0 ? cashPrice / redemption.milesRequired : 0;
-    const canRedeem = input.mileageBalance >= redemption.milesRequired;
+    const hasEnoughMiles = input.mileageBalance >= redemption.milesRequired;
     const milesShortage = Math.max(0, redemption.milesRequired - input.mileageBalance);
 
     return {
       routeId: redemption.routeId,
       routeLabel: route?.label ?? redemption.routeId,
       seatClass: redemption.seatClass,
-      seatClassLabel: SEAT_CLASS_LABELS[redemption.seatClass],
+      seatClassLabel: getSeatClassLabel(input.airlineId, redemption.seatClass),
       milesRequired: redemption.milesRequired,
       cashPrice,
       valuePerMile,
-      canRedeem,
+      hasEnoughMiles,
       milesShortage,
       example: route?.example ?? "",
     };
   });
 
-  const redeemable = allValues.filter((item) => item.canRedeem);
-  const bestOption = [...redeemable].sort((a, b) => b.valuePerMile - a.valuePerMile)[0] ?? null;
+  const balanceEligible = allValues.filter((item) => item.hasEnoughMiles);
+  const bestBalanceEligibleOption =
+    [...balanceEligible].sort((a, b) => b.valuePerMile - a.valuePerMile)[0] ??
+    null;
   const bestValuePerMile = allValues.length > 0
     ? Math.max(...allValues.map((item) => item.valuePerMile))
     : 0;
@@ -82,9 +84,9 @@ export function calculateMileageValue(input: MileageCalcInput): MileageCalcResul
     bestValuePerMile,
     totalValueKrw: Math.round(input.mileageBalance * bestValuePerMile),
     allValues,
-    redeemable,
+    balanceEligible,
     avgValueByClass,
-    bestOption,
+    bestBalanceEligibleOption,
   };
 }
 
