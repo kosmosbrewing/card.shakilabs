@@ -101,19 +101,19 @@ const faqJsonLd = {
       <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
         <RouterLink
           to="/overseas-payment"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
         >
           해외결제 카드 비교
         </RouterLink>
         <RouterLink
           to="/annual-fee"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
         >
           연회비 회수 계산기
         </RouterLink>
         <RouterLink
           to="/duty-free"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
         >
           관세 계산기
         </RouterLink>

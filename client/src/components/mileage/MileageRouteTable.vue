@@ -29,7 +29,7 @@ const sortOptions: { key: MileageSortKey; label: string }[] = [
           :key="option.key"
           type="button"
           :class="[
-            'rounded-lg border px-2 py-1 text-tiny font-medium transition-colors',
+            'min-h-[44px] min-w-[44px] rounded-lg border px-2 py-1 text-tiny font-medium transition-colors',
             sortKey === option.key
               ? 'border-primary bg-primary/10 text-primary'
               : 'border-border/70 text-muted-foreground hover:text-primary',
