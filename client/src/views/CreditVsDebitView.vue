@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import { CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
 import { formatPercent, formatWon } from "@/lib/utils";
 import { compareCreditVsDebit } from "@/utils/cardTabCalculator";
+import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
 const seoTitle = "신용카드 vs 체크카드 비교 | 연회비까지 반영한 실속 계산";
 const seoDescription = "월 카드 사용액과 연회비를 기준으로 신용카드와 체크카드 중 어떤 쪽이 더 실속인지 계산합니다.";
@@ -14,12 +15,15 @@ const annualFee = ref(20_000);
 const creditRate = ref(0.018);
 const debitRate = ref(0.007);
 
-const result = computed(() => compareCreditVsDebit({
-  monthlySpend: monthlySpend.value,
-  annualFee: annualFee.value,
-  creditRate: creditRate.value,
-  debitRate: debitRate.value,
-}));
+const { result, validationError } = useSafeCalculation(
+  () => compareCreditVsDebit({
+    monthlySpend: monthlySpend.value,
+    annualFee: annualFee.value,
+    creditRate: creditRate.value,
+    debitRate: debitRate.value,
+  }),
+  compareCreditVsDebit({ monthlySpend: 1_200_000, annualFee: 20_000, creditRate: 0.018, debitRate: 0.007 }),
+);
 </script>
 
 <template>
@@ -32,7 +36,7 @@ const result = computed(() => compareCreditVsDebit({
         <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
       </div>
       <div class="retro-panel-content space-y-4">
-        <div class="grid gap-3 md:grid-cols-2">
+        <div class="grid gap-3 md:grid-cols-2" role="group" :aria-describedby="validationError ? 'credit-debit-error' : undefined">
           <label class="space-y-1 text-caption font-semibold text-foreground">
             월 카드 사용액
             <input v-model.number="monthlySpend" type="number" min="100000" step="10000" class="retro-input w-full" />
@@ -52,6 +56,9 @@ const result = computed(() => compareCreditVsDebit({
         </div>
         <p class="text-caption text-muted-foreground">
           현재 설정은 신용카드 {{ formatPercent(creditRate, 1) }}, 체크카드 {{ formatPercent(debitRate, 1) }}를 가정합니다.
+        </p>
+        <p v-if="validationError" id="credit-debit-error" class="text-caption font-semibold text-destructive" role="alert">
+          {{ validationError }}
         </p>
       </div>
     </div>

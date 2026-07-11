@@ -6,7 +6,7 @@ import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
-import RelatedServices from "@/components/common/RelatedServices.vue";
+import FuelCardNextActions from "@/components/fuel-card/FuelCardNextActions.vue";
 import FuelCardInput from "@/components/fuel-card/FuelCardInput.vue";
 import TopCardList from "@/components/fuel-card/TopCardList.vue";
 import FuelCardInternalLinks from "@/components/fuel-card/FuelCardInternalLinks.vue";
@@ -130,6 +130,8 @@ const summaryMessage = computed(() => {
     <!-- SummaryBanner -->
     <SummaryBanner v-if="bestCard" :message="summaryMessage" />
 
+    <FuelCardNextActions v-if="bestCard" />
+
     <!-- 광고 상단 -->
     <AdSlot slot="fuel-card-top" label="비교 결과 하단" />
 
@@ -173,7 +175,6 @@ const summaryMessage = computed(() => {
     />
 
     <FuelCardInternalLinks />
-    <RelatedServices />
     <AffiliateDisclosure v-if="fuelAffiliateItems.length > 0" />
   </div>
 </template>

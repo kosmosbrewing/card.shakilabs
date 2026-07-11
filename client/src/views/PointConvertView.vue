@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import { CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
 import { formatWon } from "@/lib/utils";
 import { calculatePointConversions } from "@/utils/cardTabCalculator";
+import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
 const seoTitle = "포인트 전환 비교 | 항공·호텔·현금성 포인트 가치 계산";
 const seoDescription = "보유 포인트를 어디로 넘겨야 가치가 큰지 예상 환산가치 기준으로 비교합니다.";
 
 const pointAmount = ref(120_000);
-const result = computed(() => calculatePointConversions({ pointAmount: pointAmount.value }));
+const { result, validationError } = useSafeCalculation(
+  () => calculatePointConversions({ pointAmount: pointAmount.value }),
+  calculatePointConversions({ pointAmount: 120_000 }),
+);
 </script>
 
 <template>
@@ -23,10 +27,13 @@ const result = computed(() => calculatePointConversions({ pointAmount: pointAmou
         <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
       </div>
       <div class="retro-panel-content space-y-4">
-        <label class="space-y-1 text-caption font-semibold text-foreground">
+        <label class="space-y-1 text-caption font-semibold text-foreground" :aria-describedby="validationError ? 'point-convert-error' : undefined">
           보유 포인트
           <input v-model.number="pointAmount" type="number" min="1000" step="1000" class="retro-input w-full" />
         </label>
+        <p v-if="validationError" id="point-convert-error" class="text-caption font-semibold text-destructive" role="alert">
+          {{ validationError }}
+        </p>
         <div class="rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3 text-caption text-foreground">
           가장 높은 예상 가치는 <strong>{{ result.bestOption.label }}</strong> 전환이며 약 {{ formatWon(result.bestOption.estimatedValue) }}입니다.
         </div>

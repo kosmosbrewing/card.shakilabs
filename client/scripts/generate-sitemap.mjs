@@ -11,6 +11,7 @@ const today = new Date().toISOString().split("T")[0];
 
 function resolvePriority(route) {
   if (route === "/fuel-card") return "1.0";
+  if (route === "/all") return "0.9";
   if (route === "/overseas-payment") return "0.9";
   if (route === "/min-spend") return "0.9";
   if (route === "/annual-fee") return "0.9";
@@ -29,6 +30,7 @@ function resolvePriority(route) {
 
 function resolveChangeFreq(route) {
   if (route === "/fuel-card") return "weekly";
+  if (route === "/all") return "weekly";
   if (route === "/overseas-payment") return "weekly";
   if (route === "/min-spend") return "weekly";
   if (route === "/annual-fee") return "weekly";
