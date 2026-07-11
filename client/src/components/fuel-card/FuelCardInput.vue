@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Fuel, Share2 } from "lucide-vue-next";
+import { ShSurface, ShText } from "@shakilabs/ui";
 import type { FuelType } from "@/data/fuelPrices";
 import { FUEL_PRICES, FUEL_TYPE_LABELS, getFuelPrice } from "@/data/fuelPrices";
 import { GAS_STATION_BRANDS } from "@/data/gasStationBrands";
@@ -33,12 +34,12 @@ function handleAmountInput(e: Event) {
 </script>
 
 <template>
-  <div class="retro-panel overflow-hidden">
+  <ShSurface padding="none" class="overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
-      <h1 class="retro-title flex items-center gap-2">
+      <ShText as="h1" variant="heading" class="flex items-center gap-2">
         <Fuel class="h-5 w-5 text-primary" />
         내 주유 패턴에 맞는 최적 카드 찾기
-      </h1>
+      </ShText>
       <button
         type="button"
         class="retro-titlebar-button"
@@ -140,5 +141,5 @@ function handleAmountInput(e: Event) {
         <FreshBadge :message="`${FUEL_PRICES.lastUpdated} ${FUEL_TYPE_LABELS[fuelType]} ${getFuelPrice(fuelType).toLocaleString()}원/L`" />
       </div>
     </div>
-  </div>
+  </ShSurface>
 </template>
