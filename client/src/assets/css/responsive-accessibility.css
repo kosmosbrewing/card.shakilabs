@@ -1,0 +1,136 @@
+.text-tiny,
+.text-\[10px\],
+.text-\[11px\] {
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 400px) {
+  html {
+    font-size: 16px;
+  }
+
+  .text-caption,
+  .text-tiny,
+  .text-xs,
+  [class*="text-[0.6"],
+  [class*="text-[0.7"],
+  [class*="text-[10px]"],
+  [class*="text-[11px]"],
+  [class~="!text-xs"] {
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+  }
+
+  .retro-details-chevron {
+    font-size: 12px !important;
+  }
+
+  main input[type="range"] {
+    min-height: 24px;
+  }
+
+  main input[type="checkbox"] {
+    min-width: 24px;
+    min-height: 24px;
+  }
+
+  main button,
+  main a[target="_blank"],
+  main a.underline,
+  main summary,
+  footer a {
+    min-height: 24px;
+  }
+
+  main a[target="_blank"],
+  main a.underline,
+  main summary,
+  footer a {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  main button,
+  footer a {
+    min-width: 24px;
+  }
+
+  .text-resize-layout.container {
+    padding-inline: 12px;
+  }
+
+  .text-resize-layout .retro-panel-content,
+  .text-resize-layout .retro-titlebar {
+    padding-inline: 12px;
+  }
+
+  .text-resize-layout .retro-titlebar {
+    flex-wrap: wrap;
+  }
+
+  .text-resize-layout :is(h1, h2, h3, p, a, button, span, strong, label) {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .text-resize-layout .retro-stepper-button {
+    width: 44px;
+    min-width: 44px;
+  }
+
+  .text-resize-layout .retro-stepper-input-right {
+    padding-inline: 12px 40px;
+  }
+
+  .text-resize-layout .retro-input-affix-right {
+    right: 8px;
+    min-width: 24px;
+  }
+
+  .text-resize-layout .fuel-card-name,
+  .text-resize-layout .fuel-table-card-header,
+  .text-resize-layout .fuel-detail-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .text-resize-layout .fuel-result-stats,
+  .text-resize-layout .fuel-table-card-stats,
+  .text-resize-layout .fuel-internal-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .text-resize-layout .fuel-sort-options {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .text-resize-layout .fuel-sort-options > button {
+    width: 100%;
+  }
+
+  .text-resize-layout .fuel-table-card {
+    padding: 12px;
+  }
+
+  .text-resize-layout .savings-chart-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .text-resize-layout .savings-chart-label,
+  .text-resize-layout .savings-chart-value {
+    width: auto;
+    text-align: left;
+  }
+
+  .text-resize-layout section > .retro-panel-content > .grid > a {
+    padding: 12px;
+  }
+
+  .text-resize-layout section > .retro-panel-content > .grid > a > div {
+    gap: 8px;
+  }
+}

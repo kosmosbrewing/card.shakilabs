@@ -106,7 +106,7 @@ const summaryMessage = computed(() => {
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
-  <div class="container space-y-5 py-5">
+  <div class="text-resize-layout container space-y-5 py-5">
     <!-- 입력 -->
     <FuelCardInput
       :fuel-type="fuelType"

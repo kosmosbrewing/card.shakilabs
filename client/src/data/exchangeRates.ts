@@ -1,5 +1,6 @@
 import { reactive } from "vue";
 import { fetchExchangeRateSnapshot } from "@/lib/publicDataApi";
+import { isRemoteConstantsEnabled } from "@/lib/api";
 
 export const SUPPORTED_CURRENCIES = [
   "USD",
@@ -129,6 +130,15 @@ function applyExchangeRateSnapshot(snapshot: ExchangeRateApiSnapshot): void {
 }
 
 export async function loadExchangeRates(forceRefresh = false): Promise<void> {
+  if (!isRemoteConstantsEnabled()) {
+    if (forceRefresh) {
+      EXCHANGE_RATES.lastUpdated = fallbackExchangeRates.lastUpdated;
+      EXCHANGE_RATES.source = fallbackExchangeRates.source;
+      EXCHANGE_RATES.rates = [...fallbackExchangeRates.rates];
+    }
+    return;
+  }
+
   if (exchangeRatesPromise && !forceRefresh) return exchangeRatesPromise;
 
   exchangeRatesPromise = (async () => {

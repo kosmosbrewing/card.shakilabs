@@ -26,7 +26,7 @@ defineProps<{
 
     <div class="retro-panel-content space-y-3">
       <!-- 카드사 + 카드명 -->
-      <div class="flex items-center gap-2">
+      <div class="fuel-card-name flex items-center gap-2">
         <span
           class="inline-block h-3 w-3 rounded-sm"
           :style="{ backgroundColor: result.card.issuerColor }"
@@ -40,7 +40,7 @@ defineProps<{
       </div>
 
       <!-- 핵심 수치 -->
-      <div class="grid grid-cols-3 gap-2">
+      <div class="fuel-result-stats grid grid-cols-3 gap-2">
         <div class="text-center">
           <div class="text-tiny text-muted-foreground">월 절약</div>
           <div class="text-heading font-bold tabular-nums text-savings">

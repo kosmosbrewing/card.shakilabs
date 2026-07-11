@@ -1,5 +1,6 @@
 import { reactive } from "vue";
 import { fetchFuelPriceSnapshot } from "@/lib/publicDataApi";
+import { isRemoteConstantsEnabled } from "@/lib/api";
 
 export type FuelType = "gasoline" | "diesel" | "lpg";
 
@@ -46,6 +47,11 @@ function applyFuelPriceSnapshot(snapshot: FuelPriceApiSnapshot): void {
 type FuelPriceApiSnapshot = Awaited<ReturnType<typeof fetchFuelPriceSnapshot>>;
 
 export async function loadFuelPrices(forceRefresh = false): Promise<void> {
+  if (!isRemoteConstantsEnabled()) {
+    if (forceRefresh) Object.assign(FUEL_PRICES, fallbackFuelPrices);
+    return;
+  }
+
   if (fuelPricesPromise && !forceRefresh) return fuelPricesPromise;
 
   fuelPricesPromise = (async () => {

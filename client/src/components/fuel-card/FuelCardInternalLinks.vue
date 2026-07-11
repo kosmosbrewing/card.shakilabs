@@ -21,7 +21,7 @@ const monthlyLinks = [
       <h2 class="section-title">더 알아보기</h2>
     </div>
 
-    <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
+    <div class="fuel-internal-grid grid grid-cols-2 gap-2 sm:grid-cols-3">
       <RouterLink
         v-for="link in issuerLinks"
         :key="link.slug"
@@ -32,7 +32,7 @@ const monthlyLinks = [
       </RouterLink>
     </div>
 
-    <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
+    <div class="fuel-internal-grid grid grid-cols-2 gap-2 sm:grid-cols-3">
       <RouterLink
         v-for="link in monthlyLinks"
         :key="link.amount"

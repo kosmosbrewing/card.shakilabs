@@ -5,7 +5,7 @@ import type { FuelType } from "@/data/fuelPrices";
 import { FUEL_PRICES, FUEL_TYPE_LABELS, getFuelPrice } from "@/data/fuelPrices";
 import { GAS_STATION_BRANDS } from "@/data/gasStationBrands";
 import FreshBadge from "@/components/common/FreshBadge.vue";
-import { ref } from "vue";
+import { ref, useId } from "vue";
 
 defineProps<{
   fuelType: FuelType;
@@ -21,6 +21,9 @@ const emit = defineEmits<{
 }>();
 
 const showAdvanced = ref(false);
+const fuelTypeLabelId = useId();
+const monthlySpendId = useId();
+const monthlySpendRangeId = useId();
 
 const fuelTypes: FuelType[] = ["gasoline", "diesel", "lpg"];
 const STEP = 50_000;
@@ -53,8 +56,8 @@ function handleAmountInput(e: Event) {
       <!-- 유종 + 월 주유비 (2컬럼) -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="space-y-1.5">
-          <label class="text-caption font-semibold text-muted-foreground">유종</label>
-          <div class="grid grid-cols-3 gap-1.5">
+          <span :id="fuelTypeLabelId" class="text-caption font-semibold text-muted-foreground">유종</span>
+          <div class="grid grid-cols-3 gap-1.5" role="group" :aria-labelledby="fuelTypeLabelId">
             <button
               v-for="ft in fuelTypes"
               :key="ft"
@@ -73,7 +76,7 @@ function handleAmountInput(e: Event) {
         </div>
 
         <div class="space-y-1.5">
-          <label class="text-caption font-semibold text-muted-foreground">월 주유비</label>
+          <label :for="monthlySpendId" class="text-caption font-semibold text-muted-foreground">월 주유비</label>
           <div class="retro-stepper">
             <button
               type="button"
@@ -83,7 +86,7 @@ function handleAmountInput(e: Event) {
             >−</button>
             <div class="retro-stepper-field">
               <input
-                aria-label="월 주유비"
+                :id="monthlySpendId"
                 type="text"
                 inputmode="numeric"
                 class="retro-stepper-input retro-stepper-input-right"
@@ -104,7 +107,8 @@ function handleAmountInput(e: Event) {
 
       <!-- 금액 슬라이더 (full width) -->
       <input
-        aria-label="월 주유비 범위"
+        :id="monthlySpendRangeId"
+        aria-label="월 주유비 범위 조절"
         type="range"
         :min="MIN"
         :max="MAX"
