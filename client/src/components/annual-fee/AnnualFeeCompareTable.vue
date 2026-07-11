@@ -75,7 +75,7 @@ const sortOptions: { key: AnnualFeeSortKey; label: string }[] = [
       </div>
 
       <div class="hidden overflow-x-auto -mx-4 sm:-mx-5 md:block">
-        <table class="w-full table-fixed text-caption">
+        <table aria-label="연회비 카드 비교" class="w-full table-fixed text-caption">
           <colgroup>
             <col class="w-[28%]" />
             <col class="w-[14%]" />
@@ -86,12 +86,12 @@ const sortOptions: { key: AnnualFeeSortKey; label: string }[] = [
           </colgroup>
           <thead>
             <tr class="border-b border-border bg-muted/30">
-              <th class="px-3 py-2 text-left font-semibold">카드</th>
-              <th class="px-3 py-2 text-right font-semibold">월 혜택</th>
-              <th class="px-3 py-2 text-right font-semibold">연회비</th>
-              <th class="px-3 py-2 text-right font-semibold">회수 기간</th>
-              <th class="px-3 py-2 text-right font-semibold">ROI</th>
-              <th class="px-3 py-2 text-right font-semibold">연 순혜택</th>
+              <th scope="col" class="px-3 py-2 text-left font-semibold">카드</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">월 혜택</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">연회비</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">회수 기간</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">ROI</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">연 순혜택</th>
             </tr>
           </thead>
           <tbody>

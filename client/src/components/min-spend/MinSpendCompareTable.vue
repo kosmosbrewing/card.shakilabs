@@ -76,7 +76,7 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
       </div>
 
       <div class="hidden overflow-x-auto -mx-4 sm:-mx-5 md:block">
-        <table class="w-full table-fixed text-caption">
+        <table aria-label="전월 실적 카드 비교" class="w-full table-fixed text-caption">
           <colgroup>
             <col class="w-[8%]" />
             <col class="w-[24%]" />
@@ -87,12 +87,12 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
           </colgroup>
           <thead>
             <tr class="border-b border-border bg-muted/30">
-              <th class="px-3 py-2 text-left font-semibold">순위</th>
-              <th class="px-3 py-2 text-left font-semibold">카드</th>
-              <th class="px-3 py-2 text-left font-semibold">실적 상태</th>
-              <th class="px-3 py-2 text-right font-semibold">부족액</th>
-              <th class="px-3 py-2 text-right font-semibold">월 할인</th>
-              <th class="px-3 py-2 text-right font-semibold">순혜택</th>
+              <th scope="col" class="px-3 py-2 text-left font-semibold">순위</th>
+              <th scope="col" class="px-3 py-2 text-left font-semibold">카드</th>
+              <th scope="col" class="px-3 py-2 text-left font-semibold">실적 상태</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">부족액</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">월 할인</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">순혜택</th>
             </tr>
           </thead>
           <tbody>
@@ -135,7 +135,7 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
       <div v-if="mismatchResults.length > 0" class="mt-3 space-y-2">
         <p class="text-caption text-muted-foreground">주유소 제한으로 미적용</p>
         <div class="overflow-x-auto -mx-4 sm:-mx-5 opacity-60">
-          <table class="w-full text-caption">
+          <table aria-label="전월 실적 카드 비교" class="w-full text-caption">
             <tbody>
               <tr
                 v-for="result in mismatchResults"

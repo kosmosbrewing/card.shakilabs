@@ -73,7 +73,7 @@ const sortOptions: { key: OverseasSortKey; label: string }[] = [
       </div>
 
       <div class="hidden overflow-x-auto -mx-4 sm:-mx-5 md:block">
-        <table class="w-full table-fixed text-caption">
+        <table aria-label="해외 결제 카드 비교" class="w-full table-fixed text-caption">
           <colgroup>
             <col class="w-[8%]" />
             <col class="w-[21%]" />
@@ -85,13 +85,13 @@ const sortOptions: { key: OverseasSortKey; label: string }[] = [
           </colgroup>
           <thead>
             <tr class="border-b border-border bg-muted/30">
-              <th class="px-3 py-2 text-left font-semibold">순위</th>
-              <th class="px-3 py-2 text-left font-semibold">카드</th>
-              <th class="px-3 py-2 text-left font-semibold">총 수수료</th>
-              <th class="px-3 py-2 text-left font-semibold">핵심 혜택</th>
-              <th class="px-3 py-2 text-right font-semibold">현지통화</th>
-              <th class="px-3 py-2 text-right font-semibold">DCC</th>
-              <th class="px-3 py-2 text-right font-semibold">DCC 손해</th>
+              <th scope="col" class="px-3 py-2 text-left font-semibold">순위</th>
+              <th scope="col" class="px-3 py-2 text-left font-semibold">카드</th>
+              <th scope="col" class="px-3 py-2 text-left font-semibold">총 수수료</th>
+              <th scope="col" class="px-3 py-2 text-left font-semibold">핵심 혜택</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">현지통화</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">DCC</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">DCC 손해</th>
             </tr>
           </thead>
           <tbody>

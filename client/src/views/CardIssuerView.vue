@@ -90,11 +90,12 @@ const seoDescription = computed(
       </div>
       <div class="retro-panel-content">
       <div class="overflow-x-auto -mx-4 sm:-mx-5">
-        <table class="w-full text-caption">
+        <table aria-label="월 주유 금액별 절약액" class="w-full text-caption">
           <thead>
             <tr class="border-b border-border bg-muted/30">
-              <th class="px-3 py-2 text-left font-semibold">월 주유</th>
+              <th scope="col" class="px-3 py-2 text-left font-semibold">월 주유</th>
               <th
+                scope="col"
                 v-for="card in issuerCards"
                 :key="card.id"
                 class="px-3 py-2 text-right font-semibold"
