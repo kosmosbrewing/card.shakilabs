@@ -70,6 +70,7 @@ function handleAmountInput(event: Event) {
             >+</button>
           </div>
           <input
+            aria-label="구매 예상 금액 범위"
             type="range"
             :min="MIN"
             :max="MAX"

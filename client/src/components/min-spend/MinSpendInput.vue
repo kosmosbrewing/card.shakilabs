@@ -98,6 +98,7 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
             >−</button>
             <div class="retro-stepper-field">
               <input
+                aria-label="월 주유비"
                 type="text"
                 inputmode="numeric"
                 class="retro-stepper-input retro-stepper-input-right"
@@ -118,6 +119,7 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
 
       <!-- 금액 슬라이더 (full width) -->
       <input
+        aria-label="월 주유비 범위"
         type="range"
         :min="MIN"
         :max="MAX"

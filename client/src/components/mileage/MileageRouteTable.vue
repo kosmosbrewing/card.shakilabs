@@ -1,4 +1,14 @@
 <script setup lang="ts">
+import {
+  ShBadge,
+  ShButton,
+  ShTable,
+  ShTableBody,
+  ShTableCell,
+  ShTableHead,
+  ShTableHeader,
+  ShTableRow,
+} from "@shakilabs/ui";
 import type { MileageSortKey } from "@/composables/useMileageCalc";
 import type { MileageValuePerMile } from "@/utils/mileageCalculator";
 import { formatValuePerMile } from "@/utils/mileageCalculator";
@@ -24,62 +34,59 @@ const sortOptions: { key: MileageSortKey; label: string }[] = [
     <div class="retro-titlebar rounded-t-2xl">
       <h2 class="retro-title">노선 / 좌석 비교표</h2>
       <div class="flex gap-1">
-        <button
+        <ShButton
           v-for="option in sortOptions"
           :key="option.key"
           type="button"
-          :class="[
-            'min-h-[44px] min-w-[44px] rounded-lg border px-2 py-1 text-tiny font-medium transition-colors',
-            sortKey === option.key
-              ? 'border-primary bg-primary/10 text-primary'
-              : 'border-border/70 text-muted-foreground hover:text-primary',
-          ]"
+          :variant="sortKey === option.key ? 'primary' : 'secondary'"
+          size="sm"
           @click="emit('update:sortKey', option.key)"
         >
           {{ option.label }}
-        </button>
+        </ShButton>
       </div>
     </div>
 
     <div class="retro-panel-content">
-      <div class="overflow-x-auto -mx-4 sm:-mx-5">
-        <table class="w-full text-caption">
-          <thead>
-            <tr class="border-b border-border bg-muted/30">
-              <th class="px-3 py-2 text-left font-semibold">노선</th>
-              <th class="px-3 py-2 text-left font-semibold">등급</th>
-              <th class="px-3 py-2 text-right font-semibold">필요 마일</th>
-              <th class="px-3 py-2 text-right font-semibold">예시 현금가</th>
-              <th class="px-3 py-2 text-right font-semibold">1마일 가치</th>
-              <th class="px-3 py-2 text-right font-semibold">상태</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
+      <ShTable
+        aria-label="노선과 좌석 등급별 마일리지 가치 비교"
+        density="compact"
+        min-width="44rem"
+        scroll-hint="표를 좌우로 스크롤해 전체 노선을 확인하세요."
+      >
+          <ShTableHeader>
+            <ShTableRow>
+              <ShTableHead>노선</ShTableHead>
+              <ShTableHead>등급</ShTableHead>
+              <ShTableHead numeric>필요 마일</ShTableHead>
+              <ShTableHead numeric>예시 현금가</ShTableHead>
+              <ShTableHead numeric>1마일 가치</ShTableHead>
+              <ShTableHead numeric>상태</ShTableHead>
+            </ShTableRow>
+          </ShTableHeader>
+          <ShTableBody>
+            <ShTableRow
               v-for="item in values"
               :key="`${item.routeId}-${item.seatClass}`"
-              class="border-b border-border/50 transition-colors hover:bg-accent/20"
             >
-              <td class="px-3 py-2">
+              <ShTableCell>
                 <div class="font-medium text-foreground">{{ item.routeLabel }}</div>
                 <div class="text-tiny text-muted-foreground">{{ item.example }}</div>
-              </td>
-              <td class="px-3 py-2">{{ item.seatClassLabel }}</td>
-              <td class="px-3 py-2 text-right tabular-nums">{{ item.milesRequired.toLocaleString() }}</td>
-              <td class="px-3 py-2 text-right tabular-nums">{{ item.cashPrice.toLocaleString() }}원</td>
-              <td class="px-3 py-2 text-right font-semibold tabular-nums text-savings">
+              </ShTableCell>
+              <ShTableCell>{{ item.seatClassLabel }}</ShTableCell>
+              <ShTableCell numeric>{{ item.milesRequired.toLocaleString() }}</ShTableCell>
+              <ShTableCell numeric>{{ item.cashPrice.toLocaleString() }}원</ShTableCell>
+              <ShTableCell numeric emphasis class="text-savings">
                 {{ formatValuePerMile(item.valuePerMile) }}
-              </td>
-              <td
-                class="px-3 py-2 text-right font-semibold tabular-nums"
-                :class="item.hasEnoughMiles ? 'text-savings' : 'text-status-warning'"
-              >
-                {{ item.hasEnoughMiles ? "마일 충족" : `${item.milesShortage.toLocaleString()} 부족` }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+              </ShTableCell>
+              <ShTableCell numeric>
+                <ShBadge :tone="item.hasEnoughMiles ? 'success' : 'warning'">
+                  {{ item.hasEnoughMiles ? "마일 충족" : `${item.milesShortage.toLocaleString()} 부족` }}
+                </ShBadge>
+              </ShTableCell>
+            </ShTableRow>
+          </ShTableBody>
+      </ShTable>
     </div>
   </div>
 </template>

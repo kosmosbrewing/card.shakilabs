@@ -141,6 +141,7 @@ function handleDccInput(event: Event) {
 
       <!-- 금액 슬라이더 (full width) -->
       <input
+        aria-label="해외 결제 금액 범위"
         type="range"
         :min="MIN"
         :max="MAX"
@@ -187,6 +188,7 @@ function handleDccInput(event: Event) {
                 </span>
               </div>
               <input
+                aria-label="DCC 마크업 범위"
                 type="range"
                 :min="DCC_MARKUP_MIN_PERCENT"
                 :max="DCC_MARKUP_MAX_PERCENT"

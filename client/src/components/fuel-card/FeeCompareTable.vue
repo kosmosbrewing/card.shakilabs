@@ -77,7 +77,7 @@ const sortOptions: { key: SortKey; label: string }[] = [
       </div>
 
       <div class="hidden overflow-x-auto -mx-4 sm:-mx-5 md:block">
-        <table class="w-full table-fixed text-caption">
+        <table aria-label="주유 카드 절약액 비교" class="w-full table-fixed text-caption">
           <colgroup>
             <col class="w-[8%]" />
             <col class="w-[21%]" />
@@ -90,14 +90,14 @@ const sortOptions: { key: SortKey; label: string }[] = [
           </colgroup>
           <thead>
             <tr class="border-b border-border bg-muted/30">
-              <th class="px-3 py-2 text-left font-semibold">순위</th>
-              <th class="px-3 py-2 text-left font-semibold">카드</th>
-              <th class="px-3 py-2 text-left font-semibold">할인 방식</th>
-              <th class="px-3 py-2 text-right font-semibold">월 절약</th>
-              <th class="px-3 py-2 text-right font-semibold">연 절약</th>
-              <th class="px-3 py-2 text-right font-semibold">체감유가</th>
-              <th class="px-3 py-2 text-right font-semibold">전월실적</th>
-              <th class="px-3 py-2 text-left font-semibold">주유소</th>
+              <th scope="col" class="px-3 py-2 text-left font-semibold">순위</th>
+              <th scope="col" class="px-3 py-2 text-left font-semibold">카드</th>
+              <th scope="col" class="px-3 py-2 text-left font-semibold">할인 방식</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">월 절약</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">연 절약</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">체감유가</th>
+              <th scope="col" class="px-3 py-2 text-right font-semibold">전월실적</th>
+              <th scope="col" class="px-3 py-2 text-left font-semibold">주유소</th>
             </tr>
           </thead>
           <tbody>
@@ -153,7 +153,7 @@ const sortOptions: { key: SortKey; label: string }[] = [
       <div v-if="mismatchResults.length > 0" class="mt-3 space-y-2">
         <p class="text-caption text-muted-foreground">주유소 제한으로 미적용</p>
         <div class="overflow-x-auto -mx-4 sm:-mx-5 opacity-60">
-          <table class="w-full text-caption">
+          <table aria-label="주유 카드 절약액 비교" class="w-full text-caption">
             <tbody>
               <tr
                 v-for="r in mismatchResults"
