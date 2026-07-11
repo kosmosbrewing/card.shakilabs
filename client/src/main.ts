@@ -5,6 +5,7 @@ import App from "./App.vue";
 import router from "./router";
 import "./assets/css/main.css";
 import "@shakilabs/ui/styles.css";
+import "./assets/css/responsive-accessibility.css";
 import { initAnalytics, trackEvent } from "./lib/analytics";
 import { captureSentryException, initSentry } from "./lib/sentry";
 import { removePrerenderFallback } from "./utils/prerenderFallback";

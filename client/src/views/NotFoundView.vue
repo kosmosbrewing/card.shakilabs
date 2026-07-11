@@ -13,7 +13,7 @@ import { RouterLink } from "vue-router";
   <div class="container py-20">
     <div class="text-center space-y-4">
       <p class="text-display font-bold text-muted-foreground">404</p>
-      <p class="text-body text-muted-foreground">페이지를 찾을 수 없습니다</p>
+      <h1 class="text-heading font-bold text-foreground">페이지를 찾을 수 없습니다</h1>
       <RouterLink to="/fuel-card" class="retro-button inline-flex">
         주유 할인카드 비교 →
       </RouterLink>

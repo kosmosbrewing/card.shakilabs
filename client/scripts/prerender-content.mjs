@@ -154,7 +154,7 @@ function buildFuelCardIssuerContent(issuer) {
   return `
     <article data-seo-prerender="fuel-card-issuer" style="${ARTICLE}">
       <nav aria-label="breadcrumb" style="font-size:13px;color:#64748b;margin-bottom:10px;">
-        <a href="/card/" style="color:#64748b;text-decoration:none;">홈</a> ›
+        <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">홈</a> ›
         <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">주유 할인카드</a> ›
         ${data.label}
       </nav>
@@ -288,7 +288,7 @@ function buildFuelTypeContent(fuelType) {
   return `
     <article data-seo-prerender="fuel-card-type" style="${ARTICLE}">
       <nav aria-label="breadcrumb" style="font-size:13px;color:#64748b;margin-bottom:10px;">
-        <a href="/card/" style="color:#64748b;text-decoration:none;">홈</a> ›
+        <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">홈</a> ›
         <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">주유 할인카드</a> ›
         ${label}
       </nav>
@@ -405,7 +405,7 @@ function buildFuelMonthlyContent(amount) {
   return `
     <article data-seo-prerender="fuel-card-monthly" style="${ARTICLE}">
       <nav aria-label="breadcrumb" style="font-size:13px;color:#64748b;margin-bottom:10px;">
-        <a href="/card/" style="color:#64748b;text-decoration:none;">홈</a> ›
+        <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">홈</a> ›
         <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">주유 할인카드</a> ›
         월 ${amountLabel}원
       </nav>
@@ -509,7 +509,7 @@ function buildOverseasCurrencyContent(currency) {
   return `
     <article data-seo-prerender="overseas-currency" style="${ARTICLE}">
       <nav aria-label="breadcrumb" style="font-size:13px;color:#64748b;margin-bottom:10px;">
-        <a href="/card/" style="color:#64748b;text-decoration:none;">홈</a> ›
+        <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">홈</a> ›
         <a href="/card/overseas-payment" style="color:#64748b;text-decoration:none;">해외결제</a> ›
         ${data.label}
       </nav>

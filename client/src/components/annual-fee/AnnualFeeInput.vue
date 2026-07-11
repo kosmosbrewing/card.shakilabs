@@ -163,6 +163,7 @@ function getCategorySliderMax(categoryId: BenefitCategoryId) {
             </div>
             <input
               type="range"
+              :aria-label="`${category.label} 지출 금액 조절`"
               min="0"
               :max="getCategorySliderMax(category.id)"
               step="10000"
@@ -200,6 +201,7 @@ function getCategorySliderMax(categoryId: BenefitCategoryId) {
               </div>
               <input
                 type="range"
+                :aria-label="`${category.label} 지출 금액 조절`"
                 min="0"
                 :max="getCategorySliderMax(category.id)"
                 step="10000"

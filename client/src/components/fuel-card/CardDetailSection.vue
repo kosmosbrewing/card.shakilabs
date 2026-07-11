@@ -20,7 +20,7 @@ defineProps<{
         class="retro-panel-muted p-3.5 space-y-2"
       >
         <!-- 카드 헤더 -->
-        <div class="flex items-center gap-2">
+        <div class="fuel-detail-header flex items-center gap-2">
           <span
             class="inline-block h-3 w-3 rounded-sm"
             :style="{ backgroundColor: r.card.issuerColor }"

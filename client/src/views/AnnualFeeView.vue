@@ -106,7 +106,7 @@ const {
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
-  <div class="container space-y-5 py-5">
+  <div class="text-resize-layout container space-y-5 py-5">
     <AnnualFeeInput
       :spending="spending"
       :total-monthly-spend="totalMonthlySpend"

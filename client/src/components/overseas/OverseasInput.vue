@@ -221,6 +221,9 @@ function handleDccInput(event: Event) {
         </details>
         <FreshBadge :message="`${EXCHANGE_RATES.lastUpdated} ${getExchangeRate(currency).unit}${currency}=${getExchangeRate(currency).rate.toLocaleString()}원`" />
       </div>
+      <p class="text-tiny leading-relaxed text-muted-foreground">
+        환율 출처: {{ EXCHANGE_RATES.source }}
+      </p>
     </div>
   </div>
 </template>

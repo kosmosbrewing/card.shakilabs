@@ -24,7 +24,7 @@ const sortOptions: { key: SortKey; label: string }[] = [
   <div class="retro-panel overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
       <h2 class="retro-title">전체 카드 비교</h2>
-      <div class="flex gap-1">
+      <div class="fuel-sort-options flex gap-1">
         <button
           v-for="opt in sortOptions"
           :key="opt.key"
@@ -48,18 +48,18 @@ const sortOptions: { key: SortKey; label: string }[] = [
           v-for="(r, idx) in results"
           :key="`${r.cardId}-mobile`"
           :class="[
-            'rounded-xl border p-3',
+            'fuel-table-card rounded-xl border p-3',
             idx === 0 ? 'border-savings/30 bg-savings/10' : 'border-border/60 bg-background/60',
           ]"
         >
-          <div class="flex items-center justify-between gap-3">
+          <div class="fuel-table-card-header flex items-center justify-between gap-3">
             <div class="flex items-center gap-1.5">
               <span class="inline-block h-2.5 w-2.5 rounded-sm" :style="{ backgroundColor: r.card.issuerColor }" />
               <span class="text-caption font-semibold text-foreground">{{ idx === 0 ? "🏆 1위" : `${idx + 1}위` }}</span>
             </div>
             <span class="text-tiny text-muted-foreground">{{ r.card.issuer }} {{ r.card.name }}</span>
           </div>
-          <div class="mt-2 grid grid-cols-3 gap-2">
+          <div class="fuel-table-card-stats mt-2 grid grid-cols-3 gap-2">
             <div>
               <div class="text-tiny text-muted-foreground">월 절약</div>
               <div class="text-caption font-semibold tabular-nums text-savings">▲ {{ r.monthlyNet.toLocaleString() }}원</div>
