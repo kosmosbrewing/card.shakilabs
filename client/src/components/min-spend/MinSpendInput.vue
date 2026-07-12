@@ -50,10 +50,10 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
 <template>
   <div class="retro-panel overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
-      <h1 class="retro-title flex items-center gap-2">
+      <h2 class="retro-title flex items-center gap-2">
         <Fuel class="h-5 w-5 text-primary" />
-        내 월 지출 패턴으로 최적 카드 찾기
-      </h1>
+        월 지출 조건 입력
+      </h2>
       <button
         type="button"
         class="retro-titlebar-button"

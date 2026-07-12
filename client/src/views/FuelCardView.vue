@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
 import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
@@ -107,6 +108,8 @@ const summaryMessage = computed(() => {
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="text-resize-layout container space-y-5 py-5">
+    <CalculatorPageHeader title="주유 할인카드 비교 계산기" />
+
     <!-- 입력 -->
     <FuelCardInput
       :fuel-type="fuelType"

@@ -45,10 +45,16 @@ function validateRoutes() {
     const html = readFileSync(outputPath, "utf8");
     const expectedCanonical = canonicalBase + route;
     const hash = createHash("sha256").update(html).digest("hex");
+    const h1Count = html.match(/<h1\b/gi)?.length ?? 0;
 
     assert(canonicalFrom(html) === expectedCanonical,
       `Invalid canonical for ${route}`);
     assert(/<title>[^<]+<\/title>/.test(html), `Missing title for ${route}`);
+    assert(h1Count === 1, `Expected one H1 for ${route}, found ${h1Count}`);
+    assert(
+      !/<noscript>/i.test(html),
+      `Route-specific output must not retain the shell noscript for ${route}`,
+    );
     assert(!hashes.has(hash), `Duplicate raw HTML for ${route}`);
     hashes.add(hash);
   }

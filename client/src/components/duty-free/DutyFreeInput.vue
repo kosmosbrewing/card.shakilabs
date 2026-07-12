@@ -31,10 +31,10 @@ function handleAmountInput(event: Event) {
 <template>
   <div class="retro-panel overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
-      <h1 class="retro-title flex items-center gap-2">
+      <h2 class="retro-title flex items-center gap-2">
         <ReceiptText class="h-5 w-5 text-primary" />
-        면세 한도 초과 관세 계산기
-      </h1>
+        구매 조건 입력
+      </h2>
     </div>
 
     <div class="retro-panel-content space-y-4">

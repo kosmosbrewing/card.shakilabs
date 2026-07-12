@@ -122,10 +122,10 @@ function getCategorySliderMax(categoryId: BenefitCategoryId) {
 <template>
   <div class="retro-panel overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
-      <h1 class="retro-title flex items-center gap-2">
+      <h2 class="retro-title flex items-center gap-2">
         <CreditCard class="h-5 w-5 text-primary" />
-        연회비 회수 계산기
-      </h1>
+        소비 조건 입력
+      </h2>
       <button
         type="button"
         class="retro-titlebar-button"

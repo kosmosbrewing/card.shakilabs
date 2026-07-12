@@ -2,6 +2,7 @@
 import { RouterLink } from "vue-router";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import DutyFreeBarChart from "@/components/duty-free/DutyFreeBarChart.vue";
 import DutyFreeFAQ from "@/components/duty-free/DutyFreeFAQ.vue";
@@ -40,6 +41,8 @@ const faqJsonLd = {
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5">
+    <CalculatorPageHeader title="면세 한도 초과 관세 계산기" />
+
     <DutyFreeInput
       :purchase-amount-usd="purchaseAmountUsd"
       :category="category"

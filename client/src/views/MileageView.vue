@@ -3,6 +3,7 @@ import { RouterLink } from "vue-router";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import MileageDetailSection from "@/components/mileage/MileageDetailSection.vue";
 import MileageFAQ from "@/components/mileage/MileageFAQ.vue";
@@ -49,6 +50,8 @@ const faqJsonLd = {
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5">
+    <CalculatorPageHeader title="마일리지 가치 계산기" />
+
     <CalculatorInteractionTracker calculator-id="mileage_value" page-path="/card/mileage">
       <MileageInput
         :airline-id="airlineId"
