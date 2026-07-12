@@ -67,7 +67,7 @@ const progressTone = computed(() => {
         </div>
       </div>
 
-      <div class="grid grid-cols-3 gap-2">
+      <div class="result-metric-grid grid grid-cols-3 gap-2">
         <div class="text-center">
           <div class="text-tiny text-muted-foreground">월 할인</div>
           <div class="text-heading font-bold tabular-nums text-savings">

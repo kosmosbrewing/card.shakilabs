@@ -57,7 +57,7 @@ function handleAmountInput(e: Event) {
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="space-y-1.5">
           <span :id="fuelTypeLabelId" class="text-caption font-semibold text-muted-foreground">유종</span>
-          <div class="grid grid-cols-3 gap-1.5" role="group" :aria-labelledby="fuelTypeLabelId">
+          <div class="fuel-type-options grid grid-cols-3 gap-1.5" role="group" :aria-labelledby="fuelTypeLabelId">
             <button
               v-for="ft in fuelTypes"
               :key="ft"
