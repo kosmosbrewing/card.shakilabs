@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Fuel, Share2 } from "lucide-vue-next";
-import { ShSurface, ShText } from "@shakilabs/ui";
+import { ShSlider, ShSurface, ShText } from "@shakilabs/ui";
 import type { FuelType } from "@/data/fuelPrices";
 import { FUEL_PRICES, FUEL_TYPE_LABELS, getFuelPrice } from "@/data/fuelPrices";
 import { GAS_STATION_BRANDS } from "@/data/gasStationBrands";
@@ -106,16 +106,15 @@ function handleAmountInput(e: Event) {
       </div>
 
       <!-- 금액 슬라이더 (full width) -->
-      <input
+      <ShSlider
         :id="monthlySpendRangeId"
-        aria-label="월 주유비 범위 조절"
-        type="range"
+        :model-value="Math.min(Math.max(monthlySpend, MIN), MAX)"
         :min="MIN"
         :max="MAX"
-        step="10000"
-        class="retro-range"
-        :value="Math.min(Math.max(monthlySpend, MIN), MAX)"
-        @input="emit('update:monthlySpend', Number(($event.target as HTMLInputElement).value))"
+        :step="10000"
+        :value-text="`월 주유비 ${monthlySpend.toLocaleString('ko-KR')}원`"
+        aria-label="월 주유비 슬라이더"
+        @update:model-value="emit('update:monthlySpend', $event)"
       />
 
       <!-- 상세 설정 + 유가 기준 통합 -->
