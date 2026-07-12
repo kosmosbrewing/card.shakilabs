@@ -69,7 +69,7 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="space-y-1.5">
           <label class="text-caption font-semibold text-muted-foreground">유종</label>
-          <div class="grid grid-cols-3 gap-1.5">
+          <div class="fuel-type-options grid grid-cols-3 gap-1.5">
             <button
               v-for="ft in fuelTypes"
               :key="ft"

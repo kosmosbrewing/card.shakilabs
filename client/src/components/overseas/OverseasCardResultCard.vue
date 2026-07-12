@@ -32,7 +32,7 @@ defineProps<{
         <span class="text-body text-muted-foreground">{{ result.card.name }}</span>
       </div>
 
-      <div class="grid grid-cols-3 gap-2">
+      <div class="result-metric-grid grid grid-cols-3 gap-2">
         <div class="text-center">
           <div class="text-tiny text-muted-foreground">현지통화 실부담</div>
           <div class="text-heading font-bold tabular-nums text-savings">

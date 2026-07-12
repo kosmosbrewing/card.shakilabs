@@ -47,7 +47,7 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="space-y-1.5">
           <p class="text-caption font-semibold text-muted-foreground">항공사</p>
-          <div class="grid grid-cols-2 gap-1.5">
+          <div class="mileage-choice-grid grid grid-cols-2 gap-1.5">
             <button
               v-for="airline in AIRLINES"
               :key="airline.id"
@@ -112,7 +112,7 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
       <!-- 좌석 등급 필터 -->
       <div class="space-y-1.5">
         <p class="text-caption font-semibold text-muted-foreground">좌석 등급</p>
-        <div class="grid grid-cols-2 gap-1.5">
+        <div class="mileage-choice-grid grid grid-cols-2 gap-1.5">
           <button
             v-for="seatClass in classOptions"
             :key="seatClass"

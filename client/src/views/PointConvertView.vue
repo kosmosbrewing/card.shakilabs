@@ -38,13 +38,13 @@ const result = computed(() => calculatePointConversions({ pointAmount: pointAmou
 
     <div class="grid gap-3">
       <div v-for="item in result.items" :key="item.key" class="retro-panel-muted px-4 py-4">
-        <div class="flex items-center justify-between gap-3">
+        <div class="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
           <div>
             <p class="text-body font-semibold text-foreground">{{ item.label }}</p>
             <p class="text-tiny text-muted-foreground">{{ item.note }}</p>
           </div>
-          <div class="text-right">
-            <p class="text-body font-bold text-foreground">{{ formatWon(item.estimatedValue) }}</p>
+          <div class="sm:text-right">
+            <p class="text-body font-bold text-foreground tabular-nums">{{ formatWon(item.estimatedValue) }}</p>
             <p class="text-tiny text-muted-foreground">{{ item.units.toLocaleString() }} {{ item.unitLabel }}</p>
           </div>
         </div>

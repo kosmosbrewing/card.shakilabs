@@ -27,7 +27,7 @@ onErrorCaptured((error, _instance, info) => {
   <AppLayout>
     <RouterView v-slot="{ Component, route }">
       <Transition name="page-fade" mode="out-in">
-        <div :key="getPageGroup(route.path)">
+        <div :key="getPageGroup(route.path)" class="text-resize-layout">
           <div v-if="routeError" class="container py-10">
             <div class="retro-panel overflow-hidden border-status-danger/30">
               <div class="retro-titlebar rounded-t-2xl">

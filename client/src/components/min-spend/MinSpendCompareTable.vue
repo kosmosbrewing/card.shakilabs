@@ -24,7 +24,7 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
   <div class="retro-panel overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
       <h2 class="retro-title">전체 카드 비교</h2>
-      <div class="flex gap-1">
+      <div class="result-sort-options flex gap-1">
         <button
           v-for="option in sortOptions"
           :key="option.key"
@@ -56,7 +56,7 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
             <span class="text-caption font-semibold text-foreground">{{ idx === 0 ? "🏆 1위" : `${idx + 1}위` }}</span>
             <span class="text-tiny text-muted-foreground">{{ result.card.issuer }} {{ result.card.name }}</span>
           </div>
-          <div class="mt-2 grid grid-cols-3 gap-2">
+          <div class="result-metric-grid mt-2 grid grid-cols-3 gap-2">
             <div>
               <div class="text-tiny text-muted-foreground">실적 상태</div>
               <div class="text-caption font-semibold text-foreground">{{ formatQualificationStatus(result) }}</div>

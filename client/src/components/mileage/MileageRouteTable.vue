@@ -33,13 +33,14 @@ const sortOptions: { key: MileageSortKey; label: string }[] = [
   <div class="retro-panel overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
       <h2 class="retro-title">노선 / 좌석 비교표</h2>
-      <div class="flex gap-1">
+      <div class="result-sort-options flex gap-1">
         <ShButton
           v-for="option in sortOptions"
           :key="option.key"
           type="button"
           :variant="sortKey === option.key ? 'primary' : 'secondary'"
           size="sm"
+          class="whitespace-nowrap"
           @click="emit('update:sortKey', option.key)"
         >
           {{ option.label }}

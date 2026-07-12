@@ -36,7 +36,7 @@ defineProps<{
           <div
             v-for="detail in result.categoryBreakdown"
             :key="detail.categoryId"
-            class="rounded-xl border border-border/60 bg-background/60 p-3"
+            class="annual-fee-detail-card rounded-xl border border-border/60 bg-background/60 p-3"
           >
             <div class="flex items-center justify-between gap-2">
               <span class="text-caption font-semibold text-foreground">{{ detail.categoryLabel }}</span>

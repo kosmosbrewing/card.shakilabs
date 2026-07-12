@@ -77,7 +77,7 @@ const sortOptions: { key: SortKey; label: string }[] = [
       </div>
 
       <div class="hidden overflow-x-auto -mx-4 sm:-mx-5 md:block">
-        <table aria-label="주유 카드 절약액 비교" class="w-full table-fixed text-caption">
+        <table aria-label="주유 카드 절약액 비교" class="w-max min-w-full text-caption">
           <colgroup>
             <col class="w-[8%]" />
             <col class="w-[21%]" />

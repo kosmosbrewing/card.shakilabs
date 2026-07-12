@@ -15,7 +15,7 @@ defineProps<{
     </div>
 
     <div class="retro-panel-content space-y-3">
-      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <div class="grid grid-cols-1 gap-2 sm:grid-cols-4">
         <div class="text-center">
           <div class="text-tiny text-muted-foreground">구매액</div>
           <div class="text-heading font-bold tabular-nums text-foreground">
