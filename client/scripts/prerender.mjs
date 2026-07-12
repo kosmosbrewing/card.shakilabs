@@ -499,7 +499,10 @@ for (const route of SEO_ROUTES) {
   }
 
   const meta = buildMeta(route);
-  const html = applyMeta(template, meta, route);
+  const html = applyMeta(template, meta, route).replace(
+    /\n?\s*<noscript>[\s\S]*?<\/noscript>/i,
+    "",
+  );
   writeFileSync(filePath, html, "utf-8");
   console.log(`[prerender] ${route} -> ${filePath}`);
 }

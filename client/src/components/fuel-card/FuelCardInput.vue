@@ -39,9 +39,9 @@ function handleAmountInput(e: Event) {
 <template>
   <ShSurface padding="none" class="overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
-      <ShText as="h1" variant="heading" class="flex items-center gap-2">
+      <ShText as="h2" variant="heading" class="flex items-center gap-2">
         <Fuel class="h-5 w-5 text-primary" />
-        내 주유 패턴에 맞는 최적 카드 찾기
+        주유 조건 입력
       </ShText>
       <button
         type="button"

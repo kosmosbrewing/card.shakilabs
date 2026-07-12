@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { RouterLink } from "vue-router";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
@@ -79,9 +80,11 @@ const summaryMessage = computed(() => {
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
   <div class="container space-y-5 py-5">
+    <CalculatorPageHeader :title="`${rateEntry.label} 해외결제 카드 비교`" />
+
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
-        <h1 class="retro-title">{{ rateEntry.label }} 해외결제 카드 비교</h1>
+        <h2 class="retro-title">비교 기준</h2>
         <FreshBadge :message="`${EXCHANGE_RATES.lastUpdated} 기준`" />
       </div>
       <div class="retro-panel-content">

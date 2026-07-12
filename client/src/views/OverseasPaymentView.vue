@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
@@ -107,6 +108,8 @@ const {
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5">
+    <CalculatorPageHeader title="해외결제 카드 비교 계산기" />
+
     <OverseasInput
       :currency="currency"
       :foreign-amount="foreignAmount"

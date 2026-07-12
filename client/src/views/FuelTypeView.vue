@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { RouterLink } from "vue-router";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
@@ -48,9 +49,11 @@ const seoDescription = computed(
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
   <div class="container space-y-5 py-5">
+    <CalculatorPageHeader :title="`${FUEL_TYPE_LABELS[ft]} 주유 할인카드 비교`" />
+
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
-        <h1 class="retro-title">{{ FUEL_TYPE_LABELS[ft] }} 주유 할인카드 비교</h1>
+        <h2 class="retro-title">비교 기준</h2>
         <FreshBadge :message="`${FUEL_PRICES.lastUpdated} 기준`" />
       </div>
       <div class="retro-panel-content">

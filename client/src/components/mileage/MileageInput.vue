@@ -36,10 +36,10 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
 <template>
   <div class="retro-panel overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
-      <h1 class="retro-title flex items-center gap-2">
+      <h2 class="retro-title flex items-center gap-2">
         <Plane class="h-5 w-5 text-primary" />
-        마일리지 가치 계산기
-      </h1>
+        마일리지 조건 입력
+      </h2>
     </div>
 
     <div class="retro-panel-content space-y-4">

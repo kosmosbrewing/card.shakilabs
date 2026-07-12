@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import { CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
 import { formatWon } from "@/lib/utils";
 import { calculatePointConversions } from "@/utils/cardTabCalculator";
@@ -17,9 +18,11 @@ const result = computed(() => calculatePointConversions({ pointAmount: pointAmou
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
   <div class="container space-y-5 py-5">
+    <CalculatorPageHeader title="포인트 전환 비교" />
+
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
-        <h1 class="retro-title">포인트 전환 비교</h1>
+        <h2 class="retro-title">전환 조건</h2>
         <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
       </div>
       <div class="retro-panel-content space-y-4">

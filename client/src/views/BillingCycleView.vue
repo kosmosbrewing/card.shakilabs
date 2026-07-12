@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import { BILLING_DAY_OPTIONS, CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
 import { calculateBillingCycle } from "@/utils/cardTabCalculator";
 
@@ -17,9 +18,11 @@ const result = computed(() => calculateBillingCycle({ purchaseDay: purchaseDay.v
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
   <div class="container space-y-5 py-5">
+    <CalculatorPageHeader title="결제일별 이용기간 계산기" />
+
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
-        <h1 class="retro-title">결제일별 이용기간 계산기</h1>
+        <h2 class="retro-title">이용기간 조건</h2>
         <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
       </div>
       <div class="retro-panel-content grid gap-3 md:grid-cols-2">
