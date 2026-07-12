@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Plane } from "lucide-vue-next";
+import { ShSlider } from "@shakilabs/ui";
 import {
   AIRLINES,
   getSeatClassLabel,
@@ -98,15 +99,14 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
       </div>
 
       <!-- 마일리지 슬라이더 (full width) -->
-      <input
-        type="range"
+      <ShSlider
+        :model-value="Math.min(Math.max(mileageBalance, MIN), MAX)"
         aria-label="보유 마일리지 슬라이더"
         :min="MIN"
         :max="MAX"
-        step="1000"
-        class="retro-range"
-        :value="Math.min(Math.max(mileageBalance, MIN), MAX)"
-        @input="emit('update:mileageBalance', Number(($event.target as HTMLInputElement).value))"
+        :step="1000"
+        :value-text="`보유 마일리지 ${mileageBalance.toLocaleString('ko-KR')}마일`"
+        @update:model-value="emit('update:mileageBalance', $event)"
       />
 
       <!-- 좌석 등급 필터 -->

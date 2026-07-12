@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ReceiptText } from "lucide-vue-next";
+import { ShSlider } from "@shakilabs/ui";
 import {
   DUTY_FREE_CATEGORIES,
   DUTY_FREE_CONSTANTS,
@@ -69,15 +70,14 @@ function handleAmountInput(event: Event) {
               @click="emit('update:purchaseAmountUsd', Math.min(MAX, purchaseAmountUsd + STEP))"
             >+</button>
           </div>
-          <input
-            aria-label="구매 예상 금액 범위"
-            type="range"
+          <ShSlider
+            :model-value="Math.min(Math.max(purchaseAmountUsd, MIN), MAX)"
             :min="MIN"
             :max="MAX"
-            step="50"
-            class="retro-range"
-            :value="Math.min(Math.max(purchaseAmountUsd, MIN), MAX)"
-            @input="emit('update:purchaseAmountUsd', Number(($event.target as HTMLInputElement).value))"
+            :step="50"
+            :value-text="`구매 예상 금액 $${purchaseAmountUsd.toLocaleString('ko-KR')}`"
+            aria-label="구매 예상 금액 슬라이더"
+            @update:model-value="emit('update:purchaseAmountUsd', $event)"
           />
         </div>
 

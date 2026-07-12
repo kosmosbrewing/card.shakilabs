@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { Fuel, Share2 } from "lucide-vue-next";
+import { ShSlider } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import { GAS_STATION_BRANDS } from "@/data/gasStationBrands";
 import {
@@ -118,15 +119,14 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
       </div>
 
       <!-- 금액 슬라이더 (full width) -->
-      <input
-        aria-label="월 주유비 범위"
-        type="range"
+      <ShSlider
+        :model-value="Math.min(Math.max(fuelSpend, MIN), MAX)"
         :min="MIN"
         :max="MAX"
-        step="10000"
-        class="retro-range"
-        :value="Math.min(Math.max(fuelSpend, MIN), MAX)"
-        @input="emit('update:fuelSpend', Number(($event.target as HTMLInputElement).value))"
+        :step="10000"
+        :value-text="`월 주유비 ${fuelSpend.toLocaleString('ko-KR')}원`"
+        aria-label="월 주유비 슬라이더"
+        @update:model-value="emit('update:fuelSpend', $event)"
       />
 
       <!-- 월 생활비 (카테고리별 — 슬라이더 제거) -->
