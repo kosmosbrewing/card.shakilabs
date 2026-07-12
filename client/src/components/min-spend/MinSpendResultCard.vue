@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { AlertTriangle, CheckCircle2, Trophy } from "lucide-vue-next";
 import { computed } from "vue";
+import { progressBarWidth } from "@/utils/chartMath";
 import type { MinSpendCalcResult } from "@/utils/minSpendCalculator";
 import { formatQualificationStatus } from "@/utils/minSpendCalculator";
 
@@ -9,11 +10,10 @@ const props = defineProps<{
   rank: number;
 }>();
 
-const progressWidth = computed(() => `${Math.max(props.result.qualificationRate * 100, 4)}%`);
 const progressTone = computed(() => {
-  if (props.result.qualificationRate >= 1) return "bg-savings/80";
-  if (props.result.qualificationRate >= 0.8) return "bg-status-warning/80";
-  return "bg-loss/80";
+  if (props.result.qualificationRate >= 1) return "fill-savings";
+  if (props.result.qualificationRate >= 0.8) return "fill-status-warning";
+  return "fill-loss";
 });
 </script>
 
@@ -33,21 +33,23 @@ const progressTone = computed(() => {
 
     <div class="retro-panel-content space-y-3">
       <div class="flex items-center gap-2">
-        <span
-          class="inline-block h-3 w-3 rounded-sm"
-          :style="{ backgroundColor: result.card.issuerColor }"
-        />
+        <span class="inline-block h-3 w-3 rounded-sm bg-primary" />
         <span class="text-body font-bold text-foreground">{{ result.card.issuer }}</span>
         <span class="text-body text-muted-foreground">{{ result.card.name }}</span>
       </div>
 
       <div class="space-y-2">
-        <div class="h-3 overflow-hidden rounded-full bg-muted/60">
-          <div
-            class="h-full rounded-full transition-all duration-500 ease-out"
-            :class="progressTone"
-            :style="{ width: progressWidth }"
-          />
+        <div
+          class="h-3 overflow-hidden rounded-full bg-muted/60"
+          role="progressbar"
+          :aria-label="`${result.card.issuer} 실적 달성률`"
+          :aria-valuenow="Math.min(100, Math.max(0, result.qualificationRate * 100))"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <svg viewBox="0 0 100 12" preserveAspectRatio="none" class="block h-full w-full" aria-hidden="true">
+            <rect :width="progressBarWidth(result.qualificationRate)" height="12" rx="4" :class="progressTone" />
+          </svg>
         </div>
         <div class="flex items-center justify-between gap-2 text-caption">
           <span class="tabular-nums text-muted-foreground">

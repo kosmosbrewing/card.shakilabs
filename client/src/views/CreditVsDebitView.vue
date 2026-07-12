@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
+import DivergingBars from "@/components/result-visualization/DivergingBars.vue";
 import { CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
 import { formatPercent, formatWon } from "@/lib/utils";
 import { compareCreditVsDebit } from "@/utils/cardTabCalculator";
@@ -21,6 +22,11 @@ const result = computed(() => compareCreditVsDebit({
   creditRate: creditRate.value,
   debitRate: debitRate.value,
 }));
+const benefitItems = computed(() => [
+  { key: "credit", label: "신용카드", value: result.value.annualCreditBenefit },
+  { key: "debit", label: "체크카드", value: result.value.annualDebitBenefit },
+]);
+const formatBenefit = (value: number) => `${value >= 0 ? "+" : "-"}${formatWon(Math.abs(value))}`;
 </script>
 
 <template>
@@ -73,6 +79,8 @@ const result = computed(() => compareCreditVsDebit({
         <p class="mt-2 text-h2 font-bold text-primary">{{ result.winner === "credit" ? "신용카드" : "체크카드" }}</p>
       </div>
     </div>
+
+    <DivergingBars title="연회비 반영 연간 순혜택" :items="benefitItems" :format-value="formatBenefit" />
 
     <div class="retro-panel px-4 py-4 text-caption leading-relaxed text-foreground">
       연간 차이는 {{ formatWon(result.gap) }}입니다.
