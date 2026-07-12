@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { CreditCard, Share2 } from "lucide-vue-next";
+import { ShSlider } from "@shakilabs/ui";
 import {
   BENEFIT_CATEGORIES,
   createDefaultSpendingPattern,
@@ -161,15 +162,14 @@ function getCategorySliderMax(categoryId: BenefitCategoryId) {
               />
               <span class="retro-input-affix retro-input-affix-right retro-input-affix-wide">원</span>
             </div>
-            <input
-              type="range"
+            <ShSlider
+              :model-value="props.spending[category.id]"
               :aria-label="`${category.label} 지출 금액 조절`"
-              min="0"
+              :min="0"
               :max="getCategorySliderMax(category.id)"
-              step="10000"
-              class="retro-range"
-              :value="props.spending[category.id]"
-              @input="emit('update:spending', { categoryId: category.id, amount: Number(($event.target as HTMLInputElement).value) })"
+              :step="10000"
+              :value-text="`${category.label} ${props.spending[category.id].toLocaleString('ko-KR')}원`"
+              @update:model-value="emit('update:spending', { categoryId: category.id, amount: $event })"
             />
           </label>
         </div>
@@ -199,15 +199,14 @@ function getCategorySliderMax(categoryId: BenefitCategoryId) {
                 />
                 <span class="retro-input-affix retro-input-affix-right retro-input-affix-wide">원</span>
               </div>
-              <input
-                type="range"
+              <ShSlider
+                :model-value="props.spending[category.id]"
                 :aria-label="`${category.label} 지출 금액 조절`"
-                min="0"
+                :min="0"
                 :max="getCategorySliderMax(category.id)"
-                step="10000"
-                class="retro-range"
-                :value="props.spending[category.id]"
-                @input="emit('update:spending', { categoryId: category.id, amount: Number(($event.target as HTMLInputElement).value) })"
+                :step="10000"
+                :value-text="`${category.label} ${props.spending[category.id].toLocaleString('ko-KR')}원`"
+                @update:model-value="emit('update:spending', { categoryId: category.id, amount: $event })"
               />
             </label>
           </div>

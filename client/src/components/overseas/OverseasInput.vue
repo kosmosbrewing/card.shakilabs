@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Globe2, Share2 } from "lucide-vue-next";
 import { computed, ref } from "vue";
+import { ShSlider } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import {
   DCC_MARKUP,
@@ -43,8 +44,7 @@ function handleAmountInput(event: Event) {
   }
 }
 
-function handleDccSlider(event: Event) {
-  const value = Number((event.target as HTMLInputElement).value);
+function handleDccSlider(value: number) {
   if (Number.isFinite(value)) {
     emit("update:dccMarkupRate", value / 100);
   }
@@ -140,15 +140,14 @@ function handleDccInput(event: Event) {
       </div>
 
       <!-- 금액 슬라이더 (full width) -->
-      <input
-        aria-label="해외 결제 금액 범위"
-        type="range"
+      <ShSlider
+        :model-value="Math.min(Math.max(foreignAmount, MIN), MAX)"
         :min="MIN"
         :max="MAX"
-        step="10"
-        class="retro-range"
-        :value="Math.min(Math.max(foreignAmount, MIN), MAX)"
-        @input="emit('update:foreignAmount', Number(($event.target as HTMLInputElement).value))"
+        :step="10"
+        :value-text="`결제 금액 ${getExchangeRate(currency).symbol}${foreignAmount.toLocaleString('ko-KR')}`"
+        aria-label="해외 결제 금액 슬라이더"
+        @update:model-value="emit('update:foreignAmount', $event)"
       />
 
       <!-- 기타 통화 (접기) -->
@@ -187,15 +186,14 @@ function handleDccInput(event: Event) {
                   {{ (dccMarkupRate * 100).toFixed(1) }}%
                 </span>
               </div>
-              <input
-                aria-label="DCC 마크업 범위"
-                type="range"
+              <ShSlider
+                :model-value="dccMarkupRate * 100"
                 :min="DCC_MARKUP_MIN_PERCENT"
                 :max="DCC_MARKUP_MAX_PERCENT"
-                step="0.5"
-                class="retro-range"
-                :value="dccMarkupRate * 100"
-                @input="handleDccSlider"
+                :step="0.5"
+                :value-text="`DCC 마크업 ${(dccMarkupRate * 100).toFixed(1)}%`"
+                aria-label="DCC 마크업 슬라이더"
+                @update:model-value="handleDccSlider"
               />
             </div>
             <div class="space-y-1.5">
