@@ -1,60 +1,25 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import RankedBars from "@/components/result-visualization/RankedBars.vue";
 import type { OverseasCalcResult } from "@/utils/overseasCalculator";
 
-const props = defineProps<{
-  results: OverseasCalcResult[];
-}>();
-
-const minCost = computed(() =>
-  Math.min(...props.results.map((result) => result.localCurrencyNet))
-);
-const maxCost = computed(() =>
-  Math.max(...props.results.map((result) => result.localCurrencyNet))
-);
-
-function resolveWidth(value: number): number {
-  if (maxCost.value === minCost.value) return 100;
-  const ratio = (maxCost.value - value) / (maxCost.value - minCost.value);
-  return 30 + ratio * 70;
-}
+const props = defineProps<{ results: OverseasCalcResult[] }>();
+const minimum = computed(() => Math.min(...props.results.map((result) => result.localCurrencyNet)));
+const items = computed(() => props.results.map((result) => ({
+  key: result.cardId,
+  label: result.card.issuer,
+  value: result.localCurrencyNet,
+  highlight: result.localCurrencyNet === minimum.value,
+  tone: result.localCurrencyNet === minimum.value ? "positive" as const : "primary" as const,
+})));
+const formatWon = (value: number | null) => `${(value ?? 0).toLocaleString()}원`;
 </script>
 
 <template>
-  <div class="retro-panel overflow-hidden">
-    <div class="retro-titlebar rounded-t-2xl">
-      <h2 class="retro-title">카드별 실부담 비교</h2>
-    </div>
-
-    <div class="retro-panel-content space-y-2.5">
-      <div
-        v-for="result in results"
-        :key="result.cardId"
-        class="flex items-center gap-3"
-      >
-        <div class="flex w-28 shrink-0 items-center gap-1.5">
-          <span
-            class="inline-block h-2.5 w-2.5 shrink-0 rounded-sm"
-            :style="{ backgroundColor: result.card.issuerColor }"
-          />
-          <span class="truncate text-tiny font-medium">{{ result.card.issuer }}</span>
-        </div>
-
-        <div class="h-6 flex-1 overflow-hidden rounded-md bg-muted/50">
-          <div
-            class="h-full rounded-md transition-all duration-500 ease-out"
-            :class="result.localCurrencyNet === minCost ? 'bg-savings/80' : 'bg-primary/60'"
-            :style="{ width: `${resolveWidth(result.localCurrencyNet)}%` }"
-          />
-        </div>
-
-        <div
-          class="w-24 shrink-0 text-right text-caption font-bold tabular-nums"
-          :class="result.localCurrencyNet === minCost ? 'text-savings' : 'text-foreground'"
-        >
-          {{ result.localCurrencyNet === minCost ? '▲ ' : '' }}{{ result.localCurrencyNet.toLocaleString() }}원
-        </div>
-      </div>
-    </div>
-  </div>
+  <RankedBars
+    title="카드별 실부담 비교"
+    note="막대 길이는 실제 원화 부담액에 직접 비례하며 짧을수록 유리합니다."
+    :items="items"
+    :format-value="formatWon"
+  />
 </template>

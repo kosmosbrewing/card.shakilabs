@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
+import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
 import { CARD_CUSTOMS_CATEGORIES, CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
 import { formatWon } from "@/lib/utils";
 import { calculateCustoms } from "@/utils/cardTabCalculator";
@@ -19,6 +20,10 @@ const result = computed(() => calculateCustoms({
   shippingUsd: shippingUsd.value,
   categoryKey: categoryKey.value,
 }));
+const taxSegments = computed(() => [
+  { key: "tariff", label: "관세", value: result.value.tariff, tone: "primary" as const },
+  { key: "vat", label: "부가세", value: result.value.vat, tone: "warning" as const },
+]);
 </script>
 
 <template>
@@ -64,6 +69,12 @@ const result = computed(() => calculateCustoms({
         <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.landedCost) }}</p>
       </div>
     </div>
+
+    <BreakdownStackedBar
+      title="예상 관부가세 구성"
+      :segments="taxSegments"
+      :format-value="formatWon"
+    />
 
     <div class="retro-panel px-4 py-4 text-caption leading-relaxed text-foreground">
       {{ result.category.label }} 기준, 총 금액이 {{ result.category.thresholdUsd }}달러를 넘으면 과세 대상으로 보고 예상 관세 {{ formatWon(result.tariff) }}, 부가세 {{ formatWon(result.vat) }}를 계산합니다.

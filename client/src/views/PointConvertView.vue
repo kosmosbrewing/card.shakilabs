@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
+import RankedBars from "@/components/result-visualization/RankedBars.vue";
 import { CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
 import { formatWon } from "@/lib/utils";
 import { calculatePointConversions } from "@/utils/cardTabCalculator";
@@ -12,6 +13,14 @@ const seoDescription = "보유 포인트를 어디로 넘겨야 가치가 큰지
 
 const pointAmount = ref(120_000);
 const result = computed(() => calculatePointConversions({ pointAmount: pointAmount.value }));
+const chartItems = computed(() => result.value.items.map((item, index) => ({
+  key: item.key,
+  label: item.label,
+  value: item.estimatedValue,
+  detail: `${item.units.toLocaleString()} ${item.unitLabel}`,
+  highlight: index === 0,
+})));
+const formatChartValue = (value: number | null) => formatWon(value ?? 0);
 </script>
 
 <template>
@@ -35,6 +44,13 @@ const result = computed(() => calculatePointConversions({ pointAmount: pointAmou
         </div>
       </div>
     </div>
+
+    <RankedBars
+      title="전환처별 예상 가치"
+      note="동일한 보유 포인트를 전환했을 때의 예상 원화 가치이며 길수록 높습니다."
+      :items="chartItems"
+      :format-value="formatChartValue"
+    />
 
     <div class="grid gap-3">
       <div v-for="item in result.items" :key="item.key" class="retro-panel-muted px-4 py-4">
