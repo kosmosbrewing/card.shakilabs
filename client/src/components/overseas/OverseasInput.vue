@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Globe2, Share2 } from "lucide-vue-next";
-import { computed, ref } from "vue";
-import { ShSlider } from "@shakilabs/ui";
+import { ref } from "vue";
+import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import {
   DCC_MARKUP,
@@ -13,7 +13,7 @@ import {
 } from "@/data/exchangeRates";
 import { DCC_MARKUP_MAX_PERCENT, DCC_MARKUP_MIN_PERCENT } from "@/lib/validators";
 
-const props = defineProps<{
+defineProps<{
   currency: Currency;
   foreignAmount: number;
   dccMarkupRate: number;
@@ -33,9 +33,11 @@ const MIN = 10;
 const MAX = 2000;
 const foreignAmountInputId = "overseas-amount";
 const dccInputId = "overseas-dcc";
-const selectedExtraCurrency = computed(() =>
-  EXTRA_CURRENCIES.some((item) => item === props.currency) ? props.currency : ""
-);
+const popularCurrencyOptions = POPULAR_CURRENCIES.map((value) => ({ label: value, value }));
+const extraCurrencyOptions = EXTRA_CURRENCIES.map((value) => ({
+  label: `${value} ${getExchangeRate(value).label}`,
+  value,
+}));
 
 function handleAmountInput(event: Event) {
   const value = Number((event.target as HTMLInputElement).value.replace(/[^0-9.]/g, ""));
@@ -80,21 +82,13 @@ function handleDccInput(event: Event) {
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="space-y-1.5">
           <p class="text-caption font-semibold text-muted-foreground">통화</p>
-          <div class="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
-            <button
-              v-for="item in POPULAR_CURRENCIES"
-              :key="item"
-              type="button"
-              :class="[
-                'retro-choice-button',
-                currency === item
-                  ? 'border-primary bg-primary/10 text-primary'
-                  : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-              ]"
-              @click="emit('update:currency', item)"
-            >
-              {{ item }}
-            </button>
+          <div class="space-y-1.5">
+            <ShPresetGroup
+              :model-value="currency"
+              :options="popularCurrencyOptions"
+              label="주요 통화 선택"
+              @update:model-value="emit('update:currency', $event)"
+            />
             <button
               type="button"
               class="retro-choice-button border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary"
@@ -151,25 +145,13 @@ function handleDccInput(event: Event) {
       />
 
       <!-- 기타 통화 (접기) -->
-      <div v-if="showExtraCurrencies" class="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
-        <button
-          v-for="item in EXTRA_CURRENCIES"
-          :key="item"
-          type="button"
-          :class="[
-            'retro-choice-button retro-choice-button-compact',
-            selectedExtraCurrency === item
-              ? 'border-primary bg-primary/10 text-primary'
-              : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-          ]"
-          @click="emit('update:currency', item)"
-        >
-          <span class="block">{{ item }}</span>
-          <span class="block text-tiny text-muted-foreground/80">
-            {{ getExchangeRate(item).label }}
-          </span>
-        </button>
-      </div>
+      <ShPresetGroup
+        v-if="showExtraCurrencies"
+        :model-value="currency"
+        :options="extraCurrencyOptions"
+        label="기타 통화 선택"
+        @update:model-value="emit('update:currency', $event)"
+      />
 
       <!-- DCC 설정 + 환율 기준 통합 -->
       <div class="flex flex-wrap items-center justify-between gap-2">
