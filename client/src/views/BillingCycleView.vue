@@ -1,17 +1,21 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import { BILLING_DAY_OPTIONS, CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
 import { calculateBillingCycle } from "@/utils/cardTabCalculator";
+import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
 const seoTitle = "결제일별 이용기간 계산기 | 카드 결제일에 따른 최대 유예일";
 const seoDescription = "카드 결제일과 사용일을 기준으로 실제 결제까지 남는 이용 가능 기간을 계산합니다.";
 
 const purchaseDay = ref(15);
 const billingDay = ref<(typeof BILLING_DAY_OPTIONS)[number]>(14);
-const result = computed(() => calculateBillingCycle({ purchaseDay: purchaseDay.value, billingDay: billingDay.value }));
+const { result, validationError } = useSafeCalculation(
+  () => calculateBillingCycle({ purchaseDay: purchaseDay.value, billingDay: billingDay.value }),
+  calculateBillingCycle({ purchaseDay: 15, billingDay: 14 }),
+);
 </script>
 
 <template>
@@ -25,7 +29,7 @@ const result = computed(() => calculateBillingCycle({ purchaseDay: purchaseDay.v
         <h2 class="retro-title">이용기간 조건</h2>
         <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
       </div>
-      <div class="retro-panel-content grid gap-3 md:grid-cols-2">
+      <div class="retro-panel-content grid gap-3 md:grid-cols-2" role="group" :aria-describedby="validationError ? 'billing-cycle-error' : undefined">
         <label class="space-y-1 text-caption font-semibold text-foreground">
           카드 사용일
           <input v-model.number="purchaseDay" type="number" min="1" max="31" class="retro-input w-full" />
@@ -36,6 +40,9 @@ const result = computed(() => calculateBillingCycle({ purchaseDay: purchaseDay.v
             <option v-for="day in BILLING_DAY_OPTIONS" :key="day" :value="day">{{ day }}일</option>
           </select>
         </label>
+        <p v-if="validationError" id="billing-cycle-error" class="text-caption font-semibold text-destructive md:col-span-2" role="alert">
+          {{ validationError }}
+        </p>
       </div>
     </div>
 
