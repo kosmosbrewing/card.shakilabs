@@ -9,6 +9,12 @@ const routes: RouteRecordRaw[] = [
     path: "/",
     redirect: "/fuel-card",
   },
+  {
+    path: "/all",
+    name: "AllTools",
+    component: () => import("@/views/CardToolsView.vue"),
+    meta: { title: "카드 계산기 전체 보기 | 목적별 카드 비교 도구" },
+  },
   // 메인: 주유 할인카드 비교 계산기
   {
     path: "/fuel-card",

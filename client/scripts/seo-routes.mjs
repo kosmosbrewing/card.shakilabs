@@ -5,6 +5,7 @@ export const MONTHLY_AMOUNTS = [200000, 300000, 500000];
 export const OVERSEAS_CURRENCIES = ["usd", "eur", "jpy", "gbp", "cny", "thb", "vnd"];
 
 export const SEO_ROUTES = [
+  "/all",
   "/fuel-card",
   ...CARD_ISSUERS.map((issuer) => `/fuel-card/${issuer}`),
   ...FUEL_TYPES.map((type) => `/fuel-card/${type}`),

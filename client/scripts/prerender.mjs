@@ -1,14 +1,13 @@
-// 빌드 후 라우트별 SEO HTML 생성
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { dirname, resolve } from "path";
 import { SEO_ROUTES } from "./seo-routes.mjs";
 import { buildPrerenderHeader, buildPrerenderFooter } from "./prerender-layout.mjs";
 import { buildRichContent } from "./prerender-content.mjs";
-
+import { buildAllToolsMeta } from "./prerender-all-tools.mjs";
+import { appendCardHubLink, buildCardHubContent } from "./prerender-card-hub.mjs";
 const DIST_DIR = resolve(import.meta.dirname, "../dist");
 const INDEX_HTML = resolve(DIST_DIR, "index.html");
 const SITE_URL = "https://shakilabs.com/card";
-
 const ISSUER_LABELS = {
   hyundai: "현대카드",
   shinhan: "신한카드",
@@ -17,7 +16,6 @@ const ISSUER_LABELS = {
   lotte: "롯데카드",
   hana: "하나카드",
 };
-
 const OVERSEAS_LABELS = {
   usd: "미국 달러",
   eur: "유로",
@@ -62,6 +60,10 @@ function buildBreadcrumb(items) {
 }
 
 function buildMeta(route) {
+  if (route === "/all") {
+    return buildAllToolsMeta(SITE_URL, buildBreadcrumb);
+  }
+
   const issuerMatch = route.match(/^\/fuel-card\/(hyundai|shinhan|kb|samsung|lotte|hana)$/);
   if (issuerMatch) {
     const issuer = issuerMatch[1];
@@ -467,14 +469,9 @@ function applyMeta(html, meta, route) {
   output = output.replace(/\n?\s*<script type="application\/ld\+json" data-seo-prerender="jsonld">[\s\S]*?<\/script>/i, "");
   output = output.replace("</head>", `${jsonLdTag}\n  </head>`);
 
-  // 기존 prerender 요소 제거 (재빌드 대비)
-  output = output.replace(/\n?\s*<header data-seo-prerender[\s\S]*?<\/header>/i, "");
-  output = output.replace(/\n?\s*<section data-seo-prerender[\s\S]*?<\/section>/i, "");
-  output = output.replace(/\n?\s*<article data-seo-prerender[\s\S]*?<\/article>/i, "");
-  output = output.replace(/\n?\s*<footer data-seo-prerender[\s\S]*?<\/footer>/i, "");
+  output = output.replace(/\n?\s*<(header|section|article|footer|nav) data-seo-prerender[\s\S]*?<\/\1>/gi, "");
 
-  // 리치 콘텐츠 우선 → 없으면 기본 스텁
-  const rich = buildRichContent(route);
+  const rich = appendCardHubLink(route, route === "/all" ? buildCardHubContent() : buildRichContent(route));
   const mainContent = rich || buildPrerenderSection(meta);
   const headerHtml = buildPrerenderHeader();
   const footerHtml = buildPrerenderFooter();
