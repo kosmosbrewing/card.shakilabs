@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { ShBreakdownBar } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
-import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
 import { CARD_CUSTOMS_CATEGORIES, CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
 import { formatWon } from "@/lib/utils";
 import { calculateCustoms } from "@/utils/cardTabCalculator";
@@ -77,10 +77,12 @@ const taxSegments = computed(() => [
       </div>
     </div>
 
-    <BreakdownStackedBar
-      title="예상 관부가세 구성"
+    <ShBreakdownBar
+      label="예상 관부가세 구성"
       :segments="taxSegments"
       :format-value="formatWon"
+      empty-message="과세 기준 이하라 관부가세가 없습니다."
+      surface="outlined"
     />
 
     <div class="retro-panel px-4 py-4 text-caption leading-relaxed text-foreground">
