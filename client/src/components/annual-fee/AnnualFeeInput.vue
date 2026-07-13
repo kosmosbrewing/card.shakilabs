@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { CreditCard, Share2 } from "lucide-vue-next";
-import { ShSlider } from "@shakilabs/ui";
+import { ShPresetGroup, ShSlider, type PresetValue } from "@shakilabs/ui";
 import {
   BENEFIT_CATEGORIES,
   createDefaultSpendingPattern,
@@ -98,6 +98,18 @@ const quickPresets = [
     } satisfies SpendingPatternMap,
   },
 ];
+const quickPresetOptions = quickPresets.map((preset) => ({
+  label: preset.label,
+  value: preset.label,
+}));
+const selectedQuickPreset = computed(() => {
+  const selected = quickPresets.find((preset) =>
+    Object.entries(preset.values).every(
+      ([categoryId, amount]) => props.spending[categoryId as BenefitCategoryId] === amount,
+    ),
+  );
+  return selected?.label ?? "";
+});
 
 function handleInput(categoryId: BenefitCategoryId, event: Event) {
   const value = Number((event.target as HTMLInputElement).value.replace(/[^0-9]/g, ""));
@@ -108,6 +120,12 @@ function applyPreset(values: SpendingPatternMap) {
   for (const [categoryId, amount] of Object.entries(values) as [BenefitCategoryId, number][]) {
     emit("update:spending", { categoryId, amount });
   }
+}
+
+function applyQuickPreset(value: PresetValue): void {
+  if (typeof value !== "string") return;
+  const preset = quickPresets.find((item) => item.label === value);
+  if (preset) applyPreset(preset.values);
 }
 
 function getCategorySliderMax(categoryId: BenefitCategoryId) {
@@ -215,17 +233,12 @@ function getCategorySliderMax(categoryId: BenefitCategoryId) {
 
       <div class="space-y-2">
         <p class="text-caption font-semibold text-muted-foreground">빠른 소비 패턴 적용</p>
-        <div class="flex flex-wrap gap-1.5">
-          <button
-            v-for="preset in quickPresets"
-            :key="preset.label"
-            type="button"
-            class="retro-choice-button retro-choice-button-compact border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary"
-            @click="applyPreset(preset.values)"
-          >
-            {{ preset.label }}
-          </button>
-        </div>
+        <ShPresetGroup
+          :model-value="selectedQuickPreset"
+          :options="quickPresetOptions"
+          label="빠른 소비 패턴 적용"
+          @update:model-value="applyQuickPreset"
+        />
       </div>
 
       <div class="retro-panel-muted flex items-center justify-between gap-3 px-4 py-3">
