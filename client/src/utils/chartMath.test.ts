@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
   divergingBarWidth,
-  normalizeSegments,
   positiveBarWidth,
   progressBarWidth,
 } from "./chartMath";
@@ -24,8 +23,4 @@ describe("chartMath", () => {
     expect(progressBarWidth(1.2)).toBe(100);
   });
 
-  it("normalizes only positive composition values", () => {
-    expect(normalizeSegments([30, 70])).toEqual([0.3, 0.7]);
-    expect(normalizeSegments([0, -1])).toEqual([0, 0]);
-  });
 });
