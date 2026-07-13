@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Fuel, Share2 } from "lucide-vue-next";
-import { ShSlider, ShSurface, ShText } from "@shakilabs/ui";
+import { ShPresetGroup, ShSlider, ShSurface, ShText } from "@shakilabs/ui";
 import type { FuelType } from "@/data/fuelPrices";
 import { FUEL_PRICES, FUEL_TYPE_LABELS, getFuelPrice } from "@/data/fuelPrices";
 import { GAS_STATION_BRANDS } from "@/data/gasStationBrands";
@@ -26,6 +26,8 @@ const monthlySpendId = useId();
 const monthlySpendRangeId = useId();
 
 const fuelTypes: FuelType[] = ["gasoline", "diesel", "lpg"];
+const fuelTypeOptions = fuelTypes.map((value) => ({ label: FUEL_TYPE_LABELS[value], value }));
+const brandOptions = GAS_STATION_BRANDS.map((brand) => ({ label: brand.name, value: brand.id }));
 const STEP = 50_000;
 const MIN = 50_000;
 const MAX = 600_000;
@@ -57,22 +59,12 @@ function handleAmountInput(e: Event) {
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="space-y-1.5">
           <span :id="fuelTypeLabelId" class="text-caption font-semibold text-muted-foreground">유종</span>
-          <div class="fuel-type-options grid grid-cols-3 gap-1.5" role="group" :aria-labelledby="fuelTypeLabelId">
-            <button
-              v-for="ft in fuelTypes"
-              :key="ft"
-              type="button"
-              :class="[
-                'retro-choice-button',
-                fuelType === ft
-                  ? 'border-primary bg-primary/10 text-primary'
-                  : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-              ]"
-              @click="emit('update:fuelType', ft)"
-            >
-              {{ FUEL_TYPE_LABELS[ft] }}
-            </button>
-          </div>
+          <ShPresetGroup
+            :model-value="fuelType"
+            :options="fuelTypeOptions"
+            label="유종 선택"
+            @update:model-value="emit('update:fuelType', $event)"
+          />
         </div>
 
         <div class="space-y-1.5">
@@ -125,22 +117,12 @@ function handleAmountInput(e: Event) {
             <span class="retro-details-chevron" :class="showAdvanced && 'rotate-180'">▼</span>
           </summary>
           <div v-if="showAdvanced" class="space-y-1.5 px-3 py-3">
-            <div class="flex flex-wrap gap-1.5">
-              <button
-                v-for="brand in GAS_STATION_BRANDS"
-                :key="brand.id"
-                type="button"
-                :class="[
-                  'retro-choice-button retro-choice-button-compact',
-                  preferredBrand === brand.id
-                    ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-                ]"
-                @click="emit('update:preferredBrand', brand.id)"
-              >
-                {{ brand.name }}
-              </button>
-            </div>
+            <ShPresetGroup
+              :model-value="preferredBrand"
+              :options="brandOptions"
+              label="선호 주유소 선택"
+              @update:model-value="emit('update:preferredBrand', $event)"
+            />
           </div>
         </details>
         <FreshBadge :message="`${FUEL_PRICES.lastUpdated} ${FUEL_TYPE_LABELS[fuelType]} ${getFuelPrice(fuelType).toLocaleString()}원/L`" />

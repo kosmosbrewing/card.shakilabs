@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Plane } from "lucide-vue-next";
-import { ShSlider } from "@shakilabs/ui";
+import { computed } from "vue";
+import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import {
   AIRLINES,
   getSeatClassLabel,
@@ -9,7 +10,7 @@ import {
 } from "@/data/mileageData";
 import type { MileageFilterClass } from "@/composables/useMileageCalc";
 
-defineProps<{
+const props = defineProps<{
   airlineId: AirlineId;
   mileageBalance: number;
   selectedClass: MileageFilterClass;
@@ -32,6 +33,11 @@ function handleMileageInput(event: Event) {
 }
 
 const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first"];
+const airlineOptions = AIRLINES.map((airline) => ({ label: airline.name, value: airline.id }));
+const classPresetOptions = computed(() => classOptions.map((value) => ({
+  label: value === "all" ? "전체" : getSeatClassLabel(props.airlineId, value as SeatClass),
+  value,
+})));
 </script>
 
 <template>
@@ -48,22 +54,12 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="space-y-1.5">
           <p class="text-caption font-semibold text-muted-foreground">항공사</p>
-          <div class="mileage-choice-grid grid grid-cols-2 gap-1.5">
-            <button
-              v-for="airline in AIRLINES"
-              :key="airline.id"
-              type="button"
-              :class="[
-                'retro-choice-button',
-                airlineId === airline.id
-                  ? 'border-primary bg-primary/10 text-primary'
-                  : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-              ]"
-              @click="emit('update:airlineId', airline.id)"
-            >
-              {{ airline.name }}
-            </button>
-          </div>
+          <ShPresetGroup
+            :model-value="airlineId"
+            :options="airlineOptions"
+            label="항공사 선택"
+            @update:model-value="emit('update:airlineId', $event)"
+          />
         </div>
 
         <div class="space-y-1.5">
@@ -112,22 +108,12 @@ const classOptions: MileageFilterClass[] = ["all", "economy", "business", "first
       <!-- 좌석 등급 필터 -->
       <div class="space-y-1.5">
         <p class="text-caption font-semibold text-muted-foreground">좌석 등급</p>
-        <div class="mileage-choice-grid grid grid-cols-2 gap-1.5">
-          <button
-            v-for="seatClass in classOptions"
-            :key="seatClass"
-            type="button"
-            :class="[
-              'retro-choice-button',
-              selectedClass === seatClass
-                ? 'border-primary bg-primary/10 text-primary'
-                : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-            ]"
-            @click="emit('update:selectedClass', seatClass)"
-          >
-            {{ seatClass === "all" ? "전체" : getSeatClassLabel(airlineId, seatClass as SeatClass) }}
-          </button>
-        </div>
+        <ShPresetGroup
+          :model-value="selectedClass"
+          :options="classPresetOptions"
+          label="좌석 등급 선택"
+          @update:model-value="emit('update:selectedClass', $event)"
+        />
       </div>
     </div>
   </div>

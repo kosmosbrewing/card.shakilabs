@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ReceiptText } from "lucide-vue-next";
-import { ShSlider } from "@shakilabs/ui";
+import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import {
   DUTY_FREE_CATEGORIES,
   DUTY_FREE_CONSTANTS,
@@ -22,6 +22,10 @@ const STEP = 100;
 const MIN = 100;
 const MAX = DUTY_FREE_AMOUNT_MAX;
 const amountInputId = "duty-free-amount";
+const categoryOptions = DUTY_FREE_CATEGORIES.map((item) => ({
+  label: item.label,
+  value: item.id,
+}));
 
 function handleAmountInput(event: Event) {
   const value = Number((event.target as HTMLInputElement).value.replace(/[^0-9.]/g, ""));
@@ -83,22 +87,12 @@ function handleAmountInput(event: Event) {
 
         <div class="space-y-1.5">
           <p class="text-caption font-semibold text-muted-foreground">물품 카테고리</p>
-          <div class="grid grid-cols-2 gap-1.5">
-            <button
-              v-for="item in DUTY_FREE_CATEGORIES"
-              :key="item.id"
-              type="button"
-              :class="[
-                'retro-choice-button retro-choice-button-compact',
-                category === item.id
-                  ? 'border-primary bg-primary/10 text-primary'
-                  : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-              ]"
-              @click="emit('update:category', item.id)"
-            >
-              {{ item.label }}
-            </button>
-          </div>
+          <ShPresetGroup
+            :model-value="category"
+            :options="categoryOptions"
+            label="물품 카테고리 선택"
+            @update:model-value="emit('update:category', $event)"
+          />
         </div>
       </div>
 

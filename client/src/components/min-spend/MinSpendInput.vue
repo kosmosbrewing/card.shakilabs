@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { Fuel, Share2 } from "lucide-vue-next";
-import { ShSlider } from "@shakilabs/ui";
+import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import { GAS_STATION_BRANDS } from "@/data/gasStationBrands";
 import {
@@ -29,6 +29,8 @@ const emit = defineEmits<{
 
 const showAdvanced = ref(false);
 const fuelTypes: FuelType[] = ["gasoline", "diesel", "lpg"];
+const fuelTypeOptions = fuelTypes.map((value) => ({ label: FUEL_TYPE_LABELS[value], value }));
+const brandOptions = GAS_STATION_BRANDS.map((brand) => ({ label: brand.name, value: brand.id }));
 const STEP = 50_000;
 const MIN = 50_000;
 const MAX = 600_000;
@@ -70,22 +72,12 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div class="space-y-1.5">
           <label class="text-caption font-semibold text-muted-foreground">유종</label>
-          <div class="fuel-type-options grid grid-cols-3 gap-1.5">
-            <button
-              v-for="ft in fuelTypes"
-              :key="ft"
-              type="button"
-              :class="[
-                'retro-choice-button',
-                fuelType === ft
-                  ? 'border-primary bg-primary/10 text-primary'
-                  : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-              ]"
-              @click="emit('update:fuelType', ft)"
-            >
-              {{ FUEL_TYPE_LABELS[ft] }}
-            </button>
-          </div>
+          <ShPresetGroup
+            :model-value="fuelType"
+            :options="fuelTypeOptions"
+            label="유종 선택"
+            @update:model-value="emit('update:fuelType', $event)"
+          />
         </div>
 
         <div class="space-y-1.5">
@@ -174,22 +166,12 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
             <span class="retro-details-chevron" :class="showAdvanced && 'rotate-180'">▼</span>
           </summary>
           <div v-if="showAdvanced" class="space-y-1.5 px-3 py-3">
-            <div class="flex flex-wrap gap-1.5">
-              <button
-                v-for="brand in GAS_STATION_BRANDS"
-                :key="brand.id"
-                type="button"
-                :class="[
-                  'retro-choice-button retro-choice-button-compact',
-                  preferredBrand === brand.id
-                    ? 'border-primary bg-primary/10 text-primary'
-                    : 'border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary',
-                ]"
-                @click="emit('update:preferredBrand', brand.id)"
-              >
-                {{ brand.name }}
-              </button>
-            </div>
+            <ShPresetGroup
+              :model-value="preferredBrand"
+              :options="brandOptions"
+              label="선호 주유소 선택"
+              @update:model-value="emit('update:preferredBrand', $event)"
+            />
           </div>
         </details>
         <FreshBadge :message="`${FUEL_PRICES.lastUpdated} ${FUEL_TYPE_LABELS[fuelType]} ${getFuelPrice(fuelType).toLocaleString()}원/L`" />
