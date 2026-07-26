@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Fuel, Share2 } from "lucide-vue-next";
-import { ShPresetGroup, ShSlider, ShSurface, ShText } from "@shakilabs/ui";
+import { ShPresetGroup, ShSlider, ShStepper, ShSurface, ShText } from "@shakilabs/ui";
 import type { FuelType } from "@/data/fuelPrices";
 import { FUEL_PRICES, FUEL_TYPE_LABELS, getFuelPrice } from "@/data/fuelPrices";
 import { GAS_STATION_BRANDS } from "@/data/gasStationBrands";
@@ -69,31 +69,28 @@ function handleAmountInput(e: Event) {
 
         <div class="space-y-1.5">
           <label :for="monthlySpendId" class="text-caption font-semibold text-muted-foreground">월 주유비</label>
-          <div class="retro-stepper">
-            <button
-              type="button"
-              class="retro-stepper-button"
-              aria-label="5만원 감소"
-              @click="emit('update:monthlySpend', Math.max(MIN, monthlySpend - STEP))"
-            >−</button>
+          <ShStepper
+            class="w-full"
+            :model-value="monthlySpend"
+            :min="MIN"
+            :max="MAX"
+            :step="STEP"
+            label="월 주유비"
+            @update:model-value="emit('update:monthlySpend', $event)"
+          >
+            <!-- 직접 입력이 핵심 UX — 값 표시 대신 기존 입력창을 slot으로 유지 -->
             <div class="retro-stepper-field">
               <input
                 :id="monthlySpendId"
                 type="text"
                 inputmode="numeric"
-                class="retro-stepper-input retro-stepper-input-right"
+                class="retro-input retro-input-with-right-affix text-right tabular-nums"
                 :value="monthlySpend.toLocaleString()"
                 @input="handleAmountInput"
               />
               <span class="retro-input-affix retro-input-affix-right retro-input-affix-wide">원</span>
             </div>
-            <button
-              type="button"
-              class="retro-stepper-button"
-              aria-label="5만원 증가"
-              @click="emit('update:monthlySpend', Math.min(MAX, monthlySpend + STEP))"
-            >+</button>
-          </div>
+          </ShStepper>
         </div>
       </div>
 

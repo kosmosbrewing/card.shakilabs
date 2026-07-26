@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Globe2, Share2 } from "lucide-vue-next";
 import { ref } from "vue";
-import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
+import { ShPresetGroup, ShSlider, ShStepper } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import {
   DCC_MARKUP,
@@ -103,13 +103,15 @@ function handleDccInput(event: Event) {
           <label :for="foreignAmountInputId" class="text-caption font-semibold text-muted-foreground">
             결제 금액
           </label>
-          <div class="retro-stepper">
-            <button
-              type="button"
-              class="retro-stepper-button"
-              aria-label="50 감소"
-              @click="emit('update:foreignAmount', Math.max(MIN, foreignAmount - STEP))"
-            >−</button>
+          <ShStepper
+            class="w-full"
+            :model-value="foreignAmount"
+            :min="MIN"
+            :max="MAX"
+            :step="STEP"
+            label="결제 금액"
+            @update:model-value="emit('update:foreignAmount', $event)"
+          >
             <div class="retro-stepper-field">
               <span class="retro-input-affix retro-input-affix-left retro-input-affix-currency text-body font-semibold">
                 {{ getExchangeRate(currency).symbol }}
@@ -118,18 +120,12 @@ function handleDccInput(event: Event) {
                 :id="foreignAmountInputId"
                 type="text"
                 inputmode="decimal"
-                class="retro-stepper-input retro-stepper-input-left"
+                class="retro-input pl-12 text-right tabular-nums sm:pl-14"
                 :value="foreignAmount.toLocaleString(undefined, { maximumFractionDigits: 2 })"
                 @input="handleAmountInput"
               />
             </div>
-            <button
-              type="button"
-              class="retro-stepper-button"
-              aria-label="50 증가"
-              @click="emit('update:foreignAmount', Math.min(MAX, foreignAmount + STEP))"
-            >+</button>
-          </div>
+          </ShStepper>
         </div>
       </div>
 

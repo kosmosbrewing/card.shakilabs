@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Plane } from "lucide-vue-next";
 import { computed } from "vue";
-import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
+import { ShPresetGroup, ShSlider, ShStepper } from "@shakilabs/ui";
 import {
   AIRLINES,
   getSeatClassLabel,
@@ -66,31 +66,27 @@ const classPresetOptions = computed(() => classOptions.map((value) => ({
           <label :for="mileageInputId" class="text-caption font-semibold text-muted-foreground">
             보유 마일리지
           </label>
-          <div class="retro-stepper">
-            <button
-              type="button"
-              class="retro-stepper-button"
-              aria-label="5,000마일 감소"
-              @click="emit('update:mileageBalance', Math.max(MIN, mileageBalance - STEP))"
-            >−</button>
+          <ShStepper
+            class="w-full"
+            :model-value="mileageBalance"
+            :min="MIN"
+            :max="MAX"
+            :step="STEP"
+            label="보유 마일리지"
+            @update:model-value="emit('update:mileageBalance', $event)"
+          >
             <div class="retro-stepper-field">
               <input
                 :id="mileageInputId"
                 type="text"
                 inputmode="numeric"
-                class="retro-stepper-input retro-stepper-input-right"
+                class="retro-input retro-input-with-right-affix text-right tabular-nums"
                 :value="mileageBalance.toLocaleString()"
                 @input="handleMileageInput"
               />
               <span class="retro-input-affix retro-input-affix-right retro-input-affix-wide">마일</span>
             </div>
-            <button
-              type="button"
-              class="retro-stepper-button"
-              aria-label="5,000마일 증가"
-              @click="emit('update:mileageBalance', Math.min(MAX, mileageBalance + STEP))"
-            >+</button>
-          </div>
+          </ShStepper>
         </div>
       </div>
 

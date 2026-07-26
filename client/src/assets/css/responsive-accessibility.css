@@ -118,15 +118,6 @@
     white-space: nowrap;
   }
 
-  .text-resize-layout .retro-stepper-button {
-    width: 44px;
-    min-width: 44px;
-  }
-
-  .text-resize-layout .retro-stepper-input-right {
-    padding-inline: 12px 40px;
-  }
-
   .text-resize-layout .retro-input-affix-right {
     right: 8px;
     min-width: 24px;
