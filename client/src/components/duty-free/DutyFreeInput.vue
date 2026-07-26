@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ReceiptText } from "lucide-vue-next";
-import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
+import { ShPresetGroup, ShSlider, ShStepper } from "@shakilabs/ui";
 import {
   DUTY_FREE_CATEGORIES,
   DUTY_FREE_CONSTANTS,
@@ -49,31 +49,27 @@ function handleAmountInput(event: Event) {
           <label :for="amountInputId" class="text-caption font-semibold text-muted-foreground">
             구매 예상 금액
           </label>
-          <div class="retro-stepper">
-            <button
-              type="button"
-              class="retro-stepper-button"
-              aria-label="$100 감소"
-              @click="emit('update:purchaseAmountUsd', Math.max(MIN, purchaseAmountUsd - STEP))"
-            >−</button>
+          <ShStepper
+            class="w-full"
+            :model-value="purchaseAmountUsd"
+            :min="MIN"
+            :max="MAX"
+            :step="STEP"
+            label="구매 예상 금액"
+            @update:model-value="emit('update:purchaseAmountUsd', $event)"
+          >
             <div class="retro-stepper-field">
               <span class="retro-input-affix retro-input-affix-left retro-input-affix-currency text-body font-semibold">$</span>
               <input
                 :id="amountInputId"
                 type="text"
                 inputmode="decimal"
-                class="retro-stepper-input retro-stepper-input-left"
+                class="retro-input pl-12 text-right tabular-nums sm:pl-14"
                 :value="purchaseAmountUsd.toLocaleString()"
                 @input="handleAmountInput"
               />
             </div>
-            <button
-              type="button"
-              class="retro-stepper-button"
-              aria-label="$100 증가"
-              @click="emit('update:purchaseAmountUsd', Math.min(MAX, purchaseAmountUsd + STEP))"
-            >+</button>
-          </div>
+          </ShStepper>
           <ShSlider
             :model-value="Math.min(Math.max(purchaseAmountUsd, MIN), MAX)"
             :min="MIN"

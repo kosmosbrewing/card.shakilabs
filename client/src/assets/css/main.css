@@ -252,28 +252,9 @@
     @apply px-3 py-1 text-tiny text-muted-foreground sm:hidden;
   }
 
-  .retro-stepper {
-    @apply flex min-w-0 items-stretch overflow-hidden rounded-xl border border-input bg-card;
-  }
-
-  .retro-stepper-button {
-    @apply touch-target inline-flex w-12 shrink-0 items-center justify-center px-0 text-base font-bold text-muted-foreground transition-colors hover:bg-muted/50 active:bg-muted;
-  }
-
+  /* ± 버튼은 ShStepper(공통 컴포넌트)로 이관 — field는 slot 래퍼로 계속 사용 */
   .retro-stepper-field {
     @apply relative min-w-0 flex-1 overflow-hidden;
-  }
-
-  .retro-stepper-input {
-    @apply min-h-[44px] min-w-0 w-full border-x border-input bg-transparent py-2.5 text-right text-body tabular-nums focus:outline-none;
-  }
-
-  .retro-stepper-input-left {
-    @apply pl-12 pr-4 sm:pl-14;
-  }
-
-  .retro-stepper-input-right {
-    @apply px-3 pr-16 sm:pr-20;
   }
 
   .retro-input-affix {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { Fuel, Share2 } from "lucide-vue-next";
-import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
+import { ShPresetGroup, ShSlider, ShStepper } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import { GAS_STATION_BRANDS } from "@/data/gasStationBrands";
 import {
@@ -82,31 +82,27 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
 
         <div class="space-y-1.5">
           <label class="text-caption font-semibold text-muted-foreground">월 주유비</label>
-          <div class="retro-stepper">
-            <button
-              type="button"
-              class="retro-stepper-button"
-              aria-label="5만원 감소"
-              @click="emit('update:fuelSpend', Math.max(MIN, fuelSpend - STEP))"
-            >−</button>
+          <ShStepper
+            class="w-full"
+            :model-value="fuelSpend"
+            :min="MIN"
+            :max="MAX"
+            :step="STEP"
+            label="월 주유비"
+            @update:model-value="emit('update:fuelSpend', $event)"
+          >
             <div class="retro-stepper-field">
               <input
                 aria-label="월 주유비"
                 type="text"
                 inputmode="numeric"
-                class="retro-stepper-input retro-stepper-input-right"
+                class="retro-input retro-input-with-right-affix text-right tabular-nums"
                 :value="fuelSpend.toLocaleString()"
                 @input="handleFuelSpendInput"
               />
               <span class="retro-input-affix retro-input-affix-right retro-input-affix-wide">원</span>
             </div>
-            <button
-              type="button"
-              class="retro-stepper-button"
-              aria-label="5만원 증가"
-              @click="emit('update:fuelSpend', Math.min(MAX, fuelSpend + STEP))"
-            >+</button>
-          </div>
+          </ShStepper>
         </div>
       </div>
 
