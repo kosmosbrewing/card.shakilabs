@@ -432,6 +432,57 @@ function buildMeta(route) {
   };
 }
 
+// 화면 리치 콘텐츠에서 FAQ(Q&A) 텍스트를 추출한다.
+// 스키마 텍스트가 화면 텍스트와 항상 일치하도록 별도 데이터가 아닌 생성된 HTML에서 직접 뽑는다.
+function stripHtmlText(value) {
+  return String(value)
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function extractFaqEntities(contentHtml) {
+  if (!contentHtml) return [];
+  const entities = [];
+
+  // 패턴 1: <h3>Q1. 질문</h3> + <p>답변</p> (카드사별·유종별·월 주유비별·통화별 상세 페이지)
+  const headingPattern = /<h3[^>]*>\s*Q\d+\.\s*([\s\S]*?)<\/h3>\s*<p[^>]*>([\s\S]*?)<\/p>/g;
+  for (const match of contentHtml.matchAll(headingPattern)) {
+    const question = stripHtmlText(match[1]);
+    const answer = stripHtmlText(match[2]);
+    if (question && answer) entities.push({ question, answer });
+  }
+
+  // 패턴 2: <h2>FAQ - …</h2> + <p>Q1. 질문 A. 답변 Q2. …</p> (카테고리 정적 페이지)
+  const compactPattern = /<h2[^>]*>\s*FAQ[^<]*<\/h2>\s*<p[^>]*>([\s\S]*?)<\/p>/g;
+  for (const match of contentHtml.matchAll(compactPattern)) {
+    const body = stripHtmlText(match[1]);
+    for (const part of body.split(/\s*Q\d+\.\s*/).filter(Boolean)) {
+      const qa = part.match(/^([\s\S]+?)\s+A\.\s+([\s\S]+)$/);
+      if (qa) entities.push({ question: qa[1].trim(), answer: qa[2].trim() });
+    }
+  }
+
+  return entities;
+}
+
+function buildFaqPage(entities) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: entities.map(({ question, answer }) => ({
+      "@type": "Question",
+      name: question,
+      acceptedAnswer: { "@type": "Answer", text: answer },
+    })),
+  };
+}
+
 function buildPrerenderSection(meta) {
   return `
     <section data-seo-prerender style="max-width:920px;margin:0 auto;padding:20px 16px;line-height:1.6;">
@@ -464,14 +515,20 @@ function applyMeta(html, meta, route) {
   output = replaceTag(output, /<meta name="twitter:description" content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${escapedDescription}" />`);
   output = replaceTag(output, /<meta name="twitter:image" content="[^"]*"\s*\/?>/i, `<meta name="twitter:image" content="${escapedOgImage}" />`);
 
+  const rich = appendCardHubLink(route, route === "/all" ? buildCardHubContent() : buildRichContent(route));
+
   const jsonLdArray = [meta.jsonLd, meta.breadcrumb].flat().filter(Boolean);
+  // 화면에 FAQ(Q&A)가 보이는 페이지에만 FAQPage 스키마를 정확히 1개 싣는다 (이미 있으면 추가하지 않음).
+  const hasFaqPage = jsonLdArray.some((entry) => entry["@type"] === "FAQPage");
+  const faqEntities = extractFaqEntities(rich);
+  if (!hasFaqPage && faqEntities.length > 0) {
+    jsonLdArray.push(buildFaqPage(faqEntities));
+  }
   const jsonLdTag = `    <script type="application/ld+json" data-seo-prerender="jsonld">${toSafeJson(jsonLdArray)}</script>`;
   output = output.replace(/\n?\s*<script type="application\/ld\+json" data-seo-prerender="jsonld">[\s\S]*?<\/script>/i, "");
   output = output.replace("</head>", `${jsonLdTag}\n  </head>`);
 
   output = output.replace(/\n?\s*<(header|section|article|footer|nav) data-seo-prerender[\s\S]*?<\/\1>/gi, "");
-
-  const rich = appendCardHubLink(route, route === "/all" ? buildCardHubContent() : buildRichContent(route));
   const mainContent = rich || buildPrerenderSection(meta);
   const headerHtml = buildPrerenderHeader();
   const footerHtml = buildPrerenderFooter();
