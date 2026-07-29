@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { ChevronDown } from "lucide-vue-next";
 import type { MileageValuePerMile } from "@/utils/mileageCalculator";
 import { formatValuePerMile } from "@/utils/mileageCalculator";
 
@@ -21,10 +22,16 @@ const groupedRoutes = computed(() => {
 </script>
 
 <template>
-  <div class="retro-panel overflow-hidden">
-    <div class="retro-titlebar rounded-t-2xl">
+  <!-- 바로 위 비교표와 같은 데이터(노선·등급·필요 마일·예시 운임·1마일 가치)를 카드로 보여주는 블록이라
+       기본은 접어 두고, 노선별로 훑고 싶은 사용자만 펼치도록 한다 -->
+  <details class="group retro-panel overflow-hidden">
+    <summary class="retro-titlebar flex cursor-pointer list-none items-center justify-between gap-3 rounded-t-2xl">
       <h2 class="retro-title">노선별 상세 분석</h2>
-    </div>
+      <ChevronDown
+        aria-hidden="true"
+        class="h-4 w-4 shrink-0 transition-transform group-open:rotate-180"
+      />
+    </summary>
 
     <div class="retro-panel-content space-y-2">
       <div
@@ -51,5 +58,5 @@ const groupedRoutes = computed(() => {
         </div>
       </div>
     </div>
-  </div>
+  </details>
 </template>
