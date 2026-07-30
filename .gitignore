@@ -33,3 +33,6 @@ Thumbs.db
 /artifacts/text-layout-audit/*
 !/artifacts/text-layout-audit/report.md
 !/artifacts/text-layout-audit/issues.json
+
+# 문서는 추적한다 (*.md 전역 무시의 예외)
+!README.md
