@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { AlertTriangle, CheckCircle2, Trophy } from "lucide-vue-next";
 import { computed } from "vue";
-import { progressBarWidth } from "@/utils/chartMath";
+import { progressBarWidth } from "@shakilabs/ui";
 import type { MinSpendCalcResult } from "@/utils/minSpendCalculator";
 import { formatQualificationStatus } from "@/utils/minSpendCalculator";
 
