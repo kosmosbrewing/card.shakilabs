@@ -44,7 +44,7 @@ onMounted(() => {
             </a>
 
             <!-- 티커 -->
-            <div class="flex h-full flex-1 items-center justify-center overflow-hidden text-center font-title text-caption font-semibold sm:text-body">
+            <div class="flex min-w-0 flex-1 items-center justify-center text-center font-title text-caption font-semibold sm:text-body">
               <TickerBar :messages="tickerMessages" />
             </div>
 
