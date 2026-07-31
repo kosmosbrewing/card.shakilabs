@@ -15,6 +15,13 @@ const progressTone = computed(() => {
   if (props.result.qualificationRate >= 0.8) return "fill-status-warning";
   return "fill-loss";
 });
+
+// 표시 숫자와 aria-valuenow가 같은 값을 쓰도록 한 곳에서 반올림한다(전에는 aria만 소수점이 남았다).
+const percent = computed(() => {
+  const rate = props.result.qualificationRate;
+  if (!Number.isFinite(rate)) return 0;
+  return Math.round(Math.min(1, Math.max(0, rate)) * 100);
+});
 </script>
 
 <template>
@@ -43,12 +50,15 @@ const progressTone = computed(() => {
           class="h-3 overflow-hidden rounded-full bg-muted/60"
           role="progressbar"
           :aria-label="`${result.card.issuer} 실적 달성률`"
-          :aria-valuenow="Math.min(100, Math.max(0, result.qualificationRate * 100))"
+          :aria-valuenow="percent"
+          :aria-valuetext="`실적 기준 대비 ${percent}%${result.isQualified ? ', 실적 충족' : ''}`"
           aria-valuemin="0"
           aria-valuemax="100"
         >
           <svg viewBox="0 0 100 12" preserveAspectRatio="none" class="block h-full w-full" aria-hidden="true">
-            <rect :width="progressBarWidth(result.qualificationRate)" height="12" rx="4" :class="progressTone" />
+            <!-- rx를 두면 preserveAspectRatio="none" 때문에 가로로 늘어나 폭마다 코너가 달라진다(같은 페이지에서 886px·416px 막대가 갈렸다).
+                 ui 0.3.11이 패키지 막대에서 없앤 것과 같은 이유로 제거하고, 알약 모양은 컨테이너가 만든다. -->
+            <rect :width="progressBarWidth(result.qualificationRate)" height="12" :class="progressTone" />
           </svg>
         </div>
         <div class="flex items-center justify-between gap-2 text-caption">
@@ -56,7 +66,7 @@ const progressTone = computed(() => {
             {{ result.totalSpending.toLocaleString() }}원 / {{ result.minSpendRequired.toLocaleString() }}원
           </span>
           <span class="font-semibold tabular-nums text-foreground">
-            {{ (result.qualificationRate * 100).toFixed(0) }}%
+            {{ percent }}%
           </span>
         </div>
         <div

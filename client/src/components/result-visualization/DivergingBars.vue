@@ -1,60 +1,51 @@
 <script setup lang="ts">
-import { computed, useId } from "vue";
-// 막대 폭 계산은 @shakilabs/ui로 공통화됐다(앱별 중복 구현 방지). 크롬·색은 로컬 유지.
-import { divergingBarWidth } from "@shakilabs/ui";
+// 차트 본체는 @shakilabs/ui ShMetricBars(signed 도메인) — 이 파일은 card retro 크롬과 톤 변환만 담당한다.
+// 승격 이유: 로컬 svg에는 role·aria-value*가 전혀 없어 스크린리더에 값이 안 갔고,
+// rx가 viewBox 단위라 폭이 넓을수록 코너가 늘어나 RankedBars(승격분)와 막대 모양이 갈렸다.
+import { computed } from "vue";
+import { ShMetricBars } from "@shakilabs/ui";
+import type { MetricBarGroup } from "@shakilabs/ui";
 
 type DivergingItem = { key: string; label: string; value: number };
 
 const props = defineProps<{
   title: string;
+  /** 그룹 라벨 겸 스크린리더 문맥 — 막대 aria-label이 "<metricLabel> <항목 라벨>"로 조합된다 */
+  metricLabel: string;
   items: readonly DivergingItem[];
   formatValue: (value: number) => string;
 }>();
 
-const titleId = `diverging-bars-${useId()}`;
-const maximumMagnitude = computed(() => Math.max(
-  ...props.items.map((item) => Math.abs(item.value)).filter(Number.isFinite),
-  0,
-));
-
-function barX(value: number): number {
-  const width = divergingBarWidth(value, maximumMagnitude.value);
-  return value < 0 ? 50 - width : 50;
-}
+// 승격 전 fill-loss/fill-savings를 그대로 유지한다(앱 CSS가 danger→--loss, success→--savings로 고정).
+const metrics = computed<MetricBarGroup[]>(() => [{
+  key: "diverging",
+  label: props.metricLabel,
+  values: props.items.map((item) => ({
+    key: item.key,
+    label: item.label,
+    value: item.value,
+    tone: item.value < 0 ? ("danger" as const) : ("success" as const),
+  })),
+}]);
 </script>
 
 <template>
-  <section class="retro-panel overflow-hidden" :aria-labelledby="titleId">
-    <div class="retro-titlebar rounded-t-2xl">
-      <h2 :id="titleId" class="retro-title">{{ title }}</h2>
-    </div>
-    <div class="retro-panel-content space-y-4">
-      <div class="flex justify-between text-tiny text-muted-foreground">
-        <span>손실</span><span>0원</span><span>혜택</span>
-      </div>
-      <ul class="space-y-3">
-        <li v-for="item in items" :key="item.key" class="space-y-1.5">
-          <div class="flex items-baseline justify-between gap-3">
-            <span class="text-caption font-semibold text-foreground">{{ item.label }}</span>
-            <strong class="text-caption tabular-nums" :class="item.value < 0 ? 'text-loss' : 'text-savings'">
-              {{ formatValue(item.value) }}
-            </strong>
-          </div>
-          <div class="h-3 overflow-hidden rounded-full bg-muted/50">
-            <svg viewBox="0 0 100 12" preserveAspectRatio="none" class="block h-full w-full" aria-hidden="true">
-              <line x1="50" y1="0" x2="50" y2="12" class="stroke-foreground/40" />
-              <rect
-                v-if="item.value !== 0"
-                :x="barX(item.value)"
-                :width="divergingBarWidth(item.value, maximumMagnitude)"
-                height="12"
-                rx="3"
-                :class="item.value < 0 ? 'fill-loss' : 'fill-savings'"
-              />
-            </svg>
-          </div>
-        </li>
-      </ul>
-    </div>
+  <section class="retro-panel overflow-hidden">
+    <!-- 차트 루트가 본문 여백을 갖고, 타이틀바만 음수 마진으로 패널 폭까지 흘려 기존 크롬을 유지한다 -->
+    <ShMetricBars
+      class="px-4 pb-3 sm:px-5 sm:pb-4"
+      :metrics="metrics"
+      :format-value="formatValue"
+      domain="signed"
+      note="0원 기준선을 두고 왼쪽이 손실, 오른쪽이 혜택입니다."
+      show-scale
+    >
+      <template #header="{ titleId }">
+        <!-- 타이틀바는 패널 폭 전체를 채워야 해서 본문 좌우 여백을 음수 마진으로 되돌린다. -->
+        <div class="retro-titlebar -mx-4 mb-3 rounded-t-2xl sm:-mx-5 sm:mb-4">
+          <h2 :id="titleId" class="retro-title">{{ title }}</h2>
+        </div>
+      </template>
+    </ShMetricBars>
   </section>
 </template>
