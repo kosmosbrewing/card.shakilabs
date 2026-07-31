@@ -7,6 +7,12 @@ type ProgressItem = { key: string; label: string; rate: number };
 
 defineProps<{ title: string; items: readonly ProgressItem[] }>();
 const titleId = `progress-bars-${useId()}`;
+
+// 표시 숫자와 aria-valuenow가 같은 값을 쓰도록 한 곳에서 반올림한다(전에는 aria만 소수점이 남았다).
+function percent(rate: number): number {
+  if (!Number.isFinite(rate)) return 0;
+  return Math.round(Math.min(1, Math.max(0, rate)) * 100);
+}
 </script>
 
 <template>
@@ -21,22 +27,24 @@ const titleId = `progress-bars-${useId()}`;
           <div class="flex items-baseline justify-between gap-3">
             <span class="text-caption font-semibold text-foreground">{{ item.label }}</span>
             <strong class="text-caption tabular-nums" :class="item.rate >= 1 ? 'text-savings' : 'text-status-warning'">
-              {{ (item.rate * 100).toFixed(0) }}%
+              {{ percent(item.rate) }}%
             </strong>
           </div>
           <div
             class="h-3 overflow-hidden rounded-full bg-muted/50"
             role="progressbar"
             :aria-label="`${item.label} 실적 달성률`"
-            :aria-valuenow="Math.min(100, Math.max(0, item.rate * 100))"
+            :aria-valuenow="percent(item.rate)"
+            :aria-valuetext="`실적 기준 대비 ${percent(item.rate)}%${item.rate >= 1 ? ', 실적 충족' : ''}`"
             aria-valuemin="0"
             aria-valuemax="100"
           >
             <svg viewBox="0 0 100 12" preserveAspectRatio="none" class="block h-full w-full" aria-hidden="true">
+              <!-- rx를 두면 preserveAspectRatio="none" 때문에 가로로 늘어나 폭마다 코너가 달라진다.
+                   ui 0.3.11이 패키지 막대에서 없앤 것과 같은 이유로 여기서도 제거하고, 알약 모양은 컨테이너가 만든다. -->
               <rect
                 :width="progressBarWidth(item.rate)"
                 height="12"
-                rx="4"
                 :class="item.rate >= 1 ? 'fill-savings' : item.rate >= 0.8 ? 'fill-status-warning' : 'fill-loss'"
               />
             </svg>

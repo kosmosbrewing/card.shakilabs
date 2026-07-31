@@ -30,7 +30,9 @@ const benefitItems = computed(() => [
   { key: "credit", label: "신용카드", value: result.value.annualCreditBenefit },
   { key: "debit", label: "체크카드", value: result.value.annualDebitBenefit },
 ]);
-const formatBenefit = (value: number) => `${value >= 0 ? "+" : "-"}${formatWon(Math.abs(value))}`;
+// 0은 부호를 붙이지 않는다 — 축 눈금(0원 기준선)에 "+0원"이 찍히는 것을 막는다.
+const formatBenefit = (value: number) =>
+  `${value > 0 ? "+" : value < 0 ? "-" : ""}${formatWon(Math.abs(value))}`;
 </script>
 
 <template>
@@ -87,7 +89,12 @@ const formatBenefit = (value: number) => `${value >= 0 ? "+" : "-"}${formatWon(M
       </div>
     </div>
 
-    <DivergingBars title="연회비 반영 연간 순혜택" :items="benefitItems" :format-value="formatBenefit" />
+    <DivergingBars
+      title="연회비 반영 연간 순혜택"
+      metric-label="연간 순혜택"
+      :items="benefitItems"
+      :format-value="formatBenefit"
+    />
 
     <div class="retro-panel px-4 py-4 text-caption leading-relaxed text-foreground">
       연간 차이는 {{ formatWon(result.gap) }}입니다.
