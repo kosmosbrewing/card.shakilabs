@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
-import { divergingBarWidth } from "@/utils/chartMath";
+// 막대 폭 계산은 @shakilabs/ui로 공통화됐다(앱별 중복 구현 방지). 크롬·색은 로컬 유지.
+import { divergingBarWidth } from "@shakilabs/ui";
 
 type DivergingItem = { key: string; label: string; value: number };
 
