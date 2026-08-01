@@ -5,6 +5,7 @@ import { buildPrerenderHeader, buildPrerenderFooter } from "./prerender-layout.m
 import { buildRichContent } from "./prerender-content.mjs";
 import { buildAllToolsMeta } from "./prerender-all-tools.mjs";
 import { appendCardHubLink, buildCardHubContent } from "./prerender-card-hub.mjs";
+import { buildHomeContent, buildHomeMeta } from "./prerender-home.mjs";
 const DIST_DIR = resolve(import.meta.dirname, "../dist");
 const INDEX_HTML = resolve(DIST_DIR, "index.html");
 const SITE_URL = "https://shakilabs.com/card";
@@ -60,6 +61,10 @@ function buildBreadcrumb(items) {
 }
 
 function buildMeta(route) {
+  if (route === "/") {
+    return buildHomeMeta(SITE_URL);
+  }
+
   if (route === "/all") {
     return buildAllToolsMeta(SITE_URL, buildBreadcrumb);
   }
@@ -421,8 +426,9 @@ function buildMeta(route) {
     description,
     canonical,
     appPath: "/fuel-card",
+    // WebSite is declared once on the home (/) - this page only describes itself.
     jsonLd: [
-      { "@context": "https://schema.org", "@type": "WebSite", name: "shakilabs.com/card", url: SITE_URL, description, inLanguage: "ko" },
+      { "@context": "https://schema.org", "@type": "WebPage", name: title, description, url: canonical, inLanguage: "ko" },
       { "@context": "https://schema.org", "@type": "WebApplication", name: title, url: canonical, applicationCategory: "FinanceApplication", operatingSystem: "Any", inLanguage: "ko", offers: { "@type": "Offer", price: "0", priceCurrency: "KRW" } },
     ],
     breadcrumb: buildBreadcrumb([
@@ -492,6 +498,12 @@ function buildPrerenderSection(meta) {
     </section>`;
 }
 
+function buildRouteContent(route) {
+  if (route === "/") return buildHomeContent();
+  if (route === "/all") return buildCardHubContent();
+  return buildRichContent(route);
+}
+
 function replaceTag(html, pattern, next) {
   if (pattern.test(html)) return html.replace(pattern, next);
   return html;
@@ -515,7 +527,7 @@ function applyMeta(html, meta, route) {
   output = replaceTag(output, /<meta name="twitter:description" content="[^"]*"\s*\/?>/i, `<meta name="twitter:description" content="${escapedDescription}" />`);
   output = replaceTag(output, /<meta name="twitter:image" content="[^"]*"\s*\/?>/i, `<meta name="twitter:image" content="${escapedOgImage}" />`);
 
-  const rich = appendCardHubLink(route, route === "/all" ? buildCardHubContent() : buildRichContent(route));
+  const rich = appendCardHubLink(route, buildRouteContent(route));
 
   const jsonLdArray = [meta.jsonLd, meta.breadcrumb].flat().filter(Boolean);
   // 화면에 FAQ(Q&A)가 보이는 페이지에만 FAQPage 스키마를 정확히 1개 싣는다 (이미 있으면 추가하지 않음).

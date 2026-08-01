@@ -1,5 +1,6 @@
 import { useHead } from "@unhead/vue";
 import { toValue, type MaybeRefOrGetter } from "vue";
+import { normalizeCanonicalUrl } from "@/utils/canonicalUrl";
 
 const TITLE_SUFFIX = " | 카드 계산기";
 const DEFAULT_TITLE = "카드 계산기";
@@ -61,16 +62,7 @@ export function useSEO({
         : [];
     const currentUrl =
       typeof window !== "undefined"
-        ? (() => {
-            try {
-              const url = new URL(window.location.href);
-              url.search = "";
-              url.hash = "";
-              return url.toString();
-            } catch {
-              return window.location.href.split("#")[0].split("?")[0];
-            }
-          })()
+        ? normalizeCanonicalUrl(window.location.href)
         : undefined;
 
     return {

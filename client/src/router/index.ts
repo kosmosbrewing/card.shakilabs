@@ -4,10 +4,12 @@ import { trackPageView } from "@/lib/analytics";
 import { buildPublicPagePath, shouldTrackPageView } from "@/utils/pageTracking";
 
 const routes: RouteRecordRaw[] = [
-  // 루트 → /fuel-card로 리다이렉트
+  // 홈: 상황별 계산기 진입점. 리다이렉트로 두면 앱에서 검색 신뢰도가 가장 높은 URL이 빈 껍데기로 서빙된다.
   {
     path: "/",
-    redirect: "/fuel-card",
+    name: "Home",
+    component: () => import("@/views/HomeView.vue"),
+    meta: { title: "카드 계산기 | 주유·해외결제·연회비 혜택 비교 2026" },
   },
   {
     path: "/all",

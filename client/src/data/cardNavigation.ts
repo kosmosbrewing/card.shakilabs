@@ -44,3 +44,21 @@ export const CARD_TOOL_GROUPS: readonly CardToolGroup[] = [
     ],
   },
 ] as const;
+
+export interface CardHomeEntry {
+  path: string;
+  situation: string;
+  checkpoint: string;
+  label: string;
+}
+
+// 홈은 카테고리 나열(/all)과 겹치지 않도록 "상황 → 계산기" 진입점만 노출한다.
+// 정적 프리렌더(scripts/prerender-home.mjs)와 같은 순서를 유지한다.
+export const CARD_HOME_ENTRIES: readonly CardHomeEntry[] = [
+  { path: "/fuel-card", situation: "매달 주유비가 부담된다", checkpoint: "카드별 리터당 할인과 월 할인 한도", label: "주유 할인카드 비교" },
+  { path: "/overseas-payment", situation: "해외여행·직구를 앞두고 있다", checkpoint: "해외수수료와 DCC 원화결제 손해액", label: "해외결제 수수료 비교" },
+  { path: "/annual-fee", situation: "연회비가 아까운지 모르겠다", checkpoint: "연간 혜택이 연회비를 넘는 시점", label: "연회비 회수 계산" },
+  { path: "/min-spend", situation: "실적 채우려 억지 소비를 한다", checkpoint: "실적 충족에 드는 추가 지출", label: "전월 실적 계산" },
+  { path: "/point-convert", situation: "쌓인 포인트·마일리지가 있다", checkpoint: "전환처별 1포인트 실질 가치", label: "포인트 전환 비교" },
+  { path: "/duty-free", situation: "면세 한도를 넘길 것 같다", checkpoint: "초과분 예상 관세와 부가세", label: "면세 한도 계산" },
+] as const;
