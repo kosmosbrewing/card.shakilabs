@@ -1,5 +1,5 @@
 {
-  "name": "car-tools-client",
+  "name": "card-tools-client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,6 +9,7 @@
     "prebuild": "node scripts/generate-sitemap.mjs",
     "build": "vite build && node scripts/prerender.mjs && npm run verify:static && node scripts/verify-fonts.mjs",
     "verify:static": "node scripts/validate-static-output.mjs",
+    "verify:supply-chain": "node scripts/verify-vendored-artifacts.mjs && node scripts/verify-sbom-identity.mjs",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
