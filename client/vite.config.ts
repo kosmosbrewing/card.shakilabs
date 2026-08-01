@@ -4,7 +4,7 @@ import vue from "@vitejs/plugin-vue";
 import tailwind from "tailwindcss";
 import autoprefixer from "autoprefixer";
 
-const APP_ID = "car-tools";
+const APP_ID = "card-tools";
 const DEV_PORT = 5174;
 
 export default defineConfig({
