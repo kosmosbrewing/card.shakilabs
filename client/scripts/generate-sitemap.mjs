@@ -9,7 +9,13 @@ const PUBLIC_DIR = resolve(import.meta.dirname, "../public");
 
 const today = new Date().toISOString().split("T")[0];
 
+// vercel.json sets trailingSlash:false, so the home must be listed without one.
+function resolveLoc(route) {
+  return route === "/" ? SITE_URL : `${SITE_URL}${route}`;
+}
+
 function resolvePriority(route) {
+  if (route === "/") return "1.0";
   if (route === "/fuel-card") return "1.0";
   if (route === "/all") return "0.9";
   if (route === "/overseas-payment") return "0.9";
@@ -29,6 +35,7 @@ function resolvePriority(route) {
 }
 
 function resolveChangeFreq(route) {
+  if (route === "/") return "weekly";
   if (route === "/fuel-card") return "weekly";
   if (route === "/all") return "weekly";
   if (route === "/overseas-payment") return "weekly";
@@ -48,7 +55,7 @@ function resolveChangeFreq(route) {
 }
 
 const urls = SEO_ROUTES.map((route) => `  <url>
-    <loc>${SITE_URL}${route}</loc>
+    <loc>${resolveLoc(route)}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>${resolveChangeFreq(route)}</changefreq>
     <priority>${resolvePriority(route)}</priority>

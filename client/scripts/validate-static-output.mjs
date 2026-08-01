@@ -18,6 +18,15 @@ function canonicalFrom(html) {
   return html.match(/<link rel="canonical" href="([^"]+)"\s*\/?>/)?.[1];
 }
 
+// The home lives at dist/index.html and canonicalizes without a trailing slash.
+function outputPathFor(route) {
+  return resolve(distRoot, route.slice(1), "index.html");
+}
+
+function canonicalFor(route) {
+  return route === "/" ? canonicalBase : canonicalBase + route;
+}
+
 function validateVercelConfig() {
   const config = JSON.parse(
     readFileSync(resolve(repositoryRoot, "vercel.json"), "utf8"),
@@ -39,11 +48,11 @@ function validateRoutes() {
   const hashes = new Set();
 
   for (const route of SEO_ROUTES) {
-    const outputPath = resolve(distRoot, route.slice(1), "index.html");
+    const outputPath = outputPathFor(route);
     assert(existsSync(outputPath), `Missing static output for ${route}`);
 
     const html = readFileSync(outputPath, "utf8");
-    const expectedCanonical = canonicalBase + route;
+    const expectedCanonical = canonicalFor(route);
     const hash = createHash("sha256").update(html).digest("hex");
     const h1Count = html.match(/<h1\b/gi)?.length ?? 0;
 
@@ -65,16 +74,48 @@ function validateSitemap() {
   const actual = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
     ([, url]) => url,
   );
-  const expected = SEO_ROUTES.map((route) => canonicalBase + route);
+  const expected = SEO_ROUTES.map(canonicalFor);
   assert(JSON.stringify(actual) === JSON.stringify(expected),
     "Sitemap routes do not match static routes");
 }
 
-function validateAliasesAndNotFound() {
-  const rootHtml = readFileSync(resolve(distRoot, "index.html"), "utf8");
-  assert(canonicalFrom(rootHtml) === `${canonicalBase}/fuel-card`,
-    "Root alias must canonicalize to /card/fuel-card");
+// The home used to ship as the bare Vite shell (no content, no outbound links).
+// These checks keep it a real prerendered landing page.
+function validateHome() {
+  const html = readFileSync(outputPathFor("/"), "utf8");
+  const fuelCard = readFileSync(outputPathFor("/fuel-card"), "utf8");
+  const allTools = readFileSync(outputPathFor("/all"), "utf8");
 
+  assert(canonicalFrom(html) === canonicalBase,
+    `Home must canonicalize to ${canonicalBase} without a trailing slash`);
+
+  const title = html.match(/<title>([^<]+)<\/title>/)?.[1] ?? "";
+  const description = html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? "";
+  assert(title.length > 0 && title.length <= 60,
+    `Home title must be 1-60 characters, got ${title.length}`);
+  assert(description.length > 0 && description.length <= 155,
+    `Home description must be 1-155 characters, got ${description.length}`);
+
+  const fuelCardTitle = fuelCard.match(/<title>([^<]+)<\/title>/)?.[1];
+  const allToolsTitle = allTools.match(/<title>([^<]+)<\/title>/)?.[1];
+  assert(title !== fuelCardTitle && title !== allToolsTitle,
+    "Home title must differ from /fuel-card and /all");
+
+  assert(html.includes('data-seo-prerender="card-home"'),
+    "Home must ship its own prerendered body content");
+  assert(html.includes("카드 혜택, 발급 전에 숫자로 확인하세요"),
+    "Home must contain its own H1 copy");
+
+  // Footer cross-app navigation is the reason crawlers reach sibling apps.
+  const crossAppLinks = new Set(
+    [...html.matchAll(/href="\/(finance|loan|invest|house|car|ott|nutri|seller|biz|travel)"/g)]
+      .map(([, app]) => app),
+  );
+  assert(crossAppLinks.size >= 10,
+    `Home must link every sibling app, found ${crossAppLinks.size}`);
+}
+
+function validateAliasesAndNotFound() {
   const notFoundPath = resolve(distRoot, "404.html");
   assert(existsSync(notFoundPath), "Missing custom 404.html");
   const notFoundHtml = readFileSync(notFoundPath, "utf8");
@@ -99,6 +140,7 @@ function validateFuelTypeContent() {
 validateVercelConfig();
 validateRoutes();
 validateSitemap();
+validateHome();
 validateAliasesAndNotFound();
 validateFuelTypeContent();
 
