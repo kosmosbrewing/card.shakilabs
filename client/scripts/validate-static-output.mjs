@@ -44,6 +44,29 @@ function validateVercelConfig() {
     "card rewrite must preserve the requested path");
 }
 
+// Every JSON-LD block must carry its payload in the script body. A block whose
+// body is empty (payload leaked into an attribute) is invisible to crawlers.
+function validateJsonLd(html, route) {
+  const blocks = [
+    ...html.matchAll(
+      /<script\b([^>]*\btype="application\/ld\+json"[^>]*)>([\s\S]*?)<\/script>/gi,
+    ),
+  ];
+
+  assert(blocks.length > 0, `Missing JSON-LD for ${route}`);
+
+  for (const [, attributes, body] of blocks) {
+    assert(!/\bchildren\s*=/.test(attributes),
+      `JSON-LD on ${route} carries a children attribute instead of a body`);
+    assert(body.trim().length > 0, `Empty JSON-LD block on ${route}`);
+    try {
+      JSON.parse(body);
+    } catch (error) {
+      throw new Error(`Unparsable JSON-LD on ${route}: ${error.message}`);
+    }
+  }
+}
+
 function validateRoutes() {
   const hashes = new Set();
 
@@ -64,6 +87,7 @@ function validateRoutes() {
       !/<noscript>/i.test(html),
       `Route-specific output must not retain the shell noscript for ${route}`,
     );
+    validateJsonLd(html, route);
     assert(!hashes.has(hash), `Duplicate raw HTML for ${route}`);
     hashes.add(hash);
   }
