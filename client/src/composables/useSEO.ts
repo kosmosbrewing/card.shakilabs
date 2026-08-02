@@ -1,6 +1,15 @@
 import { useHead } from "@unhead/vue";
 import { toValue, type MaybeRefOrGetter } from "vue";
 import { normalizeCanonicalUrl } from "@/utils/canonicalUrl";
+import { buildJsonLdScripts, collectJsonLdTypes } from "@/utils/jsonLd";
+
+// Snapshot taken at module evaluation time, which runs before the app mounts and
+// therefore before unhead writes any tag. So this only ever sees the JSON-LD that
+// index.html and the prerender step baked into the served HTML.
+const PRERENDERED_JSONLD_TYPES: ReadonlySet<string> =
+  typeof document === "undefined"
+    ? new Set<string>()
+    : collectJsonLdTypes(document);
 
 const TITLE_SUFFIX = " | 카드 계산기";
 const DEFAULT_TITLE = "카드 계산기";
@@ -83,11 +92,7 @@ export function useSEO({
             ]
           : []),
       ],
-      script: resolvedJsonLdArray.map((entry, index) => ({
-        key: `json-ld-${index}`,
-        type: "application/ld+json",
-        children: JSON.stringify(entry),
-      })),
+      script: buildJsonLdScripts(resolvedJsonLdArray, PRERENDERED_JSONLD_TYPES),
     };
   });
 }
