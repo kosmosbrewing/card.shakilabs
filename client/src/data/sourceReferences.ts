@@ -10,6 +10,9 @@ const OPINET_MAIN = "https://www.opinet.co.kr/user/main/opinetIntro.do";
 const OPINET_GUIDE = "https://www.opinet.co.kr/user/dopds/dopDs_4.do";
 const CUSTOMS_TAX = "https://www.customs.go.kr/kcs/ad/tax/ItemTaxCalculation.do";
 const CUSTOMS_MAIN = "https://customs.go.kr/kcs/main.do";
+// 공적 출처 우선 노출용 대표 링크 — 카드사 개별 페이지보다 기관 공시가 검증 가능성이 높다
+const CUSTOMS_WWW = "https://www.customs.go.kr";
+const CREFIA_MAIN = "https://www.crefia.or.kr";
 const SMBS_MAIN = "https://www.smbs.biz/";
 const KOREAN_AIR_MILEAGE =
   "https://www.koreanair.com/contents/skypass/use-miles/award-ticket/redemption";
@@ -28,6 +31,7 @@ export const FUEL_COMPARE_SOURCES: CompareSource[] = [
 ];
 
 export const ANNUAL_FEE_SOURCES: CompareSource[] = [
+  { name: "여신금융협회", url: CREFIA_MAIN, basis: "카드 상품·연회비 공시" },
   { name: "현대카드", url: "https://www.hyundaicard.com/", basis: "카드상품·혜택 안내" },
   { name: "신한카드 Mr.Life", url: "https://www.shinhancard.com/conts/person/card_info/major/benefit/propose/1270468_31350.jsp", basis: "공식 혜택 안내" },
   { name: "KB국민 탄탄대로 올쇼핑", url: "https://m.kbcard.com/BON/DVIEW/MBEM0009", basis: "공식 혜택 안내" },
@@ -41,6 +45,7 @@ export const ANNUAL_FEE_SOURCES: CompareSource[] = [
 export const MIN_SPEND_SOURCES: CompareSource[] = [...ANNUAL_FEE_SOURCES];
 
 export const OVERSEAS_COMPARE_SOURCES: CompareSource[] = [
+  { name: "관세청", url: CUSTOMS_WWW, basis: "해외직구 면세 한도 기준" },
   { name: "서울외국환중개", url: SMBS_MAIN, basis: "매매기준율 참고" },
   { name: "현대카드 ZERO Edition3", url: "https://www.hyundaicard.com/cpc/cr/CPCCR0201_01.hc?cardWcd=ZER3", basis: "공식 상품 안내" },
   { name: "신한카드 Deep Dream", url: "https://www.shinhancard.com/pconts/html/card/apply/credit/1187946_2207.html", basis: "공식 상품 안내" },
