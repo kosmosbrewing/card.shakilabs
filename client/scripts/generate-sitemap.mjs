@@ -1,7 +1,7 @@
 // sitemap.xml 생성
 import { writeFileSync, mkdirSync, existsSync } from "fs";
 import { resolve } from "path";
-import { SEO_ROUTES } from "./seo-routes.mjs";
+import { SITEMAP_ROUTES } from "./seo-routes.mjs";
 
 const SITE_URL = "https://shakilabs.com/card";
 const DIST_DIR = resolve(import.meta.dirname, "../dist");
@@ -54,7 +54,10 @@ function resolveChangeFreq(route) {
   return "yearly";
 }
 
-const urls = SEO_ROUTES.map((route) => `  <url>
+// Variant routes (PARAM_ROUTES) are deliberately absent: they canonicalize to
+// their family base, so advertising them would point crawlers at URLs that
+// immediately hand authority to another page. They stay prerendered regardless.
+const urls = SITEMAP_ROUTES.map((route) => `  <url>
     <loc>${resolveLoc(route)}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>${resolveChangeFreq(route)}</changefreq>
@@ -75,4 +78,4 @@ if (existsSync(DIST_DIR)) {
   writeFileSync(resolve(DIST_DIR, "sitemap.xml"), sitemap, "utf-8");
 }
 
-console.log(`[sitemap] Generated with ${SEO_ROUTES.length} URLs`);
+console.log(`[sitemap] Generated with ${SITEMAP_ROUTES.length} URLs`);

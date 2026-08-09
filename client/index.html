@@ -37,25 +37,21 @@
     <meta name="content-language" content="ko" />
     <meta name="geo.region" content="KR" />
     <meta name="geo.placename" content="대한민국" />
-    <link rel="alternate" hreflang="ko" href="https://shakilabs.com/card/fuel-card" />
-    <link rel="alternate" hreflang="x-default" href="https://shakilabs.com/card/fuel-card" />
+    <!-- hreflang 없음: 이 앱은 한국어 단일 언어라 대체 언어판이 존재하지 않는다.
+         예전에는 여기에 /card/fuel-card를 하드코딩해 두어, 모든 페이지가 "내 대표
+         언어판은 주유 카드 페이지"라고 선언하고 있었다(x-default까지). 셸 HTML은
+         어느 라우트로 서빙될지 모르므로 페이지별 URL을 여기 박아서는 안 된다. -->
 
     <!-- 테마 — teal 계열 -->
     <meta name="theme-color" content="hsl(174, 84%, 32%)" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="hsl(174, 30%, 12%)" media="(prefers-color-scheme: dark)" />
 
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "주유 할인카드 비교 계산기",
-        "url": "https://shakilabs.com/card/fuel-card",
-        "applicationCategory": "FinanceApplication",
-        "operatingSystem": "Web",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" },
-        "inLanguage": "ko"
-      }
-    </script>
+    <!-- JSON-LD를 셸에 두지 않는다: 여기 있던 WebApplication 블록은 name·url을
+         "주유 할인카드 비교 계산기"/card/fuel-card로 고정해 34개 전 페이지에 실렸다.
+         그 결과 /overseas-payment 같은 페이지가 자기를 주유 계산기라고 선언하고,
+         /fuel-card는 같은 엔티티를 두 번 싣고 있었다.
+         스키마는 라우트를 아는 쪽(scripts/prerender*.mjs와 useSEO)만 발행한다.
+         validate-static-output.mjs가 엔티티 url == canonical을 강제한다. -->
 
     <script>
       (() => {

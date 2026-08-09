@@ -46,7 +46,13 @@ const seoDescription = computed(
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" />
+  <!-- canonical은 대표 페이지로 통합한다: 이 변종은 파라미터만 바뀐 같은 문서다.
+       고유 결론이 생기면 seo-routes.mjs의 VARIANT_FAMILIES에서 빼고 이 prop만 지우면 된다. -->
+  <SEOHead
+    :title="seoTitle"
+    :description="seoDescription"
+    canonical-path="/fuel-card"
+  />
 
   <div class="container space-y-5 py-5">
     <CalculatorPageHeader :title="`${FUEL_TYPE_LABELS[ft]} 주유 할인카드 비교`" />

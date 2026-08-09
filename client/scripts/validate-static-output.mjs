@@ -2,7 +2,13 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { SEO_ROUTES } from "./seo-routes.mjs";
+import {
+  SEO_ROUTES,
+  SITEMAP_ROUTES,
+  PARAM_ROUTES,
+  VARIANT_SUBGROUPS,
+  canonicalPathFor,
+} from "./seo-routes.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, "..");
@@ -23,8 +29,12 @@ function outputPathFor(route) {
   return resolve(distRoot, route.slice(1), "index.html");
 }
 
+// Mirrors the prerender step: variant routes canonicalize to their family base,
+// every other route is self-canonical. Both sides read canonicalPathFor from
+// seo-routes.mjs, so the expectation cannot drift away from what was emitted.
 function canonicalFor(route) {
-  return route === "/" ? canonicalBase : canonicalBase + route;
+  const path = canonicalPathFor(route);
+  return path === "/" ? canonicalBase : canonicalBase + path;
 }
 
 function validateVercelConfig() {
@@ -59,14 +69,45 @@ function validateJsonLd(html, route) {
     assert(!/\bchildren\s*=/.test(attributes),
       `JSON-LD on ${route} carries a children attribute instead of a body`);
     assert(body.trim().length > 0, `Empty JSON-LD block on ${route}`);
+    let parsed;
     try {
-      JSON.parse(body);
+      parsed = JSON.parse(body);
     } catch (error) {
       throw new Error(`Unparsable JSON-LD on ${route}: ${error.message}`);
+    }
+
+    for (const entity of Array.isArray(parsed) ? parsed : [parsed]) {
+      assertSelfDescribingUrl(entity, route);
     }
   }
 }
 
+// Types whose top-level "url" is a claim about THIS page. BreadcrumbList and
+// ItemList are excluded on purpose: their URLs legitimately point elsewhere.
+const SELF_DESCRIBING_TYPES = new Set([
+  "WebApplication",
+  "SoftwareApplication",
+  "WebPage",
+  "WebSite",
+]);
+
+// A self-describing entity that names a different URL than the page's canonical
+// tells a crawler this page is some other page. index.html used to ship a static
+// WebApplication hardcoded to /card/fuel-card, so all 34 routes claimed to be
+// the fuel card calculator; nothing failed because nothing checked. On a
+// consolidated variant that is worse than noise -- it contradicts the canonical.
+function assertSelfDescribingUrl(entity, route) {
+  if (!entity || typeof entity !== "object") return;
+  if (!SELF_DESCRIBING_TYPES.has(entity["@type"])) return;
+  if (typeof entity.url !== "string") return;
+
+  assert(entity.url === canonicalFor(route),
+    `JSON-LD ${entity["@type"]} on ${route} claims url ${entity.url} but the page canonicalizes to ${canonicalFor(route)}`);
+}
+
+// Runs over SEO_ROUTES, not SITEMAP_ROUTES: a consolidated variant must keep
+// shipping a real static file even though the sitemap no longer lists it.
+// Serving the empty SPA shell there would be a soft-404 for crawlers.
 function validateRoutes() {
   const hashes = new Set();
 
@@ -98,9 +139,63 @@ function validateSitemap() {
   const actual = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
     ([, url]) => url,
   );
-  const expected = SEO_ROUTES.map(canonicalFor);
+  const expected = SITEMAP_ROUTES.map(canonicalFor);
   assert(JSON.stringify(actual) === JSON.stringify(expected),
-    "Sitemap routes do not match static routes");
+    "Sitemap routes do not match the self-canonical routes");
+
+  // Explicit guard rather than relying on the equality above: if someone ever
+  // reorders SITEMAP_ROUTES this still fails loudly when a canonicalized
+  // variant sneaks back into the sitemap.
+  const variantUrls = new Set(PARAM_ROUTES.map((route) => canonicalBase + route));
+  const leaked = actual.filter((url) => variantUrls.has(url));
+  assert(leaked.length === 0,
+    `Sitemap must not list canonicalized variants: ${leaked.join(", ")}`);
+}
+
+// Consolidation is only real if every variant actually points at its base and
+// the base itself stays self-canonical (a canonical chain would waste the
+// signal). Reads the emitted files, not the config that produced them.
+function validateConsolidation() {
+  const bases = new Set();
+
+  // Per-subgroup rather than over the flat variant list: the failure this guards
+  // against is a whole subgroup silently losing its mapping (for example if a
+  // future refactor pattern-matches "/fuel-card/:x" and quietly drops the
+  // two-segment monthly routes). An aggregate count would still look plausible.
+  for (const { id, base, routes } of VARIANT_SUBGROUPS) {
+    assert(routes.length > 0, `Variant subgroup ${id} is empty`);
+    for (const route of routes) {
+      assert(canonicalPathFor(route) === base,
+        `Variant subgroup ${id}: ${route} must map to ${base}, got ${canonicalPathFor(route)}`);
+      assert(PARAM_ROUTES.includes(route),
+        `Variant subgroup ${id}: ${route} is missing from PARAM_ROUTES`);
+      assert(SEO_ROUTES.includes(route),
+        `Variant subgroup ${id}: ${route} must stay prerendered to avoid a soft-404`);
+    }
+  }
+
+  const mappedRoutes = VARIANT_SUBGROUPS.flatMap(({ routes }) => routes);
+  assert(mappedRoutes.length === PARAM_ROUTES.length,
+    `Every variant must belong to exactly one subgroup (${mappedRoutes.length} mapped vs ${PARAM_ROUTES.length} variants)`);
+
+  for (const route of PARAM_ROUTES) {
+    const html = readFileSync(outputPathFor(route), "utf8");
+    const base = canonicalPathFor(route);
+    assert(base !== route, `${route} is listed as a variant but canonicalizes to itself`);
+    assert(canonicalFrom(html) === canonicalBase + base,
+      `${route} must canonicalize to ${canonicalBase + base}`);
+    assert(!/name="robots" content="noindex/.test(html),
+      `${route} must not be noindex - canonical and noindex are conflicting signals`);
+    bases.add(base);
+  }
+
+  for (const base of bases) {
+    const html = readFileSync(outputPathFor(base), "utf8");
+    assert(canonicalFrom(html) === canonicalBase + base,
+      `Canonical target ${base} must be self-canonical`);
+    assert(SITEMAP_ROUTES.includes(base),
+      `Canonical target ${base} must stay in the sitemap`);
+  }
 }
 
 // The home used to ship as the bare Vite shell (no content, no outbound links).
@@ -149,6 +244,50 @@ function validateAliasesAndNotFound() {
     "404.html must contain a recovery link");
 }
 
+// Visible text of the page's OWN prerendered body -- only the
+// <article data-seo-prerender> blocks, never the shared header/footer/nav.
+//
+// Counting whole-page text is the trap here: shared chrome is worth several
+// hundred characters on every route, so a genuinely thin page can clear a
+// content floor purely on navigation boilerplate. Measuring the article alone
+// is also what the audit baseline used (/fuel-card measures 3,059 either way,
+// but /all was 322 only because chrome was excluded).
+function prerenderedBodyChars(html) {
+  const articles = [
+    ...html.matchAll(/<article[^>]*\bdata-seo-prerender\b[^>]*>([\s\S]*?)<\/article>/gi),
+  ];
+
+  return articles
+    .map(([, inner]) =>
+      inner
+        .replace(/<script\b[\s\S]*?<\/script>/gi, " ")
+        .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/&[a-z]+;/gi, " ")
+        .replace(/\s+/g, " ")
+        .trim(),
+    )
+    .reduce((total, text) => total + text.length, 0);
+}
+
+// Pages that receive canonical signals must not themselves be thin: a hub or a
+// consolidation target that reads as a bare link list wastes the authority the
+// variants hand it. 1,500 characters is the floor used across the apps.
+const THIN_CONTENT_FLOOR = 1500;
+
+function validateContentDepth() {
+  // The home and the /all hub sit above every calculator, and the consolidation
+  // targets now absorb 19 variants' worth of signal. All of them have to clear
+  // the floor on their own.
+  const targets = new Set(["/", "/all", ...PARAM_ROUTES.map(canonicalPathFor)]);
+
+  for (const route of targets) {
+    const chars = prerenderedBodyChars(readFileSync(outputPathFor(route), "utf8"));
+    assert(chars >= THIN_CONTENT_FLOOR,
+      `${route} prerenders only ${chars} chars of body text, below the ${THIN_CONTENT_FLOOR} floor`);
+  }
+}
+
 function validateFuelTypeContent() {
   const diesel = readFileSync(resolve(distRoot, "fuel-card/diesel/index.html"), "utf8");
   const lpg = readFileSync(resolve(distRoot, "fuel-card/lpg/index.html"), "utf8");
@@ -164,8 +303,14 @@ function validateFuelTypeContent() {
 validateVercelConfig();
 validateRoutes();
 validateSitemap();
+validateConsolidation();
+validateContentDepth();
 validateHome();
 validateAliasesAndNotFound();
 validateFuelTypeContent();
 
-console.log(`Validated ${SEO_ROUTES.length} card routes and custom 404 output.`);
+console.log(
+  `Validated ${SEO_ROUTES.length} card routes ` +
+    `(${SITEMAP_ROUTES.length} sitemap + ${PARAM_ROUTES.length} canonicalized variants) ` +
+    "and custom 404 output.",
+);

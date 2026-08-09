@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { dirname, resolve } from "path";
-import { SEO_ROUTES } from "./seo-routes.mjs";
+import { SEO_ROUTES, canonicalPathFor } from "./seo-routes.mjs";
 import { buildPrerenderHeader, buildPrerenderFooter } from "./prerender-layout.mjs";
 import { buildRichContent } from "./prerender-content.mjs";
 import { buildAllToolsMeta } from "./prerender-all-tools.mjs";
@@ -9,6 +9,17 @@ import { buildHomeContent, buildHomeMeta } from "./prerender-home.mjs";
 const DIST_DIR = resolve(import.meta.dirname, "../dist");
 const INDEX_HTML = resolve(DIST_DIR, "index.html");
 const SITE_URL = "https://shakilabs.com/card";
+
+// Single source of truth for every self-referencing URL on a page. Variant
+// routes resolve to their family base (see seo-routes.mjs), so canonical,
+// og:url and the JSON-LD "url" field can never drift apart -- a variant that
+// canonicalized to the base while its schema still claimed the variant URL
+// would hand crawlers two contradictory answers.
+function canonicalUrlFor(route) {
+  const path = canonicalPathFor(route);
+  return path === "/" ? SITE_URL : `${SITE_URL}${path}`;
+}
+
 const ISSUER_LABELS = {
   hyundai: "현대카드",
   shinhan: "신한카드",
@@ -75,7 +86,7 @@ function buildMeta(route) {
     const label = ISSUER_LABELS[issuer] ?? issuer;
     const title = `${label} 주유 할인카드 비교 | 카드 계산기`;
     const description = `${label} 주유 할인카드를 비교합니다. 월 주유비 기준 연간 절약액과 실적 조건을 한눈에 확인하세요.`;
-    const canonical = `${SITE_URL}/fuel-card/${issuer}`;
+    const canonical = canonicalUrlFor(route);
 
     return {
       title,
@@ -101,7 +112,7 @@ function buildMeta(route) {
         : "LPG";
     const title = `${label} 주유 할인카드 추천 | 카드 계산기`;
     const description = `${label} 주유 시 가장 유리한 할인카드를 비교합니다. 카드별 리터당 할인액과 연간 절약액을 확인하세요.`;
-    const canonical = `${SITE_URL}/fuel-card/${fuelType}`;
+    const canonical = canonicalUrlFor(route);
 
     return {
       title,
@@ -123,7 +134,7 @@ function buildMeta(route) {
     const manWon = Math.round(amount / 10000);
     const title = `월 ${manWon}만원 주유 시 추천 카드 | 카드 계산기`;
     const description = `월 주유비 ${manWon}만원 기준 가장 절약되는 주유 할인카드를 비교합니다.`;
-    const canonical = `${SITE_URL}/fuel-card/monthly/${amount}`;
+    const canonical = canonicalUrlFor(route);
 
     return {
       title,
@@ -158,7 +169,7 @@ function buildMeta(route) {
     const label = OVERSEAS_LABELS[currency] ?? currency.toUpperCase();
     const title = `${label} 해외결제 카드 비교 | DCC 수수료 계산기`;
     const description = `${label} 결제 시 카드별 해외수수료, 캐시백, DCC 원화결제 손해를 비교합니다.`;
-    const canonical = `${SITE_URL}/overseas-payment/${currency}`;
+    const canonical = canonicalUrlFor(route);
 
     return {
       title,
