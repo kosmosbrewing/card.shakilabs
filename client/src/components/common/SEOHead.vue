@@ -6,6 +6,8 @@ const props = defineProps<{
   description: string;
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
   noindex?: boolean;
+  /** 변종 라우트가 대표 URL로 접힐 때 쓰는 canonical 통합 경로 (useSEO 참고). */
+  canonicalPath?: string;
 }>();
 
 useSEO({
@@ -13,6 +15,7 @@ useSEO({
   description: () => props.description,
   jsonLd: () => props.jsonLd,
   noindex: () => props.noindex,
+  canonicalPath: () => props.canonicalPath,
 });
 </script>
 

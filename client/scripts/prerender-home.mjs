@@ -33,6 +33,28 @@ const STEPS = [
   ["연회비를 빼고 비교한다", "연간 절약액에서 연회비를 뺀 순혜택이 실제 이득입니다. 순혜택이 음수면 연회비가 낮은 카드가 낫습니다."],
 ];
 
+// Failure modes that flip a conclusion. Kept distinct from STEPS (a procedure)
+// and from the /all directory (which tool to open) so the home does not repeat
+// either one -- duplicated blocks were the actual thin-content problem here.
+const PITFALLS = [
+  [
+    "월 할인 한도를 안 본다",
+    "리터당 150원 할인이라도 월 한도가 1만원이면 주유비를 아무리 늘려도 연간 절약액은 12만원에서 멈춥니다. 할인율보다 한도가 먼저 결론을 정하는 경우가 많습니다.",
+  ],
+  [
+    "실적 채우기 비용을 빼먹는다",
+    "전월 실적 30만원을 채우려고 평소 안 쓰던 10만원을 더 썼다면, 그 10만원은 혜택이 아니라 비용입니다. 순혜택은 할인액에서 이 추가 지출을 뺀 값입니다.",
+  ],
+  [
+    "해외결제에서 원화(DCC)로 승인한다",
+    "현지 단말기가 원화 결제를 권하면 가맹점 환전 수수료가 얹혀 3~8% 손해가 납니다. 같은 카드라도 결제 통화 선택 하나로 금액이 갈립니다.",
+  ],
+  [
+    "첫해 면제 연회비를 계속 면제로 본다",
+    "발급 첫해만 면제되는 조건이 흔합니다. 2년차부터 연회비가 붙는다면 회수 시점 계산은 면제가 끝난 뒤 기준으로 다시 해야 합니다.",
+  ],
+];
+
 export function buildHomeMeta(siteUrl) {
   const title = "카드 계산기 | 주유·해외결제·연회비 혜택 비교 2026";
   const description =
@@ -84,6 +106,14 @@ export function buildHomeContent() {
     ([heading, body]) => `<li style="${LI}"><strong>${heading}</strong> — ${body}</li>`,
   ).join("");
 
+  const pitfallItems = PITFALLS.map(
+    ([heading, body]) => `
+        <tr>
+          <td style="${TD}"><strong>${heading}</strong></td>
+          <td style="${TD}">${body}</td>
+        </tr>`,
+  ).join("");
+
   return `<article data-seo-prerender="card-home" style="${ARTICLE}">
     <h1 style="${H1}">카드 혜택, 발급 전에 숫자로 확인하세요</h1>
     <p style="${P}">
@@ -111,6 +141,19 @@ export function buildHomeContent() {
     <div style="${CALLOUT}">
       할인율이 가장 높은 카드가 항상 유리한 것은 아닙니다. 월 할인 한도에 먼저 걸리면 소비를 늘려도 절약액은 그대로입니다.
     </div>
+
+    <h2 style="${H2}">혜택 계산에서 자주 놓치는 것</h2>
+    <p style="${P}">아래 네 가지는 계산에 넣고 빼는 것만으로 "어느 카드가 유리한가"의 답이 뒤집히는 항목입니다.</p>
+    <table style="${TABLE}">
+      <thead>
+        <tr>
+          <th style="${TH}">놓치는 항목</th>
+          <th style="${TH}">결론이 뒤집히는 이유</th>
+        </tr>
+      </thead>
+      <tbody>${pitfallItems}
+      </tbody>
+    </table>
 
     <h2 style="${H2}">계산 기준</h2>
     <p style="${P}">

@@ -17,6 +17,11 @@ import { CARD_TOOL_GROUPS } from "@/data/cardNavigation";
       <ShText as="h1" variant="display" class="mt-2">카드를 고르기 전에 목적부터 정리하세요</ShText>
       <ShText tone="muted" class="mt-3 max-w-3xl">
         혜택 회수, 해외 결제, 포인트 관리 중 지금 필요한 결정과 가까운 묶음에서 시작하세요.
+        각 도구에는 "언제 쓰는가"를 함께 적어 두었으니, 계산기 이름이 아니라 지금 겪고 있는 상황과 맞는 쪽을 고르면 됩니다.
+      </ShText>
+      <ShText tone="muted" class="mt-3 max-w-3xl">
+        카드 혜택은 할인율만 보면 실제 절약액을 크게 벗어납니다. 월 할인 한도, 전월 실적 조건, 연회비 세 가지가 함께 걸리기 때문입니다.
+        아래 계산기는 모두 이 세 가지를 반영한 순혜택 기준으로 결과를 냅니다. 회원가입이나 카드번호 입력 없이 금액만 넣으면 됩니다.
       </ShText>
     </ShSurface>
 
@@ -29,7 +34,10 @@ import { CARD_TOOL_GROUPS } from "@/data/cardNavigation";
         <RouterLink v-for="tool in group.tools" :key="tool.path" :to="tool.path" class="block no-underline">
           <ShSurface variant="outlined" padding="md" class="group flex h-full flex-col hover:border-primary">
             <ShText as="h3" variant="heading">{{ tool.title }}</ShText>
-            <ShText variant="caption" tone="muted" class="mt-2 flex-1">{{ tool.description }}</ShText>
+            <ShText variant="caption" tone="muted" class="mt-2">{{ tool.description }}</ShText>
+            <ShText variant="caption" tone="muted" class="mt-3 flex-1">
+              <strong class="text-foreground">언제 쓰나요?</strong> {{ tool.whenToUse }}
+            </ShText>
             <span class="mt-4 inline-flex items-center gap-1 text-caption font-semibold text-primary">
               계산 시작 <ArrowRight class="h-4 w-4" aria-hidden="true" />
             </span>
