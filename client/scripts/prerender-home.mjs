@@ -4,17 +4,21 @@
 // NOTE: keep comments in English - every character under client/scripts is
 // collected into the shipped font subset (see font-subset-config.mjs).
 
-const ARTICLE = "max-width:920px;margin:0 auto;padding:24px 16px;line-height:1.75;font-size:15px;color:#334155;";
-const H1 = "font-size:28px;line-height:1.3;margin:0 0 16px;color:#0f172a;";
-const H2 = "font-size:20px;line-height:1.35;margin:28px 0 10px;padding-bottom:6px;border-bottom:2px solid #3b82f633;color:#0f172a;";
-const H3 = "font-size:16px;line-height:1.4;margin:18px 0 6px;color:#0f172a;";
+// Colors are theme tokens, not literal hex: this markup now ships into the Vue
+// DOM as well as the static file, and hardcoded light values are unreadable in
+// dark mode. The tokens are defined in index.html critical CSS, so they resolve
+// with JavaScript disabled too.
+const ARTICLE = "max-width:920px;margin:0 auto;padding:24px 16px;line-height:1.75;font-size:15px;color:hsl(var(--foreground));";
+const H1 = "font-size:28px;line-height:1.3;margin:0 0 16px;color:hsl(var(--foreground));";
+const H2 = "font-size:20px;line-height:1.35;margin:28px 0 10px;padding-bottom:6px;border-bottom:2px solid hsl(var(--border));color:hsl(var(--foreground));";
+const H3 = "font-size:16px;line-height:1.4;margin:18px 0 6px;color:hsl(var(--foreground));";
 const P = "margin:0 0 10px;";
 const TABLE = "width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:14px;";
-const TH = "padding:8px 10px;background:#f1f5f9;text-align:left;border:1px solid #cbd5e1;color:#334155;font-weight:600;";
-const TD = "padding:8px 10px;border:1px solid #cbd5e1;";
+const TH = "padding:8px 10px;background:hsl(var(--muted));text-align:left;border:1px solid hsl(var(--border));color:hsl(var(--foreground));font-weight:600;";
+const TD = "padding:8px 10px;border:1px solid hsl(var(--border));";
 const OL = "margin:0 0 12px 20px;padding:0;";
 const LI = "margin-bottom:6px;";
-const CALLOUT = "background:#eff6ff;border-left:4px solid #3b82f6;padding:12px 14px;margin:12px 0 16px;border-radius:4px;";
+const CALLOUT = "background:hsl(var(--accent));border-left:4px solid hsl(var(--primary));padding:12px 14px;margin:12px 0 16px;border-radius:4px;";
 
 // Situation-first routing table. Deliberately framed by "when this happens"
 // so it does not repeat the category grid rendered on /all.
@@ -92,7 +96,11 @@ export function buildHomeMeta(siteUrl) {
   };
 }
 
-export function buildHomeContent() {
+// The home body is split in two because HomeView.vue already renders the hero,
+// the situation table (as cards) and the three steps from the same data. Only
+// the remaining blocks are handed to the app, so a visitor never reads the same
+// argument twice while the static file keeps the full document.
+function buildHomeIntroContent() {
   const situationRows = SITUATIONS.map(
     ([situation, checkpoint, path, label]) => `
         <tr>
@@ -106,15 +114,7 @@ export function buildHomeContent() {
     ([heading, body]) => `<li style="${LI}"><strong>${heading}</strong> — ${body}</li>`,
   ).join("");
 
-  const pitfallItems = PITFALLS.map(
-    ([heading, body]) => `
-        <tr>
-          <td style="${TD}"><strong>${heading}</strong></td>
-          <td style="${TD}">${body}</td>
-        </tr>`,
-  ).join("");
-
-  return `<article data-seo-prerender="card-home" style="${ARTICLE}">
+  return `
     <h1 style="${H1}">카드 혜택, 발급 전에 숫자로 확인하세요</h1>
     <p style="${P}">
       카드 광고는 최대 할인율을 앞세우지만, 실제로 돌아오는 금액은 내 소비 규모와 월 할인 한도, 전월 실적, 연회비를 모두 반영해야 나옵니다.
@@ -137,7 +137,20 @@ export function buildHomeContent() {
     </table>
 
     <h2 style="${H2}">카드 고르기 3단계</h2>
-    <ol style="${OL}">${stepItems}</ol>
+    <ol style="${OL}">${stepItems}</ol>`;
+}
+
+// Blocks HomeView.vue does not render. Imported by src/seo/routeRichContent.ts.
+export function buildHomeExtraContent() {
+  const pitfallItems = PITFALLS.map(
+    ([heading, body]) => `
+        <tr>
+          <td style="${TD}"><strong>${heading}</strong></td>
+          <td style="${TD}">${body}</td>
+        </tr>`,
+  ).join("");
+
+  return `
     <div style="${CALLOUT}">
       할인율이 가장 높은 카드가 항상 유리한 것은 아닙니다. 월 할인 한도에 먼저 걸리면 소비를 늘려도 절약액은 그대로입니다.
     </div>
@@ -169,6 +182,11 @@ export function buildHomeContent() {
     <h3 style="${H3}">Q3. 개인정보나 카드번호를 입력해야 하나요?</h3>
     <p style="${P}">입력값은 월 지출 금액처럼 계산에 필요한 숫자뿐이며 모두 브라우저 안에서만 처리됩니다. 카드번호나 개인정보를 입력받지 않고 서버로 전송하지도 않습니다.</p>
     <h3 style="${H3}">Q4. 이용료가 있나요?</h3>
-    <p style="${P}">모든 계산기는 무료입니다. 본 서비스는 금융 상품을 판매하거나 중개하지 않으며, 특정 카드사의 발급을 권유하지 않습니다.</p>
+    <p style="${P}">모든 계산기는 무료입니다. 본 서비스는 금융 상품을 판매하거나 중개하지 않으며, 특정 카드사의 발급을 권유하지 않습니다.</p>`;
+}
+
+export function buildHomeContent() {
+  return `<article data-seo-prerender="card-home" style="${ARTICLE}">${buildHomeIntroContent()}
+${buildHomeExtraContent()}
   </article>`;
 }
