@@ -584,14 +584,29 @@ for (const route of SEO_ROUTES) {
   console.log(`[prerender] ${route} -> ${filePath}`);
 }
 
-const notFoundHtml = applyMeta(template, {
-  title: "페이지를 찾을 수 없습니다 | 카드 계산기",
-  description: "요청한 카드 계산기 페이지를 찾을 수 없습니다.",
-  canonical: `${SITE_URL}/404`,
-  appPath: "/404",
-  jsonLd: null,
-  breadcrumb: null,
-}, "/404")
+// The 404 shell must not carry the AdSense loader. The page it renders is a
+// heading plus a recovery link -- a few dozen characters -- and serving ads on a
+// screen with no content is exactly what the "Valuable Inventory" policy
+// forbids. Views that legitimately show ads inject the loader themselves
+// (AdSlot.vue), and NotFoundView renders no ad slot, so dropping the static tag
+// here removes ads from 404 without touching any other route.
+function stripAdsenseLoader(html) {
+  return html.replace(
+    /\n?\s*<script[^>]*\bdata-adsense="true"[^>]*><\/script>/i,
+    "",
+  );
+}
+
+const notFoundHtml = stripAdsenseLoader(
+  applyMeta(template, {
+    title: "페이지를 찾을 수 없습니다 | 카드 계산기",
+    description: "요청한 카드 계산기 페이지를 찾을 수 없습니다.",
+    canonical: `${SITE_URL}/404`,
+    appPath: "/404",
+    jsonLd: null,
+    breadcrumb: null,
+  }, "/404"),
+)
   .replace("</head>", '    <meta name="robots" content="noindex,nofollow" />\n  </head>')
   .replace(
     /<noscript>[\s\S]*?<\/noscript>/i,

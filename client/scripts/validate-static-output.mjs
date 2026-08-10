@@ -242,6 +242,33 @@ function validateAliasesAndNotFound() {
     "404.html must be noindex,nofollow");
   assert(notFoundHtml.includes('href="/card/fuel-card"'),
     "404.html must contain a recovery link");
+
+  // The 404 screen is a heading and a link. Loading the ad script there puts
+  // ads on a page with no content, which AdSense treats as a Valuable Inventory
+  // violation. The shell template carries the loader for every other route, so
+  // this only stays removed as long as something checks.
+  assert(!/googlesyndication\.com|adsbygoogle/i.test(notFoundHtml),
+    "404.html must not load the AdSense script (Valuable Inventory: no ads on a contentless screen)");
+}
+
+// The AdSense review requires the privacy policy to disclose third-party ad
+// cookies and to offer an opt-out. Both opt-out destinations are load-bearing:
+// Google's own setting page covers Google, aboutads.info covers everyone else.
+// They live in a single content source now, so a careless edit could drop them
+// from the static file and the rendered page at the same time.
+function validatePolicyDisclosures() {
+  const privacy = readFileSync(outputPathFor("/privacy"), "utf8");
+  const terms = readFileSync(outputPathFor("/terms"), "utf8");
+
+  for (const link of ["https://adssettings.google.com", "https://www.aboutads.info/choices"]) {
+    assert(privacy.includes(link), `/privacy must keep the AdSense opt-out link ${link}`);
+  }
+  assert(/제3자 광고 사업자/.test(privacy),
+    "/privacy must disclose third-party ad cookies");
+  assert(/맞춤 광고/.test(privacy),
+    "/privacy must explain personalized advertising");
+  assert(terms.includes('href="/card/privacy"'),
+    "/terms must point at the privacy policy for the ad cookie disclosure");
 }
 
 // Visible text of the page's OWN prerendered body -- only the
@@ -276,10 +303,11 @@ function prerenderedBodyChars(html) {
 const THIN_CONTENT_FLOOR = 1500;
 
 function validateContentDepth() {
-  // The home and the /all hub sit above every calculator, and the consolidation
-  // targets now absorb 19 variants' worth of signal. All of them have to clear
-  // the floor on their own.
-  const targets = new Set(["/", "/all", ...PARAM_ROUTES.map(canonicalPathFor)]);
+  // Every URL the sitemap advertises has to clear the floor, not just the hubs.
+  // The earlier target set (home, /all, consolidation targets) let /terms and
+  // /privacy ship at 949 and 1,198 characters -- the two pages an AdSense
+  // reviewer opens first. Widening the set is what keeps that from recurring.
+  const targets = new Set([...SITEMAP_ROUTES, ...PARAM_ROUTES.map(canonicalPathFor)]);
 
   for (const route of targets) {
     const chars = prerenderedBodyChars(readFileSync(outputPathFor(route), "utf8"));
@@ -307,6 +335,7 @@ validateConsolidation();
 validateContentDepth();
 validateHome();
 validateAliasesAndNotFound();
+validatePolicyDisclosures();
 validateFuelTypeContent();
 
 console.log(
