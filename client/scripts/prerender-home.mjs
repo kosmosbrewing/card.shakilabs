@@ -40,6 +40,33 @@ const STEPS = [
 // Failure modes that flip a conclusion. Kept distinct from STEPS (a procedure)
 // and from the /all directory (which tool to open) so the home does not repeat
 // either one -- duplicated blocks were the actual thin-content problem here.
+// What the app actually computes. STEPS is a procedure and PITFALLS are failure
+// modes; neither says what the numbers on the result screens mean. Ten tools
+// share exactly four output metrics, so defining them once on the home makes
+// every calculator readable without repeating the definition on each one.
+const METRICS = [
+  [
+    "연간 절약액",
+    "월 지출에 카드 혜택률을 적용하고 월 할인 한도로 자른 뒤 12개월을 더합니다.",
+    "한도에 걸리는 달이 있으면 지출을 더 늘려도 이 값은 오르지 않습니다.",
+  ],
+  [
+    "순혜택",
+    "연간 절약액에서 연회비와 실적을 채우려고 추가로 쓴 금액을 뺍니다.",
+    "열 개 계산기가 모두 이 값으로 순위를 매기므로, 서로 다른 계산기의 결과도 이 값끼리 비교하면 됩니다.",
+  ],
+  [
+    "회수 기간",
+    "연회비를 월 평균 절약액으로 나눠 몇 개월 만에 본전이 되는지 계산합니다.",
+    "12개월을 넘으면 1년을 다 써도 연회비를 못 뽑는다는 뜻입니다.",
+  ],
+  [
+    "실질 가치",
+    "포인트·마일리지를 전환처와 노선별로 원화 환산액으로 바꿉니다.",
+    "1포인트가 1원에 못 미치면 현금성으로 쓰는 편이 낫습니다.",
+  ],
+];
+
 const PITFALLS = [
   [
     "월 할인 한도를 안 본다",
@@ -150,10 +177,35 @@ export function buildHomeExtraContent() {
         </tr>`,
   ).join("");
 
+  const metricRows = METRICS.map(
+    ([name, how, read]) => `
+        <tr>
+          <td style="${TD}"><strong>${name}</strong></td>
+          <td style="${TD}">${how}</td>
+          <td style="${TD}">${read}</td>
+        </tr>`,
+  ).join("");
+
   return `
     <div style="${CALLOUT}">
       할인율이 가장 높은 카드가 항상 유리한 것은 아닙니다. 월 할인 한도에 먼저 걸리면 소비를 늘려도 절약액은 그대로입니다.
     </div>
+
+    <h2 style="${H2}">계산기가 내놓는 네 가지 숫자</h2>
+    <p style="${P}">
+      계산기마다 화면은 다르지만 결론에 쓰는 지표는 네 가지입니다. 이 네 값의 뜻을 알아두면 어떤 계산기를 열어도 결과를 같은 방식으로 읽을 수 있습니다.
+    </p>
+    <table style="${TABLE}">
+      <thead>
+        <tr>
+          <th style="${TH}">지표</th>
+          <th style="${TH}">어떻게 계산하나</th>
+          <th style="${TH}">어떻게 읽나</th>
+        </tr>
+      </thead>
+      <tbody>${metricRows}
+      </tbody>
+    </table>
 
     <h2 style="${H2}">혜택 계산에서 자주 놓치는 것</h2>
     <p style="${P}">아래 네 가지는 계산에 넣고 빼는 것만으로 "어느 카드가 유리한가"의 답이 뒤집히는 항목입니다.</p>
@@ -182,7 +234,11 @@ export function buildHomeExtraContent() {
     <h3 style="${H3}">Q3. 개인정보나 카드번호를 입력해야 하나요?</h3>
     <p style="${P}">입력값은 월 지출 금액처럼 계산에 필요한 숫자뿐이며 모두 브라우저 안에서만 처리됩니다. 카드번호나 개인정보를 입력받지 않고 서버로 전송하지도 않습니다.</p>
     <h3 style="${H3}">Q4. 이용료가 있나요?</h3>
-    <p style="${P}">모든 계산기는 무료입니다. 본 서비스는 금융 상품을 판매하거나 중개하지 않으며, 특정 카드사의 발급을 권유하지 않습니다.</p>`;
+    <p style="${P}">모든 계산기는 무료입니다. 본 서비스는 금융 상품을 판매하거나 중개하지 않으며, 특정 카드사의 발급을 권유하지 않습니다.</p>
+    <h3 style="${H3}">Q5. 계산 결과가 카드사 광고보다 적게 나옵니다.</h3>
+    <p style="${P}">카드사 안내는 보통 조건이 전부 맞아떨어졌을 때의 최대 할인율을 앞세웁니다. 이 계산기는 월 할인 한도와 전월 실적, 연회비를 모두 적용한 뒤의 금액을 보여주므로 광고 문구보다 작게 나오는 것이 정상입니다. 두 숫자가 크게 벌어진다면 한도에 먼저 걸리고 있다는 신호입니다.</p>
+    <h3 style="${H3}">Q6. 계산기를 여러 개 써야 하나요?</h3>
+    <p style="${P}">보통은 하나로 끝납니다. 지출이 한 항목에 몰려 있으면 그 계산기 하나면 충분하고, 주유와 해외결제처럼 두 항목이 모두 크면 각각의 순혜택을 더해 카드 한 장으로 둘 다 감당되는지 보면 됩니다.</p>`;
 }
 
 export function buildHomeContent() {

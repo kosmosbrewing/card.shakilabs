@@ -279,6 +279,14 @@ function validatePolicyDisclosures() {
 // content floor purely on navigation boilerplate. Measuring the article alone
 // is also what the audit baseline used (/fuel-card measures 3,059 either way,
 // but /all was 322 only because chrome was excluded).
+//
+// Whitespace is stripped, not collapsed to single spaces, and that is the whole
+// difference between this gate passing and the page actually being thin.
+// Korean prose runs ~23% whitespace, so a collapsed-space count reads ~30%
+// higher than the character count a content audit reports. This gate said "pass"
+// on the home (1,963 collapsed) and on /all (2,140) while the live audit put the
+// same two pages at 1,447 and 1,484 -- below the floor. Same floor, same pages,
+// opposite verdicts, purely from counting the spaces. Strip them.
 function prerenderedBodyChars(html) {
   const articles = [
     ...html.matchAll(/<article[^>]*\bdata-seo-prerender\b[^>]*>([\s\S]*?)<\/article>/gi),
@@ -291,15 +299,15 @@ function prerenderedBodyChars(html) {
         .replace(/<style\b[\s\S]*?<\/style>/gi, " ")
         .replace(/<[^>]+>/g, " ")
         .replace(/&[a-z]+;/gi, " ")
-        .replace(/\s+/g, " ")
-        .trim(),
+        .replace(/\s+/g, ""),
     )
     .reduce((total, text) => total + text.length, 0);
 }
 
 // Pages that receive canonical signals must not themselves be thin: a hub or a
 // consolidation target that reads as a bare link list wastes the authority the
-// variants hand it. 1,500 characters is the floor used across the apps.
+// variants hand it. 1,500 characters is the floor used across the apps, counted
+// with whitespace stripped (see prerenderedBodyChars).
 const THIN_CONTENT_FLOOR = 1500;
 
 function validateContentDepth() {

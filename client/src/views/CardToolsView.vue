@@ -17,7 +17,8 @@ import { CARD_TOOL_GROUPS } from "@/data/cardNavigation";
       <ShText as="h1" variant="display" class="mt-2">카드를 고르기 전에 목적부터 정리하세요</ShText>
       <ShText tone="muted" class="mt-3 max-w-3xl">
         혜택 회수, 해외 결제, 포인트 관리 중 지금 필요한 결정과 가까운 묶음에서 시작하세요.
-        각 도구에는 "언제 쓰는가"를 함께 적어 두었으니, 계산기 이름이 아니라 지금 겪고 있는 상황과 맞는 쪽을 고르면 됩니다.
+        각 도구에는 "언제 쓰는가"와 "무엇을 넣으면 무엇이 나오는가"를 함께 적어 두었습니다.
+        계산기 이름이 아니라 지금 겪고 있는 상황과 맞는 쪽을 고르고, 필요한 입력값이 손에 있는지 열기 전에 확인하세요.
       </ShText>
       <ShText tone="muted" class="mt-3 max-w-3xl">
         카드 혜택은 할인율만 보면 실제 절약액을 크게 벗어납니다. 월 할인 한도, 전월 실적 조건, 연회비 세 가지가 함께 걸리기 때문입니다.
@@ -35,8 +36,11 @@ import { CARD_TOOL_GROUPS } from "@/data/cardNavigation";
           <ShSurface variant="outlined" padding="md" class="group flex h-full flex-col hover:border-primary">
             <ShText as="h3" variant="heading">{{ tool.title }}</ShText>
             <ShText variant="caption" tone="muted" class="mt-2">{{ tool.description }}</ShText>
-            <ShText variant="caption" tone="muted" class="mt-3 flex-1">
+            <ShText variant="caption" tone="muted" class="mt-3">
               <strong class="text-foreground">언제 쓰나요?</strong> {{ tool.whenToUse }}
+            </ShText>
+            <ShText variant="caption" tone="muted" class="mt-2 flex-1">
+              <strong class="text-foreground">무엇이 나오나요?</strong> {{ tool.inputsOutputs }}
             </ShText>
             <span class="mt-4 inline-flex items-center gap-1 text-caption font-semibold text-primary">
               계산 시작 <ArrowRight class="h-4 w-4" aria-hidden="true" />
