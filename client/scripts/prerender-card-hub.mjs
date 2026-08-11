@@ -9,6 +9,9 @@
 // Why the hub carries this at all: a bare list of links is a thin page. The
 // directory has to help pick a tool, which means saying when each calculator
 // changes the answer, not just what it computes.
+//
+// 색상은 리터럴 hex가 아니라 테마 토큰(hsl(var(--...)))을 쓴다. prerender-content.mjs와
+// 같은 규칙이다. 하드코딩된 밝은색 계열은 다크 모드에서 배경과 같은 톤이 되어 글이 안 보인다.
 const groups = [
   {
     title: "혜택·고정지출",
@@ -101,12 +104,12 @@ export function buildCardHubContent() {
       (group) => `
     <section style="margin-top:24px;">
       <h2 style="font-size:20px;margin:0 0 6px;">${group.title}</h2>
-      <p style="margin:0 0 10px;color:#475569;">${group.description}</p>
+      <p style="margin:0 0 10px;color:hsl(var(--muted-foreground));">${group.description}</p>
       <ul style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;list-style:none;margin:0;padding:0;">
         ${group.tools
           .map(
             ([path, label, whenToUse]) =>
-              `<li style="border:1px solid #cbd5e1;padding:12px;"><a href="/card${path}" style="text-decoration:none;color:#0f172a;font-weight:600;">${label} 계산하기 →</a><p style="margin:6px 0 0;color:#475569;font-size:14px;"><strong>언제 쓰나요?</strong> ${whenToUse}</p></li>`,
+              `<li style="border:1px solid hsl(var(--border));padding:12px;"><a href="/card${path}" style="text-decoration:none;color:hsl(var(--foreground));font-weight:600;">${label} 계산하기 →</a><p style="margin:6px 0 0;color:hsl(var(--muted-foreground));font-size:14px;"><strong>언제 쓰나요?</strong> ${whenToUse}</p></li>`,
           )
           .join("")}
       </ul>
@@ -121,14 +124,14 @@ export function buildCardHubContent() {
 
   return `<article data-seo-prerender="card-tool-directory" style="max-width:920px;margin:0 auto;padding:24px 16px;line-height:1.65;">
     <h1 style="font-size:28px;margin:0 0 10px;">목적별 카드 계산기 전체 보기</h1>
-    <p style="margin:0 0 10px;color:#475569;">혜택 회수, 해외 결제, 포인트 관리 중 지금 필요한 결정과 가까운 도구에서 시작하세요. 각 도구에는 "언제 쓰는가"를 함께 적어 두었으니, 계산기 이름이 아니라 지금 겪고 있는 상황과 맞는 쪽을 고르면 됩니다.</p>
-    <p style="margin:0;color:#475569;">카드 혜택은 할인율만 보면 실제 절약액을 크게 벗어납니다. 월 할인 한도, 전월 실적 조건, 연회비 세 가지가 함께 걸리기 때문입니다. 아래 계산기는 모두 이 세 가지를 반영한 순혜택 기준으로 결과를 냅니다. 회원가입이나 카드번호 입력 없이 금액만 넣으면 됩니다.</p>
+    <p style="margin:0 0 10px;color:hsl(var(--muted-foreground));">혜택 회수, 해외 결제, 포인트 관리 중 지금 필요한 결정과 가까운 도구에서 시작하세요. 각 도구에는 "언제 쓰는가"를 함께 적어 두었으니, 계산기 이름이 아니라 지금 겪고 있는 상황과 맞는 쪽을 고르면 됩니다.</p>
+    <p style="margin:0;color:hsl(var(--muted-foreground));">카드 혜택은 할인율만 보면 실제 절약액을 크게 벗어납니다. 월 할인 한도, 전월 실적 조건, 연회비 세 가지가 함께 걸리기 때문입니다. 아래 계산기는 모두 이 세 가지를 반영한 순혜택 기준으로 결과를 냅니다. 회원가입이나 카드번호 입력 없이 금액만 넣으면 됩니다.</p>
     ${sections}
     <section style="margin-top:28px;">
       <h2 style="font-size:20px;margin:0 0 6px;">어떤 계산기부터 열어야 하나요</h2>
-      <p style="margin:0 0 10px;color:#475569;">도구가 여러 개라 어디서 시작할지 모르겠다면 아래 순서대로 확인하면 대부분의 카드 선택이 끝납니다.</p>
-      <ol style="margin:0 0 12px 20px;padding:0;color:#475569;">${steps}</ol>
-      <p style="margin:0;color:#475569;font-size:14px;">계산 결과는 입력한 금액과 공개된 카드 상품 조건에 근거한 추정치입니다. 실제 청구액과 다를 수 있으며 최종 조건은 각 카드사 공식 안내에서 확인해야 합니다.</p>
+      <p style="margin:0 0 10px;color:hsl(var(--muted-foreground));">도구가 여러 개라 어디서 시작할지 모르겠다면 아래 순서대로 확인하면 대부분의 카드 선택이 끝납니다.</p>
+      <ol style="margin:0 0 12px 20px;padding:0;color:hsl(var(--muted-foreground));">${steps}</ol>
+      <p style="margin:0;color:hsl(var(--muted-foreground));font-size:14px;">계산 결과는 입력한 금액과 공개된 카드 상품 조건에 근거한 추정치입니다. 실제 청구액과 다를 수 있으며 최종 조건은 각 카드사 공식 안내에서 확인해야 합니다.</p>
     </section>
   </article>`;
 }

@@ -485,3 +485,14 @@ nav[aria-label="주요 메뉴"] .tab-scroll > a[aria-current="page"] {
 .sh-ranked-bars .sh-chart-fill--muted {
   fill: hsl(var(--primary) / 0.65);
 }
+
+/* ui 0.3.12 푸터 보조 텍스트 대비 보정.
+   패키지는 카테고리 라벨과 각주를 color-mix(--sh-color-text 55%, transparent)로 칠한다.
+   알파 55%는 라이트 푸터 배경(muted 8% + canvas = rgb(234,237,241)) 위에서 3.82:1이라
+   AA 미달이다. 다크는 5.29:1로 통과라 라이트만 무너지는 조합이었다.
+   알파를 걷고 --muted-foreground를 쓰면 라이트 5.81:1 · 다크 7.53:1이 된다.
+   패키지가 같은 값으로 올라오면 이 블록을 지운다. */
+.sh-site-footer__category-label,
+.sh-site-footer__note {
+  color: hsl(var(--muted-foreground));
+}

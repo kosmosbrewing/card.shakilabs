@@ -90,7 +90,10 @@
         --accent-foreground: 174 60% 28%;
         --popover: 0 0% 100%;
         --popover-foreground: 222 47% 11%;
-        --destructive: 0 72% 52%;
+        /* 0 72% 52%는 --background(210 40% 98%) 위 4.49:1로 AA 문턱을 살짝 밑돌았다.
+           text-destructive는 입력 검증 에러 문구에 쓰이는 본문 텍스트다.
+           이미 같은 파일이 쓰는 통과값 --loss/--status-danger(0 74% 42%)로 통일한다. */
+        --destructive: 0 74% 42%;
         --destructive-foreground: 210 40% 98%;
         --border: 214 16% 85%;
         --input: 214 16% 85%;
@@ -101,6 +104,8 @@
         --loss: 0 74% 42%;
         --loss-foreground: 0 0% 100%;
 
+        /* 라이트 의미색은 카드(0 0% 100%) 위 6.41~7.42:1로 전부 통과 상태다.
+           불필요한 시각 변화를 피하려고 실측 후 의도적으로 그대로 둔다. */
         --status-success: 142 64% 24%;
         --status-warning: 24 83% 31%;
         --status-caution: 17 79% 34%;
@@ -123,16 +128,26 @@
         --accent-foreground: 174 60% 75%;
         --popover: 217 33% 17%;
         --popover-foreground: 210 40% 96%;
-        --destructive: 0 72% 58%;
-        --destructive-foreground: 0 0% 100%;
+        /* 다크 빨강은 두 방향으로 동시에 미달이었다. 글자로 쓰면 카드(217 33% 17%) 위
+           3.66:1, 배경으로 쓰면(에러 토스트 bg-destructive) 위의 흰 글자가 4.05:1.
+           명도를 올려 글자 쪽을 통과시키고, 짝 토큰은 --primary-foreground와 같은
+           방식으로 hue를 유지한 채 어둡게 바꿔 배경 쪽도 통과시킨다. */
+        --destructive: 0 75% 72%;
+        --destructive-foreground: 0 65% 12%;
         --border: 214 16% 26%;
         --input: 214 16% 30%;
         --ring: 174 70% 45%;
         --savings: 160 56% 50%;
-        --savings-foreground: 0 0% 100%;
-        --loss: 0 62% 58%;
-        --loss-foreground: 0 0% 100%;
+        /* bg-savings 위 흰 글자는 2.15:1이었다. 지금은 솔리드 사용처가 없지만
+           값이 남아 있으면 다음에 배지 하나 만들 때 그대로 새는 함정이 된다. */
+        --savings-foreground: 160 70% 10%;
+        /* text-loss는 손해 금액 텍스트다(DCC 차액·면세 초과 세금·비교표 음수).
+           0 62% 58%는 카드 위 3.66:1, bg-loss/10 틴트 위 3.34:1로 AA 미달이었다.
+           8개 저장소에 같은 리터럴이 복제돼 있어 공통 상향값으로 통일한다. */
+        --loss: 0 75% 72%;
+        --loss-foreground: 0 65% 12%;
 
+        /* 다크 의미색은 카드 위 5.81~10.26:1로 전부 통과 — 실측 후 그대로 둔다. */
         --status-success: 148 63% 66%;
         --status-warning: 43 95% 70%;
         --status-caution: 28 91% 66%;

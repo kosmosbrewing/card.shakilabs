@@ -157,9 +157,9 @@ function buildFuelCardIssuerContent(issuer) {
   if (!data) return null;
   return `
     <article data-seo-prerender="fuel-card-issuer" style="${ARTICLE}">
-      <nav aria-label="breadcrumb" style="font-size:13px;color:#64748b;margin-bottom:10px;">
-        <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">홈</a> ›
-        <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">주유 할인카드</a> ›
+      <nav aria-label="breadcrumb" style="font-size:13px;color:hsl(var(--muted-foreground));margin-bottom:10px;">
+        <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">홈</a> ›
+        <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">주유 할인카드</a> ›
         ${data.label}
       </nav>
 
@@ -254,7 +254,7 @@ function buildFuelCardIssuerContent(issuer) {
         <li style="${LI}"><a href="/card/fuel-card">전체 주유카드 비교</a></li>
       </ul>
 
-      <p style="font-size:12px;color:#64748b;margin-top:24px;">
+      <p style="font-size:12px;color:hsl(var(--muted-foreground));margin-top:24px;">
         ※ 본 페이지는 ${data.label} 공식 페이지에서 확인 가능한 공개 정보를 기반으로 작성되었으며,
         혜택·한도는 카드사의 정책에 따라 변경될 수 있습니다. 최종 가입 조건은 ${data.label} 공식 페이지에서 확인하세요.
       </p>
@@ -291,9 +291,9 @@ function buildFuelTypeContent(fuelType) {
 
   return `
     <article data-seo-prerender="fuel-card-type" style="${ARTICLE}">
-      <nav aria-label="breadcrumb" style="font-size:13px;color:#64748b;margin-bottom:10px;">
-        <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">홈</a> ›
-        <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">주유 할인카드</a> ›
+      <nav aria-label="breadcrumb" style="font-size:13px;color:hsl(var(--muted-foreground));margin-bottom:10px;">
+        <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">홈</a> ›
+        <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">주유 할인카드</a> ›
         ${label}
       </nav>
 
@@ -392,7 +392,7 @@ function buildFuelTypeContent(fuelType) {
         <li style="${LI}"><a href="/card/annual-fee">연회비 비교</a></li>
       </ul>
 
-      <p style="font-size:12px;color:#64748b;margin-top:24px;">
+      <p style="font-size:12px;color:hsl(var(--muted-foreground));margin-top:24px;">
         ※ 본 페이지는 공개된 카드사 약관·혜택 정보를 기반으로 작성되며, 최종 가입 조건은 각 카드사 공식 페이지에서 확인해야 합니다.
       </p>
     </article>`;
@@ -408,9 +408,9 @@ function buildFuelMonthlyContent(amount) {
 
   return `
     <article data-seo-prerender="fuel-card-monthly" style="${ARTICLE}">
-      <nav aria-label="breadcrumb" style="font-size:13px;color:#64748b;margin-bottom:10px;">
-        <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">홈</a> ›
-        <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">주유 할인카드</a> ›
+      <nav aria-label="breadcrumb" style="font-size:13px;color:hsl(var(--muted-foreground));margin-bottom:10px;">
+        <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">홈</a> ›
+        <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">주유 할인카드</a> ›
         월 ${amountLabel}원
       </nav>
 
@@ -418,7 +418,7 @@ function buildFuelMonthlyContent(amount) {
 
       <p style="${P}">
         월 주유비 <strong>${amountLabel}원</strong> 기준 주유 할인카드를 사용할 경우
-        월 약 <strong style="color:#047857;">${discount.toLocaleString("ko-KR")}원</strong>,
+        월 약 <strong style="color:hsl(var(--savings));">${discount.toLocaleString("ko-KR")}원</strong>,
         연간 약 <strong>${annual.toLocaleString("ko-KR")}원</strong>을 절약할 수 있습니다.
       </p>
 
@@ -493,7 +493,7 @@ function buildFuelMonthlyContent(amount) {
         <li style="${LI}"><a href="/card/min-spend">최소 실적 조건</a></li>
       </ul>
 
-      <p style="font-size:12px;color:#64748b;margin-top:24px;">
+      <p style="font-size:12px;color:hsl(var(--muted-foreground));margin-top:24px;">
         ※ 본 계산은 표준 가정 기준 추정치이며, 실제 할인액은 카드사·주유소·실적 조건에 따라 다를 수 있습니다.
       </p>
     </article>`;
@@ -512,9 +512,9 @@ function buildOverseasCurrencyContent(currency) {
 
   return `
     <article data-seo-prerender="overseas-currency" style="${ARTICLE}">
-      <nav aria-label="breadcrumb" style="font-size:13px;color:#64748b;margin-bottom:10px;">
-        <a href="/card/fuel-card" style="color:#64748b;text-decoration:none;">홈</a> ›
-        <a href="/card/overseas-payment" style="color:#64748b;text-decoration:none;">해외결제</a> ›
+      <nav aria-label="breadcrumb" style="font-size:13px;color:hsl(var(--muted-foreground));margin-bottom:10px;">
+        <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">홈</a> ›
+        <a href="/card/overseas-payment" style="color:hsl(var(--muted-foreground));text-decoration:none;">해외결제</a> ›
         ${data.label}
       </nav>
 
@@ -522,7 +522,7 @@ function buildOverseasCurrencyContent(currency) {
 
       <p style="${P}">
         <strong>${data.country}</strong>에서 신용카드로 결제하거나 ${data.label} 기준 해외 사이트에서 쇼핑할 때
-        부과되는 수수료는 <strong style="color:#047857;">${data.avgFee}</strong> 수준입니다.
+        부과되는 수수료는 <strong style="color:hsl(var(--savings));">${data.avgFee}</strong> 수준입니다.
         ${data.sampleAmount.toLocaleString("ko-KR")} ${data.code}(약 ${sampleKrw.toLocaleString("ko-KR")}원) 결제 시
         수수료는 약 <strong>${feeLow.toLocaleString("ko-KR")}~${feeHigh.toLocaleString("ko-KR")}원</strong>입니다.
       </p>
@@ -575,7 +575,7 @@ function buildOverseasCurrencyContent(currency) {
             <td style="${TD}">카드사 국외이용 수수료 (0.25%)</td>
             <td style="${TD}">+${Math.floor(sampleKrw * 0.0025).toLocaleString("ko-KR")}원</td>
           </tr>
-          <tr style="background:#eff6ff;">
+          <tr style="background:hsl(var(--accent));">
             <td style="${TD}"><strong>총 청구 금액</strong></td>
             <td style="${TD}"><strong>${Math.floor(sampleKrw * 1.0135).toLocaleString("ko-KR")}원</strong></td>
           </tr>
@@ -637,7 +637,7 @@ function buildOverseasCurrencyContent(currency) {
         <li style="${LI}"><a href="/card/overseas-payment">전체 해외결제 비교</a></li>
       </ul>
 
-      <p style="font-size:12px;color:#64748b;margin-top:24px;">
+      <p style="font-size:12px;color:hsl(var(--muted-foreground));margin-top:24px;">
         ※ 본 페이지의 수수료율과 환율은 일반적 기준으로, 실제 결제 금액은 카드사·결제 시점에 따라 다를 수 있습니다.
       </p>
     </article>`;
@@ -968,7 +968,7 @@ function buildStaticContent(route) {
       ${extraSection}
       <h2 style="${H2}">관련 페이지</h2>
       <ul style="${UL}">${linksHtml}</ul>
-      <p style="font-size:12px;color:#64748b;margin-top:24px;">
+      <p style="font-size:12px;color:hsl(var(--muted-foreground));margin-top:24px;">
         ※ 본 페이지는 공개된 카드사 정보를 기반으로 작성되었으며, 최종 가입 조건은 해당 카드사 공식 페이지에서 확인하시기 바랍니다.
       </p>
     </article>`;
