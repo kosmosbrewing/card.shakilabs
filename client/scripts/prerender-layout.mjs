@@ -1,5 +1,9 @@
 // Card 프리렌더 공통 레이아웃 (header + footer)
 // 모든 프리렌더 페이지에 정적으로 주입되어 크롤러의 사이트 항해 신호 확보
+//
+// 색상은 리터럴 hex가 아니라 테마 토큰(hsl(var(--...)))을 쓴다. prerender-content.mjs와
+// 같은 규칙이다. 하드코딩된 밝은색 계열은 다크 모드에서 배경과 같은 톤이 되어 글이 안 보인다.
+// 이 블록은 마운트 직후 제거되지만 그 전까지는 사람이 보는 화면이다.
 
 import { readFileSync } from "node:fs";
 
@@ -22,30 +26,30 @@ function buildOtherServicesBlock() {
       const links = items
         .map(
           (service) =>
-            `<a href="${service.href}" style="color:#64748b;text-decoration:none;margin-right:12px;">${service.shortLabel}</a>`,
+            `<a href="${service.href}" style="color:hsl(var(--muted-foreground));text-decoration:none;margin-right:12px;">${service.shortLabel}</a>`,
         )
         .join("");
-      return `<p style="margin:0 0 4px;"><span style="display:inline-block;min-width:78px;color:#94a3b8;">${category.label}</span>${links}</p>`;
+      return `<p style="margin:0 0 4px;"><span style="display:inline-block;min-width:78px;color:hsl(var(--muted-foreground));">${category.label}</span>${links}</p>`;
     })
     .filter(Boolean)
     .join("");
-  return `<nav aria-label="다른 서비스" style="margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #e2e8f0;font-size:12px;line-height:2;">
-        <p style="margin:0 0 8px;font-size:13px;font-weight:700;color:#334155;">다른 서비스</p>
+  return `<nav aria-label="다른 서비스" style="margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid hsl(var(--border));font-size:12px;line-height:2;">
+        <p style="margin:0 0 8px;font-size:13px;font-weight:700;color:hsl(var(--muted-foreground));">다른 서비스</p>
         ${rows}
       </nav>`;
 }
 
 export function buildPrerenderHeader() {
   return `
-    <header data-seo-prerender="header" style="max-width:1120px;margin:0 auto;padding:14px 16px;border-bottom:1px solid #e2e8f0;">
+    <header data-seo-prerender="header" style="max-width:1120px;margin:0 auto;padding:14px 16px;border-bottom:1px solid hsl(var(--border));">
       <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-        <a href="/card/fuel-card" style="font-weight:700;font-size:18px;color:#0f172a;text-decoration:none;">ShakiLabs 카드 계산기</a>
+        <a href="/card/fuel-card" style="font-weight:700;font-size:18px;color:hsl(var(--foreground));text-decoration:none;">ShakiLabs 카드 계산기</a>
         <nav aria-label="주요 메뉴" style="display:flex;gap:16px;flex-wrap:wrap;font-size:14px;">
-          <a href="/card/fuel-card" style="color:#334155;text-decoration:none;">주유 할인카드</a>
-          <a href="/card/overseas-payment" style="color:#334155;text-decoration:none;">해외결제</a>
-          <a href="/card/annual-fee" style="color:#334155;text-decoration:none;">연회비</a>
-          <a href="/card/mileage" style="color:#334155;text-decoration:none;">마일리지</a>
-          <a href="/card/about" style="color:#334155;text-decoration:none;">서비스 소개</a>
+          <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">주유 할인카드</a>
+          <a href="/card/overseas-payment" style="color:hsl(var(--muted-foreground));text-decoration:none;">해외결제</a>
+          <a href="/card/annual-fee" style="color:hsl(var(--muted-foreground));text-decoration:none;">연회비</a>
+          <a href="/card/mileage" style="color:hsl(var(--muted-foreground));text-decoration:none;">마일리지</a>
+          <a href="/card/about" style="color:hsl(var(--muted-foreground));text-decoration:none;">서비스 소개</a>
         </nav>
       </div>
     </header>`;
@@ -89,29 +93,29 @@ export function buildPrerenderFooter() {
       const links = items
         .map(
           (item) =>
-            `<li style="margin-bottom:4px;"><a href="${item.href}" style="color:#64748b;text-decoration:none;font-size:13px;">${item.label}</a></li>`
+            `<li style="margin-bottom:4px;"><a href="${item.href}" style="color:hsl(var(--muted-foreground));text-decoration:none;font-size:13px;">${item.label}</a></li>`
         )
         .join("");
       return `
       <div>
-        <h3 style="font-size:13px;font-weight:700;color:#334155;margin:0 0 8px;">${category}</h3>
+        <h3 style="font-size:13px;font-weight:700;color:hsl(var(--muted-foreground));margin:0 0 8px;">${category}</h3>
         <ul style="list-style:none;padding:0;margin:0;">${links}</ul>
       </div>`;
     })
     .join("");
 
   return `
-    <footer data-seo-prerender="footer" style="max-width:1120px;margin:40px auto 0;padding:24px 16px;border-top:1px solid #e2e8f0;background:#f8fafc;">
+    <footer data-seo-prerender="footer" style="max-width:1120px;margin:40px auto 0;padding:24px 16px;border-top:1px solid hsl(var(--border));background:hsl(var(--muted));">
       <nav aria-label="카드 계산기 전체" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:20px;">
         ${blocks}
       </nav>
       ${buildOtherServicesBlock()}
-      <div style="padding-top:16px;border-top:1px solid #e2e8f0;font-size:12px;color:#64748b;line-height:1.8;">
-        <p style="margin:0 0 6px;">운영 <strong>Shakilabs</strong> · 문의 <a href="mailto:skdba1313@gmail.com" style="color:#64748b;">skdba1313@gmail.com</a></p>
+      <div style="padding-top:16px;border-top:1px solid hsl(var(--border));font-size:12px;color:hsl(var(--muted-foreground));line-height:1.8;">
+        <p style="margin:0 0 6px;">운영 <strong>Shakilabs</strong> · 문의 <a href="mailto:skdba1313@gmail.com" style="color:hsl(var(--muted-foreground));">skdba1313@gmail.com</a></p>
         <p style="margin:0 0 6px;">
-          <a href="/card/about" style="color:#64748b;margin-right:12px;">서비스 소개</a>
-          <a href="/card/privacy" style="color:#64748b;margin-right:12px;">개인정보처리방침</a>
-          <a href="/card/terms" style="color:#64748b;">이용약관</a>
+          <a href="/card/about" style="color:hsl(var(--muted-foreground));margin-right:12px;">서비스 소개</a>
+          <a href="/card/privacy" style="color:hsl(var(--muted-foreground));margin-right:12px;">개인정보처리방침</a>
+          <a href="/card/terms" style="color:hsl(var(--muted-foreground));">이용약관</a>
         </p>
         <p style="margin:0;">
           본 서비스의 카드 정보는 각 카드사 공식 페이지에서 확인 가능한 공개 데이터를 기반으로 합니다.

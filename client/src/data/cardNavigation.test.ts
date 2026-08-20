@@ -27,6 +27,8 @@ describe("card navigation", () => {
 
   // 허브(/all)는 하이드레이션 뒤에는 이 뷰가, 크롤러에게는 프리렌더 HTML이 보인다.
   // 둘 중 하나만 두꺼우면 얇은 페이지 문제가 그대로 남으므로 같은 문장을 강제한다.
+  // 한쪽에만 문장을 추가하면 JS 끔/켬 자수 비율이 무너진다 — 실제로 이 앱은
+  // 프리렌더에만 본문이 있던 결함을 한 번 겪었다(seo/guideRoutes.ts 주석 참고).
   it("keeps every whenToUse sentence in sync with the prerendered hub", () => {
     const tools = CARD_TOOL_GROUPS.flatMap((group) => group.tools);
 
@@ -39,18 +41,36 @@ describe("card navigation", () => {
     }
   });
 
+  it("keeps every inputsOutputs sentence in sync with the prerendered hub", () => {
+    const tools = CARD_TOOL_GROUPS.flatMap((group) => group.tools);
+
+    for (const tool of tools) {
+      expect(tool.inputsOutputs.length).toBeGreaterThan(50);
+      expect(
+        HUB_PRERENDER_SOURCE.includes(tool.inputsOutputs),
+        `prerender-card-hub.mjs is missing the inputsOutputs copy for ${tool.path}`,
+      ).toBe(true);
+      // 입력과 결과를 둘 다 말해야 "무엇이 나오나요?"라는 물음에 답이 된다.
+      // 입력만 적힌 문장은 whenToUse의 재탕이 되고, 결과만 적힌 문장은
+      // 계산기를 열기 전에 무엇을 준비해야 하는지 알려주지 못한다.
+      expect(tool.inputsOutputs, tool.path).toMatch(/넣으면|고르면/);
+      expect(tool.inputsOutputs, tool.path).toMatch(/나옵니다/);
+    }
+  });
+
   // 허브가 다시 링크 목록으로 축소되는 것을 막는 하한선.
   // 페이지 전체의 1,500자 기준은 실제 산출물(dist/all/index.html)에서
   // scripts/validate-static-output.mjs가 검사한다 — 여기서는 뷰가 렌더하는
   // 안내 문구가 통째로 사라지지 않았는지만 본다.
-  // 1,000자는 현재 값(1,055자)에 가깝게 잡은 회귀 방지선이다. 링크 라벨만 남으면
-  // 이 값은 0에 수렴하므로, 도구 하나가 통째로 설명을 잃어도 여기서 걸린다.
+  // 1,700자는 현재 값(1,055 + 상황·결과 문장)에 가깝게 잡은 회귀 방지선이다.
+  // 링크 라벨만 남으면 이 값은 0에 수렴하므로, 도구 하나가 통째로 설명을 잃어도
+  // 여기서 걸린다.
   it("carries substantive per-tool guidance, not just link labels", () => {
     const guidanceChars = CARD_TOOL_GROUPS.flatMap((group) => group.tools).reduce(
-      (total, tool) => total + tool.whenToUse.length,
+      (total, tool) => total + tool.whenToUse.length + tool.inputsOutputs.length,
       0,
     );
 
-    expect(guidanceChars).toBeGreaterThan(1000);
+    expect(guidanceChars).toBeGreaterThan(1700);
   });
 });
