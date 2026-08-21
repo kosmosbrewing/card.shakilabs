@@ -115,7 +115,10 @@ export function buildPrerenderFooter() {
         <p style="margin:0 0 6px;">
           <a href="/card/about" style="color:hsl(var(--muted-foreground));margin-right:12px;">서비스 소개</a>
           <a href="/card/privacy" style="color:hsl(var(--muted-foreground));margin-right:12px;">개인정보처리방침</a>
-          <a href="/card/terms" style="color:hsl(var(--muted-foreground));">이용약관</a>
+          <a href="/card/terms" style="color:hsl(var(--muted-foreground));margin-right:12px;">이용약관</a>
+          <!-- 블로그는 root 앱 소유(shakilabs.com/blog). JS 없는 크롤러에게도 도달 경로를 주려면
+               Vue 푸터뿐 아니라 이 정적 푸터에도 같은 절대경로가 있어야 한다. -->
+          <a href="/blog" style="color:hsl(var(--muted-foreground));">블로그</a>
         </p>
         <p style="margin:0;">
           본 서비스의 카드 정보는 각 카드사 공식 페이지에서 확인 가능한 공개 데이터를 기반으로 합니다.
