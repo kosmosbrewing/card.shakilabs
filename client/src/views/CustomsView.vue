@@ -65,15 +65,15 @@ const taxSegments = computed(() => [
     <div class="grid gap-3 md:grid-cols-3">
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">총 결제 금액</p>
-        <p class="mt-2 text-h2 font-bold text-foreground">{{ result.totalUsd.toLocaleString() }}달러</p>
+        <p class="mt-2 text-heading font-bold text-foreground">{{ result.totalUsd.toLocaleString() }}달러</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">예상 관부가세</p>
-        <p class="mt-2 text-h2 font-bold text-primary">{{ formatWon(result.totalTax) }}</p>
+        <p class="mt-2 text-heading font-bold text-primary">{{ formatWon(result.totalTax) }}</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">원화 착지가</p>
-        <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.landedCost) }}</p>
+        <p class="mt-2 text-heading font-bold text-foreground">{{ formatWon(result.landedCost) }}</p>
       </div>
     </div>
 

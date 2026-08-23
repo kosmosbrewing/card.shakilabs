@@ -77,15 +77,15 @@ const formatBenefit = (value: number) =>
     <div class="grid gap-3 md:grid-cols-3">
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">신용카드 순혜택</p>
-        <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.annualCreditBenefit) }}</p>
+        <p class="mt-2 text-heading font-bold text-foreground">{{ formatWon(result.annualCreditBenefit) }}</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">체크카드 순혜택</p>
-        <p class="mt-2 text-h2 font-bold text-foreground">{{ formatWon(result.annualDebitBenefit) }}</p>
+        <p class="mt-2 text-heading font-bold text-foreground">{{ formatWon(result.annualDebitBenefit) }}</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">추천</p>
-        <p class="mt-2 text-h2 font-bold text-primary">{{ result.winner === "credit" ? "신용카드" : "체크카드" }}</p>
+        <p class="mt-2 text-heading font-bold text-primary">{{ result.winner === "credit" ? "신용카드" : "체크카드" }}</p>
       </div>
     </div>
 
