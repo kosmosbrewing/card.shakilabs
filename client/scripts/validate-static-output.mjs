@@ -150,6 +150,92 @@ function validateSitemap() {
   const leaked = actual.filter((url) => variantUrls.has(url));
   assert(leaked.length === 0,
     `Sitemap must not list canonicalized variants: ${leaked.join(", ")}`);
+  return new Set(actual);
+}
+
+// Pulls { path, redirect } out of the router source. The router is the source of
+// truth for what this app actually serves; seo-routes.mjs is a hand-maintained
+// copy of that list, and the defect this gate exists for was the copy drifting
+// away from the original (car shipped a home that no sitemap listed).
+//
+// No fallback on purpose: if the shape of router/index.ts ever changes so this
+// stops matching, the gate must fail loudly instead of quietly validating an
+// empty set and reporting success.
+function parseRouterRoutes(source) {
+  const start = source.search(/const routes\s*:/);
+  assert(start !== -1,
+    "router/index.ts: could not locate the `const routes:` declaration - the "
+      + "route table cannot be extracted, so the sitemap cannot be checked against it");
+  // Bound the slice at the array terminator: everything after it (guards,
+  // analytics hooks) is not a route declaration and must not be scanned.
+  const end = source.indexOf("\n];", start);
+  assert(end !== -1, "router/index.ts: route array is not terminated by `\\n];`");
+  const body = source.slice(start, end);
+
+  const marks = [...body.matchAll(/path:\s*"([^"]+)"/g)].map((match) => ({
+    path: match[1],
+    index: match.index,
+  }));
+  assert(marks.length > 0, "router/index.ts: no route paths were extracted");
+
+  return marks.map((mark, i) => ({
+    path: mark.path,
+    // A route's body runs until the next `path:` declaration.
+    redirect: /redirect:/.test(body.slice(mark.index, marks[i + 1]?.index ?? body.length)),
+  }));
+}
+
+// Bidirectional router <-> sitemap reconciliation.
+//
+// Forward: every static route the router serves must be advertised. A page that
+// returns 200, prerenders fine and is simply absent from sitemap.xml is
+// invisible in the only file that tells a crawler the app's URL inventory, and
+// nothing else in this build would notice.
+//
+// Backward: the sitemap must not advertise a URL the router does not serve, and
+// a redirect route must never be listed - a redirect has no page of its own, so
+// it canonicalizes to its target, and listing it points crawlers at a URL that
+// immediately sends them elsewhere. Checking only the forward rule would accept
+// turning the home back into a redirect while leaving its URL in the sitemap,
+// which is a worse state than the one this gate was written to catch.
+function validateRouterSitemapParity(sitemapUrls) {
+  const routerSource = readFileSync(
+    resolve(projectRoot, "src", "router", "index.ts"),
+    "utf8",
+  );
+  const routerRoutes = parseRouterRoutes(routerSource);
+  const indexRoute = routerRoutes.find((route) => route.path === "/");
+
+  assert(indexRoute, "router/index.ts must register an index route");
+  assert(!indexRoute.redirect,
+    "Index route must render its own view: a redirect home canonicalizes to its "
+      + "target, and a page whose canonical points elsewhere cannot be listed");
+
+  // Parameterised and catch-all routes are not static URLs. Their concrete
+  // instances live in PARAM_ROUTES and are covered by validateConsolidation.
+  const staticRoutes = routerRoutes.filter(
+    (route) => !route.path.includes(":") && !route.path.includes("*"),
+  );
+  assert(staticRoutes.length > 0, "router/index.ts: no static routes were extracted");
+
+  for (const route of staticRoutes) {
+    if (route.redirect) {
+      assert(!sitemapUrls.has(canonicalFor(route.path)),
+        `Redirect route must not be listed in the sitemap: ${route.path}`);
+      continue;
+    }
+    assert(sitemapUrls.has(canonicalFor(route.path)),
+      `Router route is missing from the sitemap: ${canonicalFor(route.path)}`);
+  }
+
+  // Backward direction: no sitemap URL without a router route behind it.
+  const servedUrls = new Set(
+    staticRoutes.filter((route) => !route.redirect).map((route) => canonicalFor(route.path)),
+  );
+  for (const url of sitemapUrls) {
+    assert(servedUrls.has(url),
+      `Sitemap advertises a URL the router does not serve: ${url}`);
+  }
 }
 
 // Consolidation is only real if every variant actually points at its base and
@@ -338,7 +424,7 @@ function validateFuelTypeContent() {
 
 validateVercelConfig();
 validateRoutes();
-validateSitemap();
+validateRouterSitemapParity(validateSitemap());
 validateConsolidation();
 validateContentDepth();
 validateHome();
@@ -348,6 +434,6 @@ validateFuelTypeContent();
 
 console.log(
   `Validated ${SEO_ROUTES.length} card routes ` +
-    `(${SITEMAP_ROUTES.length} sitemap + ${PARAM_ROUTES.length} canonicalized variants) ` +
-    "and custom 404 output.",
+    `(${SITEMAP_ROUTES.length} sitemap + ${PARAM_ROUTES.length} canonicalized variants), ` +
+    "router<->sitemap parity, and custom 404 output.",
 );

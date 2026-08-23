@@ -4,6 +4,8 @@
 // NOTE: keep comments in English - every character under client/scripts is
 // collected into the shipped font subset (see font-subset-config.mjs).
 
+import { CAP_BINDS_UNDER_200K, CAP_THRESHOLDS, formatWon } from "./card-data-derived.mjs";
+
 // Colors are theme tokens, not literal hex: this markup now ships into the Vue
 // DOM as well as the static file, and hardcoded light values are unreadable in
 // dark mode. The tokens are defined in index.html critical CSS, so they resolve
@@ -186,6 +188,24 @@ export function buildHomeExtraContent() {
         </tr>`,
   ).join("");
 
+  const capRows = CAP_THRESHOLDS.map(
+    (row) => `
+        <tr>
+          <td style="${TD}">${row.card}</td>
+          <td style="${TD}">${row.category}</td>
+          <td style="${TD}">${row.rate}%</td>
+          <td style="${TD}">${formatWon(row.monthlyCap)}원</td>
+          <td style="${TD}">${formatWon(row.capAtSpend)}원</td>
+        </tr>`,
+  ).join("");
+  // CAP_THRESHOLDS is sorted by the spend at which the cap binds, so the first
+  // row is the card that stops paying soonest. The lowest headline rate has to
+  // be looked up separately - that is the card at the other end of the argument.
+  const earliestCapRow = CAP_THRESHOLDS[0];
+  const lowestRateRow = [...CAP_THRESHOLDS].sort(
+    (a, b) => Number(a.rate) - Number(b.rate),
+  )[0];
+
   return `
     <div style="${CALLOUT}">
       할인율이 가장 높은 카드가 항상 유리한 것은 아닙니다. 월 할인 한도에 먼저 걸리면 소비를 늘려도 절약액은 그대로입니다.
@@ -206,6 +226,37 @@ export function buildHomeExtraContent() {
       <tbody>${metricRows}
       </tbody>
     </table>
+
+    <h2 style="${H2}">할인율이 무의미해지는 지출액</h2>
+    <p style="${P}">
+      위의 첫 번째 지표를 카드 하나에 대입해 보면 광고 문구와 실제 절약액이 왜 벌어지는지 한 줄로 드러납니다.
+      월 할인 한도를 할인율로 나눈 금액이 "이 지출을 넘기면 더 써도 할인이 늘지 않는 지점"이고,
+      이 값은 연회비 회수 계산기가 비교하는 ${CAP_THRESHOLDS.length}장에서 아래처럼 벌어집니다.
+      각 카드의 혜택 중 할인율이 가장 높은 항목, 즉 카드사가 앞세우는 숫자를 기준으로 잡았습니다.
+    </p>
+    <table style="${TABLE}">
+      <thead>
+        <tr>
+          <th style="${TH}">카드</th>
+          <th style="${TH}">대표 혜택</th>
+          <th style="${TH}">할인율</th>
+          <th style="${TH}">월 한도</th>
+          <th style="${TH}">한도에 닿는 월 지출</th>
+        </tr>
+      </thead>
+      <tbody>${capRows}
+      </tbody>
+    </table>
+    <p style="${P}">
+      ${CAP_THRESHOLDS.length}장 중 ${CAP_BINDS_UNDER_200K}장은 월 ${formatWon(200000)}원 이하 지출에서 이미 한도에 닿습니다.
+      할인율이 높을수록 한도에 빨리 걸린다는 뜻이기도 합니다.
+      할인율이 가장 낮은 카드는 ${lowestRateRow.card}(${lowestRateRow.rate}%)이고,
+      월 한도가 ${formatWon(lowestRateRow.monthlyCap)}원이라 월 ${formatWon(lowestRateRow.capAtSpend)}원까지 할인이 계속 늘어납니다.
+      반대로 한도에 가장 빨리 닿는 카드는 ${earliestCapRow.card}(${earliestCapRow.rate}%)이고,
+      월 ${formatWon(earliestCapRow.capAtSpend)}원을 넘기는 순간 그 항목에서는 더 이상 할인이 붙지 않습니다.
+      해당 항목 지출이 한도 지점을 크게 넘는다면 할인율이 낮고 한도가 큰 카드를 함께 계산해 보세요.
+      항목별 한도를 다 채워도 월 통합한도가 한 번 더 자르는 카드가 있으므로, 최종 판단은 순혜택으로 해야 합니다.
+    </p>
 
     <h2 style="${H2}">혜택 계산에서 자주 놓치는 것</h2>
     <p style="${P}">아래 네 가지는 계산에 넣고 빼는 것만으로 "어느 카드가 유리한가"의 답이 뒤집히는 항목입니다.</p>

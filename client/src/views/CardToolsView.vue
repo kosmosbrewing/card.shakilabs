@@ -4,6 +4,9 @@ import { RouterLink } from "vue-router";
 import { ShSurface, ShText } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import { CARD_TOOL_GROUPS } from "@/data/cardNavigation";
+// 프리렌더 허브(scripts/prerender-card-hub.mjs)가 렌더하는 것과 같은 표.
+// 한쪽에만 있으면 JS 끔/켬 자수가 갈리고, 그게 이 앱이 이미 한 번 겪은 결함이다.
+import { CARD_DATA_SCOPE } from "@/data/cardDataScope";
 </script>
 
 <template>
@@ -49,5 +52,37 @@ import { CARD_TOOL_GROUPS } from "@/data/cardNavigation";
         </RouterLink>
       </div>
     </section>
+
+    <ShSurface padding="lg" aria-labelledby="card-data-scope-title">
+      <ShText id="card-data-scope-title" as="h2" variant="heading">각 계산기가 비교하는 카드</ShText>
+      <ShText tone="muted" class="mt-2 max-w-3xl">
+        계산기를 열기 전에 무엇을 몇 장이나 비교하는지, 조건의 폭이 어느 정도인지 확인하세요.
+        아래 숫자는 계산에 실제로 쓰이는 카드 데이터에서 그대로 뽑은 값이라, 카드가 추가되거나 조건이 바뀌면 이 표도 함께 바뀝니다.
+      </ShText>
+      <div class="mt-3 overflow-x-auto">
+        <table class="w-full min-w-[560px] border-collapse text-caption">
+          <thead>
+            <tr>
+              <th scope="col" class="border border-border bg-muted px-3 py-2 text-left font-semibold">계산기</th>
+              <th scope="col" class="whitespace-nowrap border border-border bg-muted px-3 py-2 text-left font-semibold">카드 수</th>
+              <th scope="col" class="border border-border bg-muted px-3 py-2 text-left font-semibold">조건의 폭</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in CARD_DATA_SCOPE" :key="row.path">
+              <th scope="row" class="whitespace-nowrap border border-border px-3 py-2 text-left font-semibold">
+                <RouterLink :to="row.path" class="text-primary">{{ row.label }}</RouterLink>
+              </th>
+              <td class="whitespace-nowrap border border-border px-3 py-2 tabular-nums">{{ row.count }}장</td>
+              <td class="border border-border px-3 py-2 text-muted-foreground">{{ row.detail }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ShText variant="caption" tone="muted" class="mt-3">
+        나머지 계산기는 카드 목록이 아니라 규칙을 계산합니다. 면세 한도와 해외직구 관세는 품목별 세율표를,
+        마일리지와 포인트 전환은 전환처별 교환 비율을, 결제일 이용기간은 카드사별 사이클 규칙을 각각 입력값에 적용합니다.
+      </ShText>
+    </ShSurface>
   </div>
 </template>
