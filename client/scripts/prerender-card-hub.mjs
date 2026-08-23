@@ -18,6 +18,8 @@
 //
 // 색상은 리터럴 hex가 아니라 테마 토큰(hsl(var(--...)))을 쓴다. prerender-content.mjs와
 // 같은 규칙이다. 하드코딩된 밝은색 계열은 다크 모드에서 배경과 같은 톤이 되어 글이 안 보인다.
+import { DATA_SCOPE_ROWS } from "./card-data-derived.mjs";
+
 const groups = [
   {
     title: "혜택·고정지출",
@@ -138,12 +140,31 @@ export function buildCardHubContent() {
       `<li style="margin-bottom:6px;"><strong>${heading}</strong> — ${body}</li>`,
   ).join("");
 
+  const scopeRows = DATA_SCOPE_ROWS.map(
+    (row) =>
+      `<tr><td style="padding:8px 10px;border:1px solid hsl(var(--border));"><a href="/card${row.path}">${row.label}</a></td><td style="padding:8px 10px;border:1px solid hsl(var(--border));">${row.count}장</td><td style="padding:8px 10px;border:1px solid hsl(var(--border));">${row.detail}</td></tr>`,
+  ).join("");
+
   return `<article data-seo-prerender="card-tool-directory" style="max-width:920px;margin:0 auto;padding:24px 16px;line-height:1.65;">
     <h1 style="font-size:28px;margin:0 0 10px;">목적별 카드 계산기 전체 보기</h1>
     <p style="margin:0 0 10px;color:hsl(var(--muted-foreground));">혜택 회수, 해외 결제, 포인트 관리 중 지금 필요한 결정과 가까운 도구에서 시작하세요. 각 도구에는 "언제 쓰는가"와 "무엇을 넣으면 무엇이 나오는가"를 함께 적어 두었습니다. 계산기 이름이 아니라 지금 겪고 있는 상황과 맞는 쪽을 고르고, 필요한 입력값이 손에 있는지 열기 전에 확인하세요.</p>
     <p style="margin:0;color:hsl(var(--muted-foreground));">카드 혜택은 할인율만 보면 실제 절약액을 크게 벗어납니다. 월 할인 한도, 전월 실적 조건, 연회비 세 가지가 함께 걸리기 때문입니다. 아래 계산기는 모두 이 세 가지를 반영한 순혜택 기준으로 결과를 냅니다. 회원가입이나 카드번호 입력 없이 금액만 넣으면 됩니다.</p>
     ${sections}
     <section style="margin-top:28px;">
+      <h2 style="font-size:20px;margin:0 0 6px;">각 계산기가 비교하는 카드</h2>
+      <p style="margin:0 0 10px;color:hsl(var(--muted-foreground));">계산기를 열기 전에 무엇을 몇 장이나 비교하는지, 조건의 폭이 어느 정도인지 확인하세요. 아래 숫자는 계산에 실제로 쓰이는 카드 데이터에서 그대로 뽑은 값이라, 카드가 추가되거나 조건이 바뀌면 이 표도 함께 바뀝니다.</p>
+      <table style="width:100%;border-collapse:collapse;margin:10px 0 12px;font-size:14px;">
+        <thead>
+          <tr>
+            <th style="padding:8px 10px;background:hsl(var(--muted));text-align:left;border:1px solid hsl(var(--border));font-weight:600;">계산기</th>
+            <th style="padding:8px 10px;background:hsl(var(--muted));text-align:left;border:1px solid hsl(var(--border));font-weight:600;">카드 수</th>
+            <th style="padding:8px 10px;background:hsl(var(--muted));text-align:left;border:1px solid hsl(var(--border));font-weight:600;">조건의 폭</th>
+          </tr>
+        </thead>
+        <tbody>${scopeRows}</tbody>
+      </table>
+      <p style="margin:0 0 20px;color:hsl(var(--muted-foreground));font-size:14px;">나머지 계산기는 카드 목록이 아니라 규칙을 계산합니다. 면세 한도와 해외직구 관세는 품목별 세율표를, 마일리지와 포인트 전환은 전환처별 교환 비율을, 결제일 이용기간은 카드사별 사이클 규칙을 각각 입력값에 적용합니다.</p>
+
       <h2 style="font-size:20px;margin:0 0 6px;">어떤 계산기부터 열어야 하나요</h2>
       <p style="margin:0 0 10px;color:hsl(var(--muted-foreground));">도구가 여러 개라 어디서 시작할지 모르겠다면 아래 순서대로 확인하면 대부분의 카드 선택이 끝납니다.</p>
       <ol style="margin:0 0 12px 20px;padding:0;color:hsl(var(--muted-foreground));">${steps}</ol>
