@@ -49,15 +49,15 @@ const { result, validationError } = useSafeCalculation(
     <div class="grid gap-3 md:grid-cols-3">
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">청구 사이클</p>
-        <p class="mt-2 text-h2 font-bold text-foreground">{{ result.cycleDays }}일</p>
+        <p class="mt-2 text-heading font-bold text-foreground">{{ result.cycleDays }}일</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">총 이용 가능 기간</p>
-        <p class="mt-2 text-h2 font-bold text-primary">{{ result.usableDays }}일</p>
+        <p class="mt-2 text-heading font-bold text-primary">{{ result.usableDays }}일</p>
       </div>
       <div class="retro-panel-muted px-4 py-4">
         <p class="text-tiny text-muted-foreground">최적 결제일 직후 사용</p>
-        <p class="mt-2 text-h2 font-bold text-foreground">{{ result.bestUsableDays }}일</p>
+        <p class="mt-2 text-heading font-bold text-foreground">{{ result.bestUsableDays }}일</p>
       </div>
     </div>
 

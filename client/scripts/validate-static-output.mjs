@@ -9,6 +9,7 @@ import {
   VARIANT_SUBGROUPS,
   canonicalPathFor,
 } from "./seo-routes.mjs";
+import { validateUtilitiesAreGenerated } from "./validate-tailwind-utilities.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, "..");
@@ -431,9 +432,11 @@ validateHome();
 validateAliasesAndNotFound();
 validatePolicyDisclosures();
 validateFuelTypeContent();
+const utilityCount = validateUtilitiesAreGenerated({ projectRoot, distRoot });
 
 console.log(
   `Validated ${SEO_ROUTES.length} card routes ` +
     `(${SITEMAP_ROUTES.length} sitemap + ${PARAM_ROUTES.length} canonicalized variants), ` +
-    "router<->sitemap parity, and custom 404 output.",
+    `router<->sitemap parity, ${utilityCount} generated colour utilities, ` +
+    "and custom 404 output.",
 );
