@@ -5,6 +5,7 @@
 // (scripts/는 순수 ESM이라 Node 빌드 스크립트와 Vite 번들 양쪽에서 그대로 쓸 수 있다.
 //  prerender-layout.mjs만 node:fs를 쓰므로 여기서 import하지 않는다.)
 import { buildRichContent } from "../../scripts/prerender-content.mjs";
+import { buildCardHubExtraContent } from "../../scripts/prerender-card-hub.mjs";
 import { buildHomeExtraContent } from "../../scripts/prerender-home.mjs";
 import { guidePlacementFor, hasInAppGuide } from "./guideRoutes";
 
@@ -28,6 +29,8 @@ export function richContentFor(path: string): string {
 
   // 홈은 화면이 히어로·상황표·3단계를 이미 렌더한다. 나머지 블록만 덧붙인다.
   if (path === "/") return buildHomeExtraContent();
+  // 허브도 같다 — 화면이 도구 카드와 데이터 범위 표를 렌더하고, 고르는 순서만 남는다.
+  if (path === "/all") return buildCardHubExtraContent();
 
   const html = buildRichContent(path);
   if (!html) return "";

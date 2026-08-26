@@ -9,6 +9,7 @@
     "prebuild": "node scripts/generate-sitemap.mjs",
     "build": "vite build && node scripts/prerender.mjs && npm run verify:static && node scripts/verify-fonts.mjs",
     "verify:static": "node scripts/validate-static-output.mjs",
+    "verify:hydration": "node scripts/verify-hydration-survival.mjs",
     "verify:supply-chain": "node scripts/verify-vendored-artifacts.mjs && node scripts/verify-sbom-identity.mjs",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.2",
+    "playwright-core": "^1.61.1",
     "sharp": "^0.34.5",
     "typescript": "^5.7.3",
     "vite": "^7.3.1",
