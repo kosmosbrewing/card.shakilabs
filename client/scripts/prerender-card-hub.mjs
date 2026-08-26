@@ -116,6 +116,26 @@ const PICK_STEPS = [
   ],
 ];
 
+// The part of the hub the Vue view (CardToolsView.vue) does NOT render.
+//
+// Same split as the home (buildHomeIntroContent / buildHomeExtraContent) and for
+// the same reason: the prerendered article is deleted on mount, so whatever the
+// view does not draw has to be handed back to the app or it only ever existed
+// for the crawler. CardToolsView renders the hero, the three tool groups and the
+// data-scope table; the picking procedure below was prerender-only, which is why
+// /all measured 81.1% surviving sentences.
+export function buildCardHubExtraContent() {
+  const steps = PICK_STEPS.map(
+    ([heading, body]) =>
+      `<li style="margin-bottom:6px;"><strong>${heading}</strong> — ${body}</li>`,
+  ).join("");
+
+  return `<h2 style="font-size:20px;margin:0 0 6px;">어떤 계산기부터 열어야 하나요</h2>
+      <p style="margin:0 0 10px;color:hsl(var(--muted-foreground));">도구가 여러 개라 어디서 시작할지 모르겠다면 아래 순서대로 확인하면 대부분의 카드 선택이 끝납니다.</p>
+      <ol style="margin:0 0 12px 20px;padding:0;color:hsl(var(--muted-foreground));">${steps}</ol>
+      <p style="margin:0;color:hsl(var(--muted-foreground));font-size:14px;">계산 결과는 입력한 금액과 공개된 카드 상품 조건에 근거한 추정치입니다. 실제 청구액과 다를 수 있으며 최종 조건은 각 카드사 공식 안내에서 확인해야 합니다.</p>`;
+}
+
 export function buildCardHubContent() {
   const sections = groups
     .map(
@@ -134,11 +154,6 @@ export function buildCardHubContent() {
     </section>`,
     )
     .join("");
-
-  const steps = PICK_STEPS.map(
-    ([heading, body]) =>
-      `<li style="margin-bottom:6px;"><strong>${heading}</strong> — ${body}</li>`,
-  ).join("");
 
   const scopeRows = DATA_SCOPE_ROWS.map(
     (row) =>
@@ -165,10 +180,7 @@ export function buildCardHubContent() {
       </table>
       <p style="margin:0 0 20px;color:hsl(var(--muted-foreground));font-size:14px;">나머지 계산기는 카드 목록이 아니라 규칙을 계산합니다. 면세 한도와 해외직구 관세는 품목별 세율표를, 마일리지와 포인트 전환은 전환처별 교환 비율을, 결제일 이용기간은 카드사별 사이클 규칙을 각각 입력값에 적용합니다.</p>
 
-      <h2 style="font-size:20px;margin:0 0 6px;">어떤 계산기부터 열어야 하나요</h2>
-      <p style="margin:0 0 10px;color:hsl(var(--muted-foreground));">도구가 여러 개라 어디서 시작할지 모르겠다면 아래 순서대로 확인하면 대부분의 카드 선택이 끝납니다.</p>
-      <ol style="margin:0 0 12px 20px;padding:0;color:hsl(var(--muted-foreground));">${steps}</ol>
-      <p style="margin:0;color:hsl(var(--muted-foreground));font-size:14px;">계산 결과는 입력한 금액과 공개된 카드 상품 조건에 근거한 추정치입니다. 실제 청구액과 다를 수 있으며 최종 조건은 각 카드사 공식 안내에서 확인해야 합니다.</p>
+      ${buildCardHubExtraContent()}
     </section>
   </article>`;
 }

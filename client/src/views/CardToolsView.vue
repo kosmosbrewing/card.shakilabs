@@ -19,7 +19,7 @@ import { CARD_DATA_SCOPE } from "@/data/cardDataScope";
       <ShText as="p" variant="caption" tone="muted">CARD TOOL DIRECTORY</ShText>
       <ShText as="h1" variant="display" class="mt-2">카드를 고르기 전에 목적부터 정리하세요</ShText>
       <ShText tone="muted" class="mt-3 max-w-3xl">
-        혜택 회수, 해외 결제, 포인트 관리 중 지금 필요한 결정과 가까운 묶음에서 시작하세요.
+        혜택 회수, 해외 결제, 포인트 관리 중 지금 필요한 결정과 가까운 도구에서 시작하세요.
         각 도구에는 "언제 쓰는가"와 "무엇을 넣으면 무엇이 나오는가"를 함께 적어 두었습니다.
         계산기 이름이 아니라 지금 겪고 있는 상황과 맞는 쪽을 고르고, 필요한 입력값이 손에 있는지 열기 전에 확인하세요.
       </ShText>
