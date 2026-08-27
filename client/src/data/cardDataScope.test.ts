@@ -3,7 +3,9 @@ import { describe, expect, it } from "vitest";
 import {
   CAP_BINDS_UNDER_200K as MIRRORED_CAP_BINDS_UNDER_200K,
   CAP_THRESHOLDS as MIRRORED_CAP_THRESHOLDS,
+  CARD_BENEFIT_DATA_VERIFIED_AT as MIRRORED_CARD_BENEFIT_DATA_VERIFIED_AT,
   DATA_SCOPE_ROWS as MIRRORED_DATA_SCOPE_ROWS,
+  SOURCE_LINKS_VERIFIED_AT as MIRRORED_SOURCE_LINKS_VERIFIED_AT,
   formatWon,
 } from "../../scripts/card-data-derived.mjs";
 import { ANNUAL_FEE_CARDS } from "./annualFeeCards";
@@ -14,6 +16,10 @@ import {
 } from "./cardDataScope";
 import { FUEL_CARDS } from "./fuelCards";
 import { OVERSEAS_CARDS } from "./overseasCards";
+import {
+  CARD_BENEFIT_DATA_VERIFIED_AT,
+  SOURCE_VERIFIED_AT,
+} from "./sourceReferences";
 
 // 홈과 /all 본문은 "카드 데이터에서 뽑은 숫자"라고 말한다. 그 주장이 참이려면
 // 원본 배열을 고친 순간 본문도 같이 바뀌어야 한다. 프리렌더는 .mjs라 타입 소스를
@@ -22,6 +28,24 @@ import { OVERSEAS_CARDS } from "./overseasCards";
 describe("card data derived facts", () => {
   it("mirrors the computed scope table into the prerender copy", () => {
     expect(MIRRORED_DATA_SCOPE_ROWS).toEqual(CARD_DATA_SCOPE);
+  });
+
+  // /about now interpolates these two dates instead of describing a refresh
+  // cadence. If the mirror drifts, the page starts quoting a freshness the
+  // calculator data does not have - which is exactly the bug this replaced.
+  it("mirrors both freshness dates into the prerender copy", () => {
+    expect(MIRRORED_CARD_BENEFIT_DATA_VERIFIED_AT).toBe(
+      CARD_BENEFIT_DATA_VERIFIED_AT,
+    );
+    expect(MIRRORED_SOURCE_LINKS_VERIFIED_AT).toBe(SOURCE_VERIFIED_AT);
+  });
+
+  // The data-check date and the link-check date answer different questions.
+  // Collapsing them into one value would make one of the two sentences false.
+  it("keeps the data check and the link check as separate dates", () => {
+    expect(CARD_BENEFIT_DATA_VERIFIED_AT).not.toBe(SOURCE_VERIFIED_AT);
+    expect(CARD_BENEFIT_DATA_VERIFIED_AT).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(SOURCE_VERIFIED_AT).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
 
   it("mirrors the computed cap thresholds into the prerender copy", () => {
