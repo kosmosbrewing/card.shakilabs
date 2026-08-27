@@ -5,6 +5,15 @@
 // 정적 HTML(JS 꺼짐)과 Vue 화면(JS 켜짐) 양쪽에 같은 마크업으로 실리는데,
 // 하드코딩된 밝은색 계열은 다크 모드에서 배경과 같은 톤이 되어 글이 안 보인다.
 // 토큰은 index.html의 critical CSS와 번들 CSS 양쪽에 정의돼 있어 JS 없이도 해석된다.
+// Freshness dates are interpolated, never typed into the prose. /about used to
+// promise a monthly refresh while the update log stopped at 2026.03 - the two
+// sentences contradicted each other inside one section. Reading the dates from
+// the mirror means a data refresh moves the page and a stale dataset shows.
+import {
+  CARD_BENEFIT_DATA_VERIFIED_AT,
+  SOURCE_LINKS_VERIFIED_AT,
+} from "./card-data-derived.mjs";
+
 const ARTICLE = "max-width:920px;margin:0 auto;padding:24px 16px;line-height:1.75;font-size:15px;color:hsl(var(--foreground));";
 const H1 = "font-size:28px;line-height:1.3;margin:0 0 16px;color:hsl(var(--foreground));";
 const H2 = "font-size:20px;line-height:1.35;margin:28px 0 10px;padding-bottom:6px;border-bottom:2px solid hsl(var(--border));color:hsl(var(--foreground));";
@@ -842,11 +851,11 @@ const STATIC_CATEGORIES = {
       "ShakiLabs 카드 계산기는 주유 할인카드·해외결제·연회비·마일리지 등 신용카드 혜택을 비교하는 무료 서비스입니다. 회원가입 없이 누구나 이용할 수 있으며, 소비 패턴에 맞는 최적 카드를 찾을 수 있습니다.",
     sections: [
       { h2: "제공 기능", body: "본 서비스는 월 주유비·결제 통화·실적 조건 등을 입력하면 카드별 예상 절약액을 즉시 계산해 줍니다. 현대·신한·KB·삼성·롯데·하나 6개 주요 카드사의 주요 카드 혜택을 공개 데이터 기반으로 비교하며, 총 22개 계산기(주유 할인·해외결제·연회비·마일리지·면세점·연말정산·실적조건 등)를 무료로 제공합니다. 각 계산기는 실제 소비 시나리오를 기반으로 작성되어 있어, 본인의 소비 패턴에 가장 근접한 결과를 얻을 수 있습니다." },
-      { h2: "데이터 출처와 신뢰성", body: '카드 혜택·연회비·수수료 정보는 각 카드사 공식 페이지에서 확인 가능한 공개 데이터를 기반으로 합니다. 정기적으로 수동 갱신하며, 카드사의 정책 변경이 있을 때마다 반영합니다. 최종 가입 조건은 반드시 해당 카드사 공식 페이지에서 확인하셔야 합니다. 본 서비스는 카드사와의 제휴 관계 없이 중립적 정보를 제공하며, 특정 카드 가입을 유도하지 않습니다. <a href="https://www.customs.go.kr" target="_blank" rel="noopener noreferrer">관세청</a>·<a href="https://www.crefia.or.kr" target="_blank" rel="noopener noreferrer">여신금융협회</a> 등 공공기관·공시 자료를 우선 참고합니다. 모든 계산식과 상수는 배포 전에 이런 공개 고시·공식 상품 안내와 대조해 검증하고, 확인일과 출처 링크를 각 계산기 하단 "출처 및 기준" 카드에 함께 표기합니다.' },
+      { h2: "데이터 출처와 신뢰성", body: `카드 혜택·연회비·수수료 정보는 각 카드사 공식 페이지에서 확인 가능한 공개 데이터를 기반으로 합니다. 카드 혜택을 자동으로 수집하는 수단이 없어 사람이 공시를 직접 열어 확인해 반영하며, 정해진 갱신 주기는 없습니다. 카드 혜택·연회비 데이터를 카드사 안내와 마지막으로 대조한 날은 ${CARD_BENEFIT_DATA_VERIFIED_AT}이고, 출처 링크가 아직 유효한지는 ${SOURCE_LINKS_VERIFIED_AT}에 다시 확인했습니다. 데이터 확인일과 링크 점검일은 서로 다른 작업이라 하나로 묶지 않고 따로 적습니다. ${CARD_BENEFIT_DATA_VERIFIED_AT} 이후 카드사가 바꾼 조건은 반영되어 있지 않을 수 있으므로, 최종 가입 조건은 반드시 해당 카드사 공식 페이지에서 확인하셔야 합니다. 본 서비스는 카드사와의 제휴 관계 없이 중립적 정보를 제공하며, 특정 카드 가입을 유도하지 않습니다. <a href="https://www.customs.go.kr" target="_blank" rel="noopener noreferrer">관세청</a>·<a href="https://www.crefia.or.kr" target="_blank" rel="noopener noreferrer">여신금융협회</a> 등 공공기관·공시 자료를 우선 참고합니다. 모든 계산식과 상수는 배포 전에 이런 공개 고시·공식 상품 안내와 대조해 검증하고, 확인일과 출처 링크를 각 계산기 하단 "출처 및 기준" 카드에 함께 표기합니다.` },
       { h2: "운영자 정보", body: '본 서비스는 개발 스튜디오 ShakiLabs가 직접 기획·개발·운영합니다. ShakiLabs는 shakilabs.com에서 금융·생활 분야의 무료 웹 계산기를 만들고 있습니다. <strong>운영: ShakiLabs · 문의: <a href="mailto:skdba1313@gmail.com">skdba1313@gmail.com</a></strong> (영업일 기준 24~48시간 이내 답변) · 서비스 URL: https://shakilabs.com/card' },
       { h2: "서비스 탄생 배경", body: "한국에는 200여 종의 신용카드가 있고 각 카드마다 수십 가지 혜택 조건이 있어 일반 소비자가 최적의 카드를 찾기 매우 어렵습니다. 대부분의 금융 비교 사이트는 카드사로부터 수수료를 받는 '광고성 비교'이기 때문에 중립적인 정보를 얻기 힘들었습니다. 이에 ShakiLabs 카드 계산기는 실제 사용 시나리오 기반의 객관적 비교 도구를 제공해 소비자가 스스로 최적의 카드를 선택할 수 있도록 돕는 것을 목표로 합니다." },
       { h2: "운영 원칙", body: "회원가입이 필요 없으며, 입력값은 서버에 저장되지 않습니다. 모든 계산은 브라우저 내부에서 이루어져 개인정보 유출 위험이 없습니다. 광고(Google AdSense)를 통해 운영비를 충당하며, 특정 카드사와의 제휴 관계 없이 중립적인 비교 정보를 제공합니다. 본 서비스는 금융 상품 판매·중개 서비스가 아니며, 실제 카드 발급은 각 카드사의 공식 채널을 통해 이루어져야 합니다." },
-      { h2: "업데이트 이력", body: "2026.03: 주유 할인카드 데이터 갱신, 해외결제 통화 7종 확장. 2026.01: 2026년 세율·요율 전면 반영 (연말정산, 소득공제, 자녀세액공제 등). 2025.12: 마일리지 계산기 추가, 면세점 가이드 확장. 2025.11: 신용 vs 체크카드 비교 페이지 신규. 매월 1~2회 카드사별 혜택 변경 사항을 반영합니다." },
+      { h2: "업데이트 이력", body: `2026.03: 주유 할인카드 데이터 갱신, 해외결제 통화 7종 확장. 2026.01: 2026년 세율·요율 전면 반영 (연말정산, 소득공제, 자녀세액공제 등). 2025.12: 마일리지 계산기 추가, 면세점 가이드 확장. 2025.11: 신용 vs 체크카드 비교 페이지 신규. 카드 혜택 데이터는 ${CARD_BENEFIT_DATA_VERIFIED_AT} 확인분이 가장 최근이며, 그 뒤로는 갱신하지 않았습니다. 갱신 주기를 정해 두거나 자동으로 수집하는 장치는 없고, 변경을 확인하면 그때 반영하고 이 목록에 적습니다. 그동안 바뀐 조건이 있을 수 있으니, 금액이 중요한 결정에는 카드사 공식 안내를 먼저 확인하시기 바랍니다.` },
       { h2: "문의 및 피드백", body: "서비스 관련 문의·오류 제보는 skdba1313@gmail.com으로 보내주세요. 영업일 기준 24~48시간 이내 답변드립니다. 계산기 결과가 실제 카드사 안내와 다른 경우, 구체적인 카드명·조건·결과값을 포함해 메일 주시면 빠르게 확인 후 수정하겠습니다. 새로운 계산기 제안이나 개선 아이디어도 환영합니다." },
     ],
     links: [

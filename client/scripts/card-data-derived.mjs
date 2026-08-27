@@ -12,6 +12,17 @@
 // subset. The Korean strings below are page copy and belong in the subset; a
 // Korean comment would not.
 
+// Mirror of CARD_BENEFIT_DATA_VERIFIED_AT in src/data/sourceReferences.ts:
+// the last day the card benefit rows were re-checked against the issuers'
+// official pages. The /about copy interpolates it, so the page cannot keep
+// claiming a freshness the data does not have.
+export const CARD_BENEFIT_DATA_VERIFIED_AT = "2026-03-15";
+
+// Mirror of SOURCE_VERIFIED_AT in src/data/sourceReferences.ts: the last day the
+// source links themselves were re-checked. Kept separate from the line above on
+// purpose - collapsing the two into one date would make one of them a lie.
+export const SOURCE_LINKS_VERIFIED_AT = "2026-07-10";
+
 // Spend at which a card's headline discount rate stops mattering:
 // monthlyCap / rate. Sorted ascending, ties keep the ANNUAL_FEE_CARDS order.
 export const CAP_THRESHOLDS = [

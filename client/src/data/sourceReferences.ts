@@ -6,6 +6,17 @@ export interface CompareSource {
 
 export const SOURCE_VERIFIED_AT = "2026-07-10";
 
+// Last day someone opened the issuers' official pages and re-checked the benefit
+// rows in fuelCards.ts / overseasCards.ts / annualFeeCards.ts. This is NOT the
+// same as SOURCE_VERIFIED_AT above, which only records when the source links
+// were last confirmed to resolve.
+//
+// The /about copy interpolates this constant instead of spelling a date (or a
+// cadence) into prose, so a refresh cannot land without the page moving with it.
+// scripts/card-data-derived.mjs mirrors the value for the prerender templates and
+// cardDataScope.test.ts fails when the two drift apart.
+export const CARD_BENEFIT_DATA_VERIFIED_AT = "2026-03-15";
+
 const OPINET_MAIN = "https://www.opinet.co.kr/user/main/opinetIntro.do";
 const OPINET_GUIDE = "https://www.opinet.co.kr/user/dopds/dopDs_4.do";
 const CUSTOMS_TAX = "https://www.customs.go.kr/kcs/ad/tax/ItemTaxCalculation.do";
