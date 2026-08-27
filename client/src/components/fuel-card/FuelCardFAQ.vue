@@ -1,7 +1,16 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import FAQSection from "@/components/common/FAQSection.vue";
+import { FUEL_PRICES } from "@/data/fuelPrices";
+import { CARD_BENEFIT_DATA_VERIFIED_AT } from "@/data/sourceReferences";
 
-const faqs = [
+// The answer below used to promise a weekly fuel-price refresh. Nothing does that:
+// there is no schedule workflow in this repo, the remote-constants loader is off in
+// production, and the shipped snapshot has not moved since its own lastUpdated date.
+// Both dates are interpolated so a refresh moves the copy instead of leaving it stale.
+// FUEL_PRICES is reactive, so the answer must be computed - a plain array would
+// freeze the date at setup time if the snapshot ever gets refreshed at runtime.
+const faqs = computed(() => [
   {
     question: "주유 할인카드는 어떤 기준으로 선택해야 하나요?",
     answer: "월 주유 금액, 선호 주유소 브랜드, 전월 실적 충족 가능 여부를 고려하세요. 리터당 고정 할인 카드는 유가가 낮을 때 유리하고, % 할인 카드는 유가가 높을 때 유리합니다.",
@@ -24,9 +33,12 @@ const faqs = [
   },
   {
     question: "카드 할인 데이터는 얼마나 자주 업데이트되나요?",
-    answer: "유가는 주 1회, 카드 혜택은 변경 시 수동으로 업데이트합니다. 상단의 기준일을 확인하세요. 실제 할인 조건은 반드시 카드사 공식 사이트에서 확인하시기 바랍니다.",
+    answer:
+      "정해진 갱신 주기는 없습니다. 유가와 카드 혜택 모두 자동으로 수집하는 장치가 없어 사람이 직접 확인해 반영합니다. " +
+      `현재 화면에 쓰는 유가 기준일은 ${FUEL_PRICES.lastUpdated}, 카드 혜택 데이터 확인일은 ${CARD_BENEFIT_DATA_VERIFIED_AT}입니다. ` +
+      "그 이후 바뀐 유가·혜택은 반영되어 있지 않을 수 있으니, 실제 할인 조건은 반드시 카드사 공식 사이트에서 확인하시기 바랍니다.",
   },
-];
+]);
 </script>
 
 <template>
