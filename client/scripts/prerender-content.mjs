@@ -13,6 +13,11 @@ import {
   CARD_BENEFIT_DATA_VERIFIED_AT,
   SOURCE_LINKS_VERIFIED_AT,
 } from "./card-data-derived.mjs";
+// Data-derived findings (boundaries, gaps, cross-card comparisons) computed
+// from the card tables at build time. Rendered between the guide sections and
+// the shared checklist so the page-specific numbers sit next to the guide that
+// introduces them, not under the generic material.
+import { buildInsightsSection } from "./card-insights.mjs";
 
 const ARTICLE = "max-width:920px;margin:0 auto;padding:24px 16px;line-height:1.75;font-size:15px;color:hsl(var(--foreground));";
 const H1 = "font-size:28px;line-height:1.3;margin:0 0 16px;color:hsl(var(--foreground));";
@@ -975,6 +980,7 @@ function buildStaticContent(route) {
       <h1 style="${H1}">${data.title}</h1>
       <p style="${P}">${data.intro}</p>
       ${sectionsHtml}
+      ${buildInsightsSection(route)}
       ${extraSection}
       <h2 style="${H2}">관련 페이지</h2>
       <ul style="${UL}">${linksHtml}</ul>
