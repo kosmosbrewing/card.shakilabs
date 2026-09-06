@@ -344,9 +344,24 @@ function annualFeeInsights() {
   const cappedCategories = sum(results.map((result) => result.breakdown.filter((item) => item.isCapExceeded).length));
   const ratedCategories = sum(results.map((result) => result.breakdown.length));
   const uncappedTotal = sum(results.map((result) => result.uncappedMonthlyBenefit));
-  const cappedTotal = sum(results.map((result) => result.rawMonthlyBenefit));
+  // rawMonthlyBenefit only has each category's own monthly cap applied - a card
+  // whose combined/integrated cap (totalMonthlyCap) is lower still shows its
+  // pre-integrated-cap number here. totalMonthlyBenefit is what the card
+  // actually pays out once that second cap (and the min-spend gate) also runs,
+  // so it is the only real "after every limit" total (readability QA #1: the
+  // aggregate sentence below used to read as if categoryOnlyTotal were final).
+  const categoryOnlyTotal = sum(results.map((result) => result.rawMonthlyBenefit));
+  const realizedTotal = sum(results.map((result) => result.totalMonthlyBenefit));
   const loca = results.find((result) => result.cardId === "lotte-loca-365");
   const locaCategoryCapSum = sum(loca.card.benefitRates.map((rate) => rate.monthlyCap));
+  // Whether the gap between categoryOnlyTotal and realizedTotal is fully
+  // explained by lotte-loca-365 alone, or other cards also contribute (their
+  // own integrated cap binding, or a min-spend miss). Branched rather than
+  // asserted as a fixed "entirely" so the sentence stays true if the card
+  // mirror data changes later.
+  const otherGapCards = results.filter(
+    (result) => result.cardId !== "lotte-loca-365" && (result.isTotalCapExceeded || !result.isMinSpendMet),
+  );
   const cliff = [...results].sort(byDesc("totalMonthlyBenefit"))[0];
   const highestMinSpend = [...ANNUAL_FEE_CARDS].sort(byDesc("minSpend"))[0];
   const highestMinSpendResult = results.find((result) => result.cardId === highestMinSpend.id);
@@ -377,8 +392,8 @@ function annualFeeInsights() {
   const findings = [
     `기본 지출 패턴(12개 카테고리 합계 월 ${won(total)})으로 8장을 한 번에 돌리면 연 순혜택이 ${cardName(best.card)} ${won(best.annualNetBenefit)}에서 ${cardName(worst.card)} ${won(worst.annualNetBenefit)}까지 벌어집니다. 카드마다 혜택률·한도 산식이 다르기 때문에 같은 지출인데도 카드 선택만으로 연 ${won(best.annualNetBenefit - worst.annualNetBenefit)} 차이가 납니다.`,
     `연회비 회수가 가장 빠른 카드는 ${cardName(fastest.card)}(${fastest.breakEvenMonths}개월), 가장 느린 카드는 ${cardName(slowest.card)}(${slowest.breakEvenMonths}개월)입니다. 그래서 8장 중 연 순혜택이 음수로 떨어지는, 즉 연회비를 회수하지 못하는 카드도 ${negative.length}장이나 됩니다.`,
-    `혜택률이 붙은 카테고리 ${ratedCategories}개 중 ${cappedCategories}개가 기본 패턴에서 이미 월 한도에 걸립니다. 한도가 없었다면 8장 합계 월 ${won(uncappedTotal)}이 나왔을 혜택인데, 한도를 거치는 순간 ${won(cappedTotal)}으로 줄어듭니다.`,
-    `${cardName(loca.card)}는 카테고리별 한도까지만 적용하면 월 ${won(locaCategoryCapSum)}이지만, 이 금액을 실제로 받는 것은 아닙니다. 그 위에 통합한도가 한 번 더 걸리기 때문에 실제 지급액은 ${won(loca.card.totalMonthlyCap)}으로 줄어듭니다. 기본 패턴에서는 카테고리 합계가 ${won(loca.rawMonthlyBenefit)}이라 통합한도에 ${loca.isTotalCapExceeded ? "걸리고" : "아직 닿지 않고"}, 7개 카테고리를 모두 채워도 받을 수 있는 최대치는 ${won(loca.card.totalMonthlyCap)}입니다.`,
+    `혜택률이 붙은 카테고리 ${ratedCategories}개 중 ${cappedCategories}개가 기본 패턴에서 이미 월 한도에 걸립니다. 한도가 없었다면 8장 합계 월 ${won(uncappedTotal)}이 나왔을 혜택인데, 카테고리 한도까지만 거치면 ${won(categoryOnlyTotal)}으로 줄어듭니다. 그런데 이 ${won(categoryOnlyTotal)}도 아직 끝이 아닙니다 - 카드별 통합한도까지 마저 거친 실제 지급액은 ${won(realizedTotal)}입니다.`,
+    `그 차이 ${won(categoryOnlyTotal - realizedTotal)}은 ${otherGapCards.length === 0 ? "전부" : "대부분"} ${cardName(loca.card)} 한 장에서 납니다. 이 카드는 카테고리별 한도까지만 적용하면 월 ${won(locaCategoryCapSum)}이지만, 그 위에 통합한도가 한 번 더 걸리기 때문에 실제 지급액은 ${won(loca.card.totalMonthlyCap)}으로 줄어듭니다. 기본 패턴에서는 카테고리 합계가 ${won(loca.rawMonthlyBenefit)}이라 통합한도에 ${loca.isTotalCapExceeded ? "걸리고" : "아직 닿지 않고"}, 7개 카테고리를 모두 채워도 받을 수 있는 최대치는 ${won(loca.card.totalMonthlyCap)}입니다.`,
     `전월 실적은 1원 차이로 혜택 전체를 지웁니다. 그래서 ${cardName(cliff.card)}의 경우 실적 ${won(cliff.card.minSpend)}을 채우면 월 ${won(cliff.totalMonthlyBenefit)}, 1원 모자라면 0원이라 8장 가운데 낙차가 가장 큽니다. 실적 기준이 가장 높은 ${cardName(highestMinSpend)}(${won(highestMinSpend.minSpend)})의 경우 기본 패턴에서 ${highestMinSpendResult.isMinSpendMet ? "충족" : "미달"}입니다.`,
     `연회비 대비 연 혜택 배율은 ${cardName(roiBest.card)} ${times(roiBest.roiRatio)}에서 ${cardName(roiWorst.card)} ${times(roiWorst.roiRatio)}까지 갈립니다. 연회비가 가장 비싼 카드가 배율도 가장 낮다는 뜻이라서, 연회비 액수만 보고 프리미엄을 고르면 오히려 회수가 가장 느립니다.`,
     `지출 12개 카테고리를 비중은 그대로 두고 절반(월 ${won(total * 0.5)})으로 줄이면 ${halfUnmet.length}장이 실적 미달로 혜택 0원이 되고 1위는 ${cardName(halfBest.card)}로 바뀝니다. 반대로 1.5배(월 ${won(total * 1.5)})로 늘리면 1위는 ${cardName(oneAndHalfBest.card)}입니다. 순위가 지출 규모에 따라 ${halfBest.cardId === oneAndHalfBest.cardId ? "바뀌지 않는" : "뒤집히는"} 이유는 실적 문턱과 월 한도가 서로 다른 지점에서 작동하기 때문입니다.`,
