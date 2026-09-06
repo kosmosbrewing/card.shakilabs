@@ -10,7 +10,6 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import MinSpendCompareTable from "@/components/min-spend/MinSpendCompareTable.vue";
 import MinSpendDetailSection from "@/components/min-spend/MinSpendDetailSection.vue";
-import MinSpendFAQ from "@/components/min-spend/MinSpendFAQ.vue";
 import MinSpendInput from "@/components/min-spend/MinSpendInput.vue";
 import MinSpendNetBenefitChart from "@/components/min-spend/MinSpendNetBenefitChart.vue";
 import MinSpendTopCards from "@/components/min-spend/MinSpendTopCards.vue";
@@ -41,29 +40,6 @@ useCardFuelPrices();
 const seoTitle = "전월 실적 채우기 최소 비용 계산기 | 카드 실적 vs 할인 효율 분석 2026";
 const seoDescription =
   "내 월 지출 패턴을 입력하면 카드별 전월 실적 충족 여부와 순 혜택을 자동 계산합니다.";
-
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "실적을 채우기 위해 추가 지출할 가치가 있나요?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "추가 지출까지 차감한 순혜택이 양수인지 먼저 봐야 합니다.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "생활비가 실적에 모두 포함되나요?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "대부분 포함되지만 카드사별 제외 항목이 있어 최종 확인이 필요합니다.",
-      },
-    },
-  ],
-};
 
 const summaryMessage = computed(() => {
   if (!bestCard.value) return "";
@@ -112,7 +88,7 @@ const {
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
+  <SEOHead :title="seoTitle" :description="seoDescription" />
 
   <div class="container space-y-5 py-5">
     <CalculatorPageHeader title="전월 실적 계산기" />
@@ -151,8 +127,6 @@ const {
     <AdSlot slot="min-spend-middle" label="실적 비교표 하단" />
 
     <MinSpendDetailSection v-if="sortedResults.length > 0" :results="sortedResults" />
-
-    <MinSpendFAQ />
 
     <AdSlot slot="min-spend-bottom" label="실적 FAQ 하단" />
 

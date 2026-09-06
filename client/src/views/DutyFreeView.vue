@@ -5,7 +5,6 @@ import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import DutyFreeBarChart from "@/components/duty-free/DutyFreeBarChart.vue";
-import DutyFreeFAQ from "@/components/duty-free/DutyFreeFAQ.vue";
 import DutyFreeInput from "@/components/duty-free/DutyFreeInput.vue";
 import DutyFreeResult from "@/components/duty-free/DutyFreeResult.vue";
 import TaxBreakdownSection from "@/components/duty-free/TaxBreakdownSection.vue";
@@ -18,27 +17,10 @@ const { purchaseAmountUsd, category, result } = useDutyFreeCalc();
 const seoTitle = "면세 한도 초과 관세 계산기 | 해외쇼핑 관세·부가세 자동 계산 2026";
 const seoDescription =
   "해외 면세점과 직구 구매 금액이 800달러를 넘을 때 예상 관세와 부가세를 자동 계산합니다.";
-
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "면세 한도가 $800인가요?",
-      acceptedAnswer: { "@type": "Answer", text: "일반 여행자 휴대품 면세 한도는 800달러 기준입니다." },
-    },
-    {
-      "@type": "Question",
-      name: "간이세율은 언제 적용되나요?",
-      acceptedAnswer: { "@type": "Answer", text: "일부 일반 물품에 한해 금액과 품목 조건을 만족할 때 적용됩니다." },
-    },
-  ],
-};
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
+  <SEOHead :title="seoTitle" :description="seoDescription" />
 
   <div class="container space-y-5 py-5">
     <CalculatorPageHeader title="면세 한도 초과 관세 계산기" />
@@ -67,8 +49,6 @@ const faqJsonLd = {
     <div class="retro-panel-muted px-4 py-4 text-caption font-semibold leading-relaxed text-foreground">
       {{ formatTaxBreakdown(result) }}
     </div>
-
-    <DutyFreeFAQ />
 
     <AdSlot slot="duty-free-bottom" label="관세 FAQ 하단" />
 
