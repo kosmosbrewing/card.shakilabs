@@ -11,7 +11,6 @@ import DCCCompareSection from "@/components/overseas/DCCCompareSection.vue";
 import OverseasBarChart from "@/components/overseas/OverseasBarChart.vue";
 import OverseasCompareTable from "@/components/overseas/OverseasCompareTable.vue";
 import OverseasDetailSection from "@/components/overseas/OverseasDetailSection.vue";
-import OverseasFAQ from "@/components/overseas/OverseasFAQ.vue";
 import OverseasInput from "@/components/overseas/OverseasInput.vue";
 import OverseasTopCardList from "@/components/overseas/OverseasTopCardList.vue";
 import { useCardExchangeRates } from "@/composables/usePublicData";
@@ -39,29 +38,6 @@ useCardExchangeRates();
 const seoTitle = "해외결제 카드 비교 + DCC 수수료 계산기 | Car Tools 2026";
 const seoDescription =
   "해외에서 현지통화 결제와 DCC 원화결제를 비교하고, 카드별 해외수수료와 캐시백까지 한 번에 계산합니다.";
-
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "DCC는 왜 피하는 게 좋나요?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "대부분의 경우 현지통화 결제보다 높은 마크업이 붙기 때문입니다.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "해외결제 카드 비교 시 무엇을 봐야 하나요?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "총 해외수수료, 적립/캐시백, 실적 조건, 체크/선불 여부를 함께 비교해야 합니다.",
-      },
-    },
-  ],
-};
 
 const summaryMessage = computed(() => {
   if (!bestCard.value) return "";
@@ -105,7 +81,7 @@ const {
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
+  <SEOHead :title="seoTitle" :description="seoDescription" />
 
   <div class="container space-y-5 py-5">
     <CalculatorPageHeader title="해외결제 카드 비교 계산기" />
@@ -145,8 +121,6 @@ const {
     <AdSlot slot="overseas-middle" label="해외결제 비교표 하단" />
 
     <OverseasDetailSection v-if="sortedResults.length > 0" :results="sortedResults" />
-
-    <OverseasFAQ />
 
     <AdSlot slot="overseas-bottom" label="해외결제 FAQ 하단" />
 

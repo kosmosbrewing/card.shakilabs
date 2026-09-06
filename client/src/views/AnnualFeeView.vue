@@ -10,7 +10,6 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import AnnualFeeCompareTable from "@/components/annual-fee/AnnualFeeCompareTable.vue";
 import AnnualFeeDetailSection from "@/components/annual-fee/AnnualFeeDetailSection.vue";
-import AnnualFeeFAQ from "@/components/annual-fee/AnnualFeeFAQ.vue";
 import AnnualFeeInput from "@/components/annual-fee/AnnualFeeInput.vue";
 import AnnualFeeTopCards from "@/components/annual-fee/AnnualFeeTopCards.vue";
 import BreakEvenChart from "@/components/annual-fee/BreakEvenChart.vue";
@@ -34,29 +33,6 @@ const {
 const seoTitle = "연회비 회수 계산기 | 카드 혜택 vs 연회비 손익분석 2026";
 const seoDescription =
   "월 소비 패턴을 입력하면 카드별 연회비 회수 기간, 연 순혜택, ROI를 한 번에 비교합니다.";
-
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "연회비 회수 기간이란 무엇인가요?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "월 혜택이 누적되어 연회비를 넘어서는 데 걸리는 월 수를 뜻합니다.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "전월 실적을 못 채우면 어떻게 되나요?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "해당 월 혜택은 0원으로 계산되므로 실적 조건이 낮은 카드가 실제로 더 유리할 수 있습니다.",
-      },
-    },
-  ],
-};
 
 const summaryMessage = computed(() => {
   if (!bestCard.value) return "";
@@ -105,7 +81,7 @@ const {
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
+  <SEOHead :title="seoTitle" :description="seoDescription" />
 
   <div class="text-resize-layout container space-y-5 py-5">
     <CalculatorPageHeader title="연회비 회수 계산기" />
@@ -135,8 +111,6 @@ const {
     <AdSlot slot="annual-fee-middle" label="연회비 비교표 하단" />
 
     <AnnualFeeDetailSection v-if="sortedResults.length > 0" :results="sortedResults" />
-
-    <AnnualFeeFAQ />
 
     <AdSlot slot="annual-fee-bottom" label="연회비 FAQ 하단" />
 

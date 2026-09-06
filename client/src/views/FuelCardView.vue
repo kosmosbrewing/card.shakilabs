@@ -14,7 +14,6 @@ import FuelCardInternalLinks from "@/components/fuel-card/FuelCardInternalLinks.
 import FeeCompareTable from "@/components/fuel-card/FeeCompareTable.vue";
 import CardDetailSection from "@/components/fuel-card/CardDetailSection.vue";
 import SavingsBarChart from "@/components/fuel-card/SavingsBarChart.vue";
-import FuelCardFAQ from "@/components/fuel-card/FuelCardFAQ.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useFuelCardCalc } from "@/composables/useFuelCardCalc";
 import { useCardFuelPrices } from "@/composables/usePublicData";
@@ -69,30 +68,6 @@ const seoTitle = "주유 할인카드 비교 계산기 | 내 주유량에 맞는
 const seoDescription =
   "월 주유 금액만 입력하면 카드별 절약액을 즉시 비교합니다. 현대카드, 신한카드, KB국민, 삼성카드 주유 할인 한눈에.";
 
-// FAQ JSON-LD
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "주유 할인카드는 어떤 기준으로 선택해야 하나요?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "월 주유 금액, 선호 주유소 브랜드, 전월 실적 충족 가능 여부를 고려하세요.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "체감 유가란 무엇인가요?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "카드 할인을 적용한 후 실제로 내가 체감하는 리터당 가격입니다.",
-      },
-    },
-  ],
-};
-
 // SummaryBanner 메시지
 const summaryMessage = computed(() => {
   if (!bestCard.value) return "";
@@ -105,7 +80,7 @@ const summaryMessage = computed(() => {
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
+  <SEOHead :title="seoTitle" :description="seoDescription" />
 
   <div class="text-resize-layout container space-y-5 py-5">
     <CalculatorPageHeader title="주유 할인카드 비교 계산기" />
@@ -155,9 +130,6 @@ const summaryMessage = computed(() => {
 
     <!-- 카드별 상세 조건 -->
     <CardDetailSection v-if="sortedResults.length > 0" :results="sortedResults" />
-
-    <!-- FAQ -->
-    <FuelCardFAQ />
 
     <!-- 광고 하단 -->
     <AdSlot slot="fuel-card-bottom" label="FAQ 하단" />
