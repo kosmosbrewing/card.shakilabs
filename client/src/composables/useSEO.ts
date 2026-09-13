@@ -11,13 +11,16 @@ const PRERENDERED_JSONLD_TYPES: ReadonlySet<string> =
     ? new Set<string>()
     : collectJsonLdTypes(document);
 
-const TITLE_SUFFIX = " | 카드 계산기";
-const DEFAULT_TITLE = "카드 계산기";
+// 정본 규칙(디자인 시스템 §11.1): "{페이지} | {카테고리} | ShakiLabs".
+const CATEGORY = "카드 계산기";
+const TITLE_SUFFIX = ` | ${CATEGORY} | ShakiLabs`;
+const DEFAULT_TITLE = CATEGORY;
 const LEGACY_TITLE_SUFFIXES = [
+  TITLE_SUFFIX,
   " | Car Tools 2026",
   " | Car Tools",
+  ` | ${CATEGORY}`,
   " | ShakiLabs",
-  TITLE_SUFFIX,
 ] as const;
 
 type SEOOptions = {
@@ -38,9 +41,12 @@ type SEOOptions = {
   canonicalPath?: MaybeRefOrGetter<string | undefined>;
 };
 
-function normalizeTitle(rawTitle: string): string {
+// 뷰가 넘기는 title에 이미 "|"가 들어있어도(서브타이틀 병기) 배지를 건너뛰지
+// 않는다 — 예전에는 pipe 유무로 두 레시피가 섞였다(카테고리 배지 있음/없음).
+// 항상 한 레시피만 적용해 배지 유무가 페이지마다 갈리지 않게 한다.
+export function normalizeTitle(rawTitle: string): string {
   const trimmed = rawTitle.trim();
-  let baseTitle = trimmed;
+  let baseTitle = trimmed || DEFAULT_TITLE;
 
   for (const suffix of LEGACY_TITLE_SUFFIXES) {
     if (baseTitle.endsWith(suffix)) {
@@ -50,10 +56,21 @@ function normalizeTitle(rawTitle: string): string {
   }
 
   if (!baseTitle) {
-    return DEFAULT_TITLE;
+    baseTitle = DEFAULT_TITLE;
   }
 
-  return baseTitle.includes(" | ") ? baseTitle : `${baseTitle}${TITLE_SUFFIX}`;
+  // v3 §11.1의 레시피는 `{페이지} | {카테고리} | ShakiLabs` 3단이다.
+  // 페이지 이름이 자체 부제를 pipe로 달고 있으면 4단이 되어 어디까지가 페이지명인지
+  // 읽히지 않는다. 부제는 검색 키워드를 담고 있으므로 버리지 않고 구분자만 중점으로 바꾼다.
+  baseTitle = baseTitle.replace(/\s*\|\s*/g, " · ");
+
+  // 카테고리 없는 루트 예외(§11.1): 페이지 이름이 이미 카테고리로 시작하면
+  // ("카드 계산기 | ...") 배지를 또 붙이지 않고 ShakiLabs만 덧붙인다.
+  if (baseTitle.startsWith(CATEGORY)) {
+    return `${baseTitle} | ShakiLabs`;
+  }
+
+  return `${baseTitle}${TITLE_SUFFIX}`;
 }
 
 export function useSEO({
