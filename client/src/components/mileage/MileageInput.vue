@@ -44,7 +44,7 @@ const classPresetOptions = computed(() => classOptions.map((value) => ({
   <div class="retro-panel overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
       <h2 class="retro-title flex items-center gap-2">
-        <Plane class="h-5 w-5 text-primary" />
+        <Plane class="h-5 w-5 text-muted-foreground" />
         마일리지 조건 입력
       </h2>
     </div>

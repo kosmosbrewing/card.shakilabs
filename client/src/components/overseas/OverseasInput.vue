@@ -64,7 +64,7 @@ function handleDccInput(event: Event) {
   <div class="retro-panel overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
       <h2 class="retro-title flex items-center gap-2">
-        <Globe2 class="h-5 w-5 text-primary" />
+        <Globe2 class="h-5 w-5 text-muted-foreground" />
         결제 조건 입력
       </h2>
       <button
@@ -91,7 +91,7 @@ function handleDccInput(event: Event) {
             />
             <button
               type="button"
-              class="retro-choice-button border-border/70 text-muted-foreground hover:border-primary/50 hover:text-primary"
+              class="retro-choice-button border-border/70 text-muted-foreground hover:border-foreground/40 hover:text-foreground"
               @click="showExtraCurrencies = !showExtraCurrencies"
             >
               통화+

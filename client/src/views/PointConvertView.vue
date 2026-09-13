@@ -46,7 +46,7 @@ const formatChartValue = (value: number | null) => formatWon(value ?? 0);
         <p v-if="validationError" id="point-convert-error" class="text-caption font-semibold text-destructive" role="alert">
           {{ validationError }}
         </p>
-        <div class="rounded-2xl border border-primary/20 bg-primary/5 px-4 py-3 text-caption text-foreground">
+        <div class="rounded-2xl border border-border bg-muted/30 px-4 py-3 text-caption text-foreground">
           가장 높은 예상 가치는 <strong>{{ result.bestOption.label }}</strong> 전환이며 약 {{ formatWon(result.bestOption.estimatedValue) }}입니다.
         </div>
       </div>

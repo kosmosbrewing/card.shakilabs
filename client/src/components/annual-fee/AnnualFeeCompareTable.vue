@@ -32,7 +32,7 @@ const sortOptions: { key: AnnualFeeSortKey; label: string }[] = [
             'touch-target rounded-lg border px-2 py-1 text-tiny font-medium transition-colors',
             sortKey === option.key
               ? 'border-primary bg-primary/10 text-primary'
-              : 'border-border/70 text-muted-foreground hover:text-primary',
+              : 'border-border/70 text-muted-foreground hover:text-foreground',
           ]"
           @click="emit('update:sortKey', option.key)"
         >

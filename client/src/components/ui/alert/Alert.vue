@@ -43,7 +43,7 @@ let timer: ReturnType<typeof setTimeout> | null = null;
 const alertStyles = computed(() => {
   if (props.confirmMode) return "";
   if (props.type === "error") return "bg-destructive text-destructive-foreground";
-  return "bg-primary text-primary-foreground";
+  return "border border-border bg-card text-foreground";
 });
 
 const containerStyles = computed(() => {
@@ -110,11 +110,11 @@ onUnmounted(() => {
         <div v-if="isVisible" :class="cn(containerStyles, alertStyles, props.class)" role="alert">
           <template v-if="confirmMode">
             <div class="pt-6 pb-4 px-5 sm:pt-6 sm:pb-4 sm:px-6 flex flex-col items-center gap-2.5">
-              <div v-if="!isDestructive" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary/5 flex items-center justify-center">
-                <CheckCircle2 class="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+              <div v-if="!isDestructive" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-muted flex items-center justify-center">
+                <CheckCircle2 class="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground" />
               </div>
-              <div v-else class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-primary/5 flex items-center justify-center">
-                <AlertTriangle class="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+              <div v-else class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-muted flex items-center justify-center">
+                <AlertTriangle class="w-6 h-6 sm:w-8 sm:h-8 text-muted-foreground" />
               </div>
               <p class="text-caption sm:text-body font-medium text-foreground text-center whitespace-pre-line">
                 {{ message }}
@@ -129,7 +129,7 @@ onUnmounted(() => {
               </button>
               <button
                 @click="handleConfirm"
-                class="flex-1 py-3 sm:py-3.5 text-caption sm:text-body font-semibold transition-colors text-primary hover:bg-primary/5"
+                class="flex-1 py-3 sm:py-3.5 text-caption sm:text-body font-semibold transition-colors text-foreground hover:bg-muted/50"
               >
                 {{ confirmText }}
               </button>

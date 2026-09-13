@@ -38,7 +38,7 @@ defineProps<{
             :href="source.url"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-1 text-primary underline underline-offset-2"
+            class="text-link inline-flex items-center gap-1"
           >
             <span>{{ source.basis }}</span>
             <ExternalLink class="h-3 w-3 shrink-0" />
