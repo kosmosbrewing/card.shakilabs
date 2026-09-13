@@ -2,6 +2,7 @@ import { nextTick } from "vue";
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
 import { trackPageView } from "@/lib/analytics";
 import { buildPublicPagePath, shouldTrackPageView } from "@/utils/pageTracking";
+import { normalizeTitle } from "@/composables/useSEO";
 
 const routes: RouteRecordRaw[] = [
   // 홈: 상황별 계산기 진입점. 리다이렉트로 두면 앱에서 검색 신뢰도가 가장 높은 URL이 빈 껍데기로 서빙된다.
@@ -152,7 +153,9 @@ router.beforeEach(async (to) => {
     typeof to.meta.title === "string"
       ? to.meta.title
       : "카드 계산기";
-  document.title = title;
+  // useHead가 붙기 전에 잠깐 보이는 초기 title도 최종 렌더와 같은 레시피여야
+  // 한다 — 그렇지 않으면 하이드레이션 순간 title이 바뀌는 깜빡임이 생긴다.
+  document.title = normalizeTitle(title);
   return true;
 });
 

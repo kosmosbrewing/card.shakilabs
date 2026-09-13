@@ -10,6 +10,48 @@ const DIST_DIR = resolve(import.meta.dirname, "../dist");
 const INDEX_HTML = resolve(DIST_DIR, "index.html");
 const SITE_URL = "https://shakilabs.com/card";
 
+// 정본 규칙(디자인 시스템 §11.1): "{페이지} | {카테고리} | ShakiLabs".
+// client/src/composables/useSEO.ts의 normalizeTitle과 같은 레시피를 쓴다 —
+// 이 스크립트는 순수 .mjs라 TS 컴포저블을 그대로 import할 수 없어 미러링한다.
+// 이 앱은 프리렌더가 이겨서(하이드레이션 전 static HTML이 실제로 서빙되는
+// 산출물이다), 그 쪽의 title도 같은 레시피를 적용해야 실제로 보이는 title이
+// 바뀐다 — useSEO만 고쳐서는 라이브 <title>이 그대로다.
+const TITLE_CATEGORY = "카드 계산기";
+const TITLE_SUFFIX = ` | ${TITLE_CATEGORY} | ShakiLabs`;
+const TITLE_DEFAULT = TITLE_CATEGORY;
+const LEGACY_TITLE_SUFFIXES = [
+  TITLE_SUFFIX,
+  " | Car Tools 2026",
+  " | Car Tools",
+  ` | ${TITLE_CATEGORY}`,
+  " | ShakiLabs",
+];
+
+function normalizeTitle(rawTitle) {
+  const trimmed = (rawTitle ?? "").trim();
+  let baseTitle = trimmed || TITLE_DEFAULT;
+
+  for (const suffix of LEGACY_TITLE_SUFFIXES) {
+    if (baseTitle.endsWith(suffix)) {
+      baseTitle = baseTitle.slice(0, -suffix.length).trimEnd();
+      break;
+    }
+  }
+
+  if (!baseTitle) {
+    baseTitle = TITLE_DEFAULT;
+  }
+
+  // 페이지명 안의 pipe는 중점으로 — 레시피는 3단이다(useSEO.ts와 같은 규칙).
+  baseTitle = baseTitle.replace(/\s*\|\s*/g, " · ");
+
+  if (baseTitle.startsWith(TITLE_CATEGORY)) {
+    return `${baseTitle} | ShakiLabs`;
+  }
+
+  return `${baseTitle}${TITLE_SUFFIX}`;
+}
+
 // Single source of truth for every self-referencing URL on a page. Variant
 // routes resolve to their family base (see seo-routes.mjs), so canonical,
 // og:url and the JSON-LD "url" field can never drift apart -- a variant that
@@ -521,7 +563,10 @@ function replaceTag(html, pattern, next) {
 }
 
 function applyMeta(html, meta, route) {
-  const escapedTitle = escapeAttr(meta.title);
+  // <title>/og:title/twitter:title에만 카테고리+ShakiLabs 배지를 붙인다.
+  // meta.title 자체는 그대로 둔다 — 아래에서 h1(split(" | ")[0])과 JSON-LD
+  // name이 같은 meta.title을 다시 읽어 배지 없는 순수 페이지명을 써야 한다.
+  const escapedTitle = escapeAttr(normalizeTitle(meta.title));
   const escapedDescription = escapeAttr(meta.description);
   const escapedCanonical = escapeAttr(meta.canonical);
   const escapedOgImage = escapeAttr(`${SITE_URL}/og-image.png`);

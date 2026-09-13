@@ -11,7 +11,7 @@ import { CARD_DATA_SCOPE } from "@/data/cardDataScope";
 
 <template>
   <SEOHead
-    title="카드 계산기 전체 보기 | 목적별 10개 비교 도구"
+    title="카드 계산기 전체 보기 | 목적별 카드 비교 도구"
     description="혜택·고정지출, 해외·여행 결제, 포인트·결제 관리 목적별로 필요한 카드 계산기를 찾으세요."
   />
   <div class="container space-y-5 py-5">
