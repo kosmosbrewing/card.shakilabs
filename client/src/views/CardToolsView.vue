@@ -36,7 +36,7 @@ import { CARD_DATA_SCOPE } from "@/data/cardDataScope";
       </div>
       <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <RouterLink v-for="tool in group.tools" :key="tool.path" :to="tool.path" class="block no-underline">
-          <ShSurface variant="outlined" padding="md" class="group flex h-full flex-col hover:border-primary">
+          <ShSurface variant="outlined" padding="md" class="group flex h-full flex-col hover:border-foreground/40">
             <ShText as="h3" variant="heading">{{ tool.title }}</ShText>
             <ShText variant="caption" tone="muted" class="mt-2">{{ tool.description }}</ShText>
             <ShText variant="caption" tone="muted" class="mt-3">
@@ -45,7 +45,7 @@ import { CARD_DATA_SCOPE } from "@/data/cardDataScope";
             <ShText variant="caption" tone="muted" class="mt-2 flex-1">
               <strong class="text-foreground">무엇이 나오나요?</strong> {{ tool.inputsOutputs }}
             </ShText>
-            <span class="mt-4 inline-flex items-center gap-1 text-caption font-semibold text-primary">
+            <span class="mt-4 inline-flex items-center gap-1 text-caption font-semibold text-foreground">
               계산 시작 <ArrowRight class="h-4 w-4" aria-hidden="true" />
             </span>
           </ShSurface>
@@ -71,7 +71,7 @@ import { CARD_DATA_SCOPE } from "@/data/cardDataScope";
           <tbody>
             <tr v-for="row in CARD_DATA_SCOPE" :key="row.path">
               <th scope="row" class="whitespace-nowrap border border-border px-3 py-2 text-left font-semibold">
-                <RouterLink :to="row.path" class="text-primary">{{ row.label }}</RouterLink>
+                <RouterLink :to="row.path" class="text-link">{{ row.label }}</RouterLink>
               </th>
               <td class="whitespace-nowrap border border-border px-3 py-2 tabular-nums">{{ row.count }}장</td>
               <td class="border border-border px-3 py-2 text-muted-foreground">{{ row.detail }}</td>

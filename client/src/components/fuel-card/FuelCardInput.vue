@@ -42,7 +42,7 @@ function handleAmountInput(e: Event) {
   <ShSurface padding="none" class="overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
       <ShText as="h2" variant="heading" class="flex items-center gap-2">
-        <Fuel class="h-5 w-5 text-primary" />
+        <Fuel class="h-5 w-5 text-muted-foreground" />
         주유 조건 입력
       </ShText>
       <button

@@ -37,12 +37,12 @@ function trackRelatedClick(toTool: string): void {
         variant="outlined"
         padding="md"
         :href="item.href"
-        class="group flex flex-col no-underline transition-colors hover:border-primary"
+        class="group flex flex-col no-underline transition-colors hover:border-foreground/40"
         @click="trackRelatedClick(item.key)"
       >
         <ShText as="h3" variant="heading">{{ item.title }}</ShText>
         <ShText variant="caption" tone="muted" class="mt-2 flex-1">{{ item.description }}</ShText>
-        <span class="mt-4 inline-flex items-center gap-1 text-caption font-semibold text-primary">
+        <span class="mt-4 inline-flex items-center gap-1 text-caption font-semibold text-foreground">
           {{ item.title }} <ArrowRight class="h-4 w-4" aria-hidden="true" />
         </span>
       </ShSurface>

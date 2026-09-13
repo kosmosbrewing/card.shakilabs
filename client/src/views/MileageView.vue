@@ -45,7 +45,7 @@ const seoDescription =
       />
     </CalculatorInteractionTracker>
 
-    <div class="rounded-xl border border-primary/25 bg-primary/5 p-4 text-caption leading-relaxed text-foreground">
+    <div class="rounded-xl border border-border bg-muted/30 p-4 text-caption leading-relaxed text-foreground">
       <p class="font-semibold">공식 공제 기준: {{ MILEAGE_ASSUMPTIONS.journey }}</p>
       <p class="mt-1 text-muted-foreground">
         원/마일은 {{ MILEAGE_ASSUMPTIONS.cashFare }}로 계산하며,
@@ -84,19 +84,19 @@ const seoDescription =
       <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
         <RouterLink
           to="/overseas-payment"
-          class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
         >
           해외결제 카드 비교
         </RouterLink>
         <RouterLink
           to="/annual-fee"
-          class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
         >
           연회비 회수 계산기
         </RouterLink>
         <RouterLink
           to="/duty-free"
-          class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
         >
           관세 계산기
         </RouterLink>

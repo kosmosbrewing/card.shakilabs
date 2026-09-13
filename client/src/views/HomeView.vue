@@ -61,7 +61,7 @@ const jsonLd = [
         ShakiLabs 카드 계산기는 주유·해외결제·연회비·포인트 등 카드 선택에 필요한 계산을 10개 도구로 나눠 제공합니다.
         회원가입이나 개인정보 입력 없이 금액만 넣으면 결과를 바로 확인할 수 있습니다.
       </ShText>
-      <RouterLink to="/all" class="mt-4 inline-flex items-center gap-1 text-caption font-semibold text-primary no-underline">
+      <RouterLink to="/all" class="mt-4 inline-flex items-center gap-1 text-caption font-semibold text-foreground no-underline">
         계산기 전체 보기 <ArrowRight class="h-4 w-4" aria-hidden="true" />
       </RouterLink>
     </ShSurface>
@@ -80,10 +80,10 @@ const jsonLd = [
           :to="entry.path"
           class="block no-underline"
         >
-          <ShSurface variant="outlined" padding="md" class="flex h-full flex-col hover:border-primary">
+          <ShSurface variant="outlined" padding="md" class="flex h-full flex-col hover:border-foreground/40">
             <ShText as="h3" variant="heading">{{ entry.situation }}</ShText>
             <ShText variant="caption" tone="muted" class="mt-2 flex-1">{{ entry.checkpoint }}</ShText>
-            <span class="mt-4 inline-flex items-center gap-1 text-caption font-semibold text-primary">
+            <span class="mt-4 inline-flex items-center gap-1 text-caption font-semibold text-foreground">
               {{ entry.label }} <ArrowRight class="h-4 w-4" aria-hidden="true" />
             </span>
           </ShSurface>

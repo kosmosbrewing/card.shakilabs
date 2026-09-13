@@ -48,6 +48,7 @@ onErrorCaptured((error, _instance, info) => {
               <div class="container py-10">
                 <LoadingSpinner
                   variant="spinner"
+                  color="muted"
                   message="화면을 불러오는 중입니다."
                 />
               </div>

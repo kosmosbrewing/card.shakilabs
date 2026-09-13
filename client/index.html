@@ -76,12 +76,14 @@
     <!-- Critical CSS: car-tools 테마 — teal 주유/자동차 톤 -->
     <style>
       :root {
-        --background: 210 40% 98%;
-        --foreground: 222 47% 11%;
-        --muted: 210 40% 96%;
-        --muted-foreground: 215 16% 37%;
+        /* Archive 톤 중성 — root와 온도를 맞춘다 (docs/ARCHIVE_TONE_SPEC.md §1).
+           앱 브랜드색(--primary teal)은 그대로 두고 중성만 옮긴다. */
+        --background: 40 25% 99%;
+        --foreground: 40 7% 12%;
+        --muted: 36 14% 95%;
+        --muted-foreground: 30 8% 38%;
         --card: 0 0% 100%;
-        --card-foreground: 222 47% 11%;
+        --card-foreground: 40 7% 12%;
         --primary: 174 87% 21%;
         --primary-foreground: 0 0% 100%;
         --secondary: 174 20% 93%;
@@ -95,14 +97,19 @@
            이미 같은 파일이 쓰는 통과값 --loss/--status-danger(0 74% 42%)로 통일한다. */
         --destructive: 0 74% 42%;
         --destructive-foreground: 210 40% 98%;
-        --border: 214 16% 85%;
-        --input: 214 16% 85%;
+        --border: 33 14% 87%;
+        --input: 33 14% 87%;
         --ring: 174 87% 21%;
         --radius: 0.4rem;
         --savings: 160 94% 23%;
         --savings-foreground: 0 0% 100%;
         --loss: 0 74% 42%;
         --loss-foreground: 0 0% 100%;
+
+        /* sticky 내비(ShPrimaryNavigation) 높이 — scroll-padding-top 계산의 단일
+           출처. AppHeader는 sticky가 아니라서 내비만 고려하면 된다.
+           모바일 실측(390px 기준) ~56px, 데스크톱 ~49px — 여유를 둔 3.5rem(56px). */
+        --header-h: 3.5rem;
 
         /* 라이트 의미색은 카드(0 0% 100%) 위 6.41~7.42:1로 전부 통과 상태다.
            불필요한 시각 변화를 피하려고 실측 후 의도적으로 그대로 둔다. */
@@ -114,12 +121,13 @@
       }
 
       .dark {
-        --background: 222 47% 11%;
-        --foreground: 210 40% 96%;
-        --muted: 217 33% 17%;
-        --muted-foreground: 215 20% 72%;
-        --card: 217 33% 17%;
-        --card-foreground: 210 40% 96%;
+        /* Archive 다크 원본(#14120f/#f3efe9/#a49c93/#2e2a25) 대응 */
+        --background: 40 11% 9%;
+        --foreground: 36 30% 93%;
+        --muted: 36 10% 16%;
+        --muted-foreground: 30 11% 70%;
+        --card: 36 10% 16%;
+        --card-foreground: 36 30% 93%;
         --primary: 174 70% 45%;
         --primary-foreground: 174 90% 8%;
         --secondary: 174 15% 20%;
@@ -134,8 +142,8 @@
            방식으로 hue를 유지한 채 어둡게 바꿔 배경 쪽도 통과시킨다. */
         --destructive: 0 75% 72%;
         --destructive-foreground: 0 65% 12%;
-        --border: 214 16% 26%;
-        --input: 214 16% 30%;
+        --border: 33 9% 24%;
+        --input: 33 9% 28%;
         --ring: 174 70% 45%;
         --savings: 160 56% 50%;
         /* bg-savings 위 흰 글자는 2.15:1이었다. 지금은 솔리드 사용처가 없지만
@@ -158,6 +166,10 @@
       html {
         scroll-behavior: auto;
         font-size: 16px;
+        /* sticky 내비(top:0)가 페이지 내 앵커 대상을 가리던 문제 — 내비 높이만큼
+           미리 확보한다. router의 scrollBehavior top:80 오프셋과는 별개로, 브라우저가
+           네이티브 프래그먼트 이동(#main-content 등)을 처리할 때도 적용된다. */
+        scroll-padding-top: calc(var(--header-h) + 1rem);
       }
 
       @media (max-width: 640px) {

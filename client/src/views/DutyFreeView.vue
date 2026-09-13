@@ -65,19 +65,19 @@ const seoDescription =
       <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
         <RouterLink
           to="/overseas-payment"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
         >
           해외결제 카드 비교
         </RouterLink>
         <RouterLink
           to="/annual-fee"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
         >
           연회비 회수 계산기
         </RouterLink>
         <RouterLink
           to="/fuel-card"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
         >
           주유 할인카드 비교
         </RouterLink>

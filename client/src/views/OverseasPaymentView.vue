@@ -148,37 +148,37 @@ const {
           v-for="link in currencyLinks"
           :key="link.code"
           :to="link.to"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
         >
           {{ link.code }} 카드 비교
         </RouterLink>
         <RouterLink
           to="/annual-fee"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
         >
           연회비 회수 계산기
         </RouterLink>
         <RouterLink
           to="/duty-free"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
         >
           관세 계산기
         </RouterLink>
         <RouterLink
           to="/mileage"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
         >
           마일리지 가치 계산기
         </RouterLink>
         <RouterLink
           to="/fuel-card"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
         >
           주유 할인카드 비교
         </RouterLink>
         <RouterLink
           to="/min-spend"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:text-primary"
+          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
         >
           전월 실적 계산기
         </RouterLink>
