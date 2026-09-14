@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { AIRLINES } from "@/data/mileageData";
 import type { MileageCalcResult } from "@/utils/mileageCalculator";
 import { formatTotalValue, formatValuePerMile } from "@/utils/mileageCalculator";
+import ResultHero from "@/components/common/ResultHero.vue";
 
 const props = defineProps<{
   result: MileageCalcResult;
@@ -29,13 +30,14 @@ const airline = computed(() =>
         <span class="text-body text-muted-foreground">{{ airline.mileageName }}</span>
       </div>
 
-      <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
-        <div class="retro-panel-muted px-3 py-3">
-          <div class="text-caption text-muted-foreground">예시 환산 상한</div>
-          <div class="mt-1 text-heading font-bold tabular-nums text-savings">
-            {{ formatTotalValue(result.totalValueKrw) }}
-          </div>
-        </div>
+      <!-- 대표 수치(BL-020) -->
+      <ResultHero
+        label="예시 환산 상한"
+        :value="formatTotalValue(result.totalValueKrw)"
+        value-class="text-savings"
+      />
+
+      <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
         <div class="retro-panel-muted px-3 py-3">
           <div class="text-caption text-muted-foreground">예시 최고 1마일 가치</div>
           <div class="mt-1 text-heading font-bold tabular-nums text-savings">

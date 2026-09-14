@@ -15,8 +15,13 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", ...fontFamily.sans],
-        title: ["GmarketSans", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", ...fontFamily.sans],
-        brand: ["GmarketSans", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", ...fontFamily.sans],
+        // 한글 제목용. GmarketSans를 뺐다 — 서브셋이 숫자 전용으로 바뀌어
+        // "주유 할인카드 비교 계산기"의 '세'만 Gmarket으로 찍히는 혼합 렌더가 난다.
+        title: ["Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", ...fontFamily.sans],
+        brand: ["Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", ...fontFamily.sans],
+        // 강조 숫자 전용 스택(BL-020). ResultHero 말고 다른 곳에 붙이지 마라 —
+        // 서브셋에 없는 한글은 글리프 단위로 폴백돼 섞여 보인다.
+        numeral: ["GmarketSans", "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", ...fontFamily.sans],
       },
       fontSize: {
         display: ["1.625rem", { lineHeight: "1.2", fontWeight: "700" }],

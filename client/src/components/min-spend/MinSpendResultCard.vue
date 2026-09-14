@@ -4,6 +4,7 @@ import { computed } from "vue";
 import { progressBarWidth } from "@shakilabs/ui";
 import type { MinSpendCalcResult } from "@/utils/minSpendCalculator";
 import { formatQualificationStatus } from "@/utils/minSpendCalculator";
+import ResultHero from "@/components/common/ResultHero.vue";
 
 const props = defineProps<{
   result: MinSpendCalcResult;
@@ -79,7 +80,15 @@ const percent = computed(() => {
         </div>
       </div>
 
-      <div class="result-metric-grid grid grid-cols-3 gap-2">
+      <!-- 대표 수치: 1위 카드만 히어로로 올린다(BL-020) -->
+      <ResultHero
+        v-if="rank === 1"
+        label="순 혜택"
+        :value="`${result.netBenefitIncludingGap >= 0 ? '▲' : '▼'} ${Math.abs(result.netBenefitIncludingGap).toLocaleString()}원`"
+        :value-class="result.netBenefitIncludingGap >= 0 ? 'text-savings' : 'text-loss'"
+      />
+
+      <div class="result-metric-grid grid gap-2" :class="rank === 1 ? 'grid-cols-2' : 'grid-cols-3'">
         <div class="text-center">
           <div class="text-tiny text-muted-foreground">월 할인</div>
           <div class="text-heading font-bold tabular-nums text-savings">
@@ -92,7 +101,7 @@ const percent = computed(() => {
             {{ result.monthlyAnnualFee.toLocaleString() }}원
           </div>
         </div>
-        <div class="text-center">
+        <div v-if="rank !== 1" class="text-center">
           <div class="text-tiny text-muted-foreground">순 혜택</div>
           <div
             class="text-heading font-bold tabular-nums"

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { AlertTriangle, ArrowRightLeft, Trophy } from "lucide-vue-next";
 import { formatFeeRate, formatPrimaryBenefit, type OverseasCalcResult } from "@/utils/overseasCalculator";
+import ResultHero from "@/components/common/ResultHero.vue";
 
 defineProps<{
   result: OverseasCalcResult;
@@ -32,8 +33,16 @@ defineProps<{
         <span class="text-body text-muted-foreground">{{ result.card.name }}</span>
       </div>
 
-      <div class="result-metric-grid grid grid-cols-3 gap-2">
-        <div class="text-center">
+      <!-- 대표 수치: 1위 카드만 히어로로 올린다(BL-020) -->
+      <ResultHero
+        v-if="rank === 1"
+        label="현지통화 실부담"
+        :value="`${result.localCurrencyNet.toLocaleString()}원`"
+        value-class="text-savings"
+      />
+
+      <div class="result-metric-grid grid gap-2" :class="rank === 1 ? 'grid-cols-2' : 'grid-cols-3'">
+        <div v-if="rank !== 1" class="text-center">
           <div class="text-tiny text-muted-foreground">현지통화 실부담</div>
           <div class="text-heading font-bold tabular-nums text-savings">
             {{ result.localCurrencyNet.toLocaleString() }}원

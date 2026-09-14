@@ -2,6 +2,7 @@
 import { AlertTriangle, BadgeCheck } from "lucide-vue-next";
 import type { DutyFreeCalcResult } from "@/utils/dutyFreeCalculator";
 import { isExempt } from "@/utils/dutyFreeCalculator";
+import ResultHero from "@/components/common/ResultHero.vue";
 
 defineProps<{
   result: DutyFreeCalcResult;
@@ -15,7 +16,14 @@ defineProps<{
     </div>
 
     <div class="retro-panel-content space-y-3">
-      <div class="grid grid-cols-1 gap-2 sm:grid-cols-4">
+      <!-- 대표 수치(BL-020) -->
+      <ResultHero
+        label="최종 세액"
+        :value="`${result.finalTax.toLocaleString()}원`"
+        value-class="text-loss"
+      />
+
+      <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
         <div class="text-center">
           <div class="text-tiny text-muted-foreground">구매액</div>
           <div class="text-heading font-bold tabular-nums text-foreground">
@@ -32,12 +40,6 @@ defineProps<{
           <div class="text-tiny text-muted-foreground">과세 대상</div>
           <div class="text-heading font-bold tabular-nums text-status-warning">
             ${{ result.taxableAmountUsd.toLocaleString() }}
-          </div>
-        </div>
-        <div class="text-center">
-          <div class="text-tiny text-muted-foreground">최종 세액</div>
-          <div class="text-heading font-bold tabular-nums text-loss">
-            {{ result.finalTax.toLocaleString() }}원
           </div>
         </div>
       </div>
