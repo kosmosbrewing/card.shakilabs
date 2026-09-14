@@ -1,57 +1,33 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { RouterLink, useRoute } from "vue-router";
+import { ShPrimaryNavigation } from "@shakilabs/ui";
 import {
-  ShPrimaryNavigation,
-  type PrimaryNavigationItem,
-} from "@shakilabs/ui";
+  PRIMARY_NAV_ITEMS,
+  findActiveNavItem,
+} from "../../../scripts/primary-nav-items.mjs";
 
 const route = useRoute();
-const tabs: readonly PrimaryNavigationItem[] = [
-  { key: "all", label: "카드 도구", to: "/all" },
-  { key: "fuel-card", label: "주유 할인카드", to: "/fuel-card" },
-  { key: "overseas-payment", label: "해외결제 비교", to: "/overseas-payment" },
-  { key: "min-spend", label: "실적 채우기", to: "/min-spend" },
-  { key: "annual-fee", label: "연회비 회수", to: "/annual-fee" },
-  { key: "duty-free", label: "관세 계산", to: "/duty-free" },
-  { key: "mileage", label: "마일리지 가치", to: "/mileage" },
-  { key: "credit-vs-debit", label: "신용 vs 체크", to: "/credit-vs-debit" },
-  { key: "point-convert", label: "포인트 전환", to: "/point-convert" },
-  { key: "billing-cycle", label: "결제일 이용기간", to: "/billing-cycle" },
-  { key: "customs", label: "직구 관세", to: "/customs" },
-];
-
-const mobileDefaultKeys = [
-  "all",
-  "fuel-card",
-  "overseas-payment",
-  "min-spend",
-  "annual-fee",
-  "customs",
-] as const;
-
-const activeItem = computed(() =>
-  tabs.find((item) => route.path.startsWith(`/${item.key}`)),
-);
-
-const mobileItems = computed(() => {
-  const keys: string[] = [...mobileDefaultKeys];
-
-  if (activeItem.value && !keys.includes(activeItem.value.key)) {
-    keys[4] = activeItem.value.key;
-  }
-
-  return keys
-    .map((key) => tabs.find((item) => item.key === key))
-    .filter((item): item is PrimaryNavigationItem => Boolean(item));
-});
+const activeItem = computed(() => findActiveNavItem(route.path));
 </script>
 
 <template>
+  <!-- v3 §3.3-1 — 모바일(<48rem)에서는 이 인라인 내비를 숨기고 헤더의 좌측 드로어가
+       같은 목록을 대신 연다. 11개 탭을 2행 그리드로 깔면 모바일 chrome을 105px 더
+       먹었고, 그래서 6개만 보여 주는 mobile-items 로직이 필요했다 — 드로어는 11개를
+       전부 싣는다. 링크는 항상 DOM에 렌더되므로 크롤 경로는 끊기지 않는다. -->
   <ShPrimaryNavigation
-    :items="tabs"
-    :mobile-items="mobileItems"
+    class="tab-navigation--desktop-only"
+    :items="PRIMARY_NAV_ITEMS"
     :active-key="activeItem?.key"
     :link-component="RouterLink"
   />
 </template>
+
+<style scoped>
+@media (max-width: 47.99rem) {
+  .tab-navigation--desktop-only {
+    display: none;
+  }
+}
+</style>

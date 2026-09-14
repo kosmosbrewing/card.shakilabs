@@ -486,9 +486,9 @@ nav[aria-label="주요 메뉴"] {
   --sh-color-on-primary: hsl(var(--muted-foreground));
   --sh-nav-active-wash: hsl(var(--muted));
   border-bottom: 1px solid hsl(var(--border));
-  /* v3 AppShell: ShGlobalHeader도 top:0 sticky라 이 nav와 겹친다.
-     헤더 높이만큼 내려서 그 아래에 고정한다. */
-  top: var(--header-h, 56px);
+  /* 헤더 아래 적층은 이제 패키지가 구조로 처리한다 — 0.3.16의
+     `:root:has(.sh-global-header){--sh-secondary-nav-top: var(--sh-header-h)}`.
+     여기 있던 top 오버라이드는 그 규칙과 중복이라 제거했다(레시피 §2). */
 }
 
 nav[aria-label="주요 메뉴"] .sh-primary-navigation__link:hover,
