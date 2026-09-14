@@ -39,20 +39,23 @@ function buildOtherServicesBlock() {
       </nav>`;
 }
 
+// v3 AppShell: 프리렌더 정적 마크업도 실제 Vue 출력(검정 ShGlobalHeader + 흰 SecondaryNav)과
+// 같은 모양이어야 수화 전후 헤더가 깜빡이지 않는다(BL-038). header/nav를 별개의
+// body 직계 블록으로 나눈다 - removePrerenderChrome()이 HEADER/NAV 태그를 각각 지운다.
 export function buildPrerenderHeader() {
   return `
-    <header data-seo-prerender="header" style="max-width:1120px;margin:0 auto;padding:14px 16px;border-bottom:1px solid hsl(var(--border));">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-        <a href="/card/fuel-card" style="font-weight:700;font-size:18px;color:hsl(var(--foreground));text-decoration:none;">ShakiLabs 카드 계산기</a>
-        <nav aria-label="주요 메뉴" style="display:flex;gap:16px;flex-wrap:wrap;font-size:14px;">
-          <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">주유 할인카드</a>
-          <a href="/card/overseas-payment" style="color:hsl(var(--muted-foreground));text-decoration:none;">해외결제</a>
-          <a href="/card/annual-fee" style="color:hsl(var(--muted-foreground));text-decoration:none;">연회비</a>
-          <a href="/card/mileage" style="color:hsl(var(--muted-foreground));text-decoration:none;">마일리지</a>
-          <a href="/card/about" style="color:hsl(var(--muted-foreground));text-decoration:none;">서비스 소개</a>
-        </nav>
+    <header data-seo-prerender="header" style="background:#0a0a0a;">
+      <div style="max-width:1120px;margin:0 auto;padding:0 16px;height:56px;display:flex;align-items:center;">
+        <a href="/" style="font-weight:700;font-size:15px;color:#fafafa;text-decoration:none;">ShakiLabs</a>
       </div>
-    </header>`;
+    </header>
+    <nav aria-label="주요 메뉴" data-seo-prerender="nav" style="max-width:1120px;margin:0 auto;padding:10px 16px;border-bottom:1px solid hsl(var(--border));display:flex;gap:16px;flex-wrap:wrap;font-size:14px;">
+      <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">주유 할인카드</a>
+      <a href="/card/overseas-payment" style="color:hsl(var(--muted-foreground));text-decoration:none;">해외결제</a>
+      <a href="/card/annual-fee" style="color:hsl(var(--muted-foreground));text-decoration:none;">연회비</a>
+      <a href="/card/mileage" style="color:hsl(var(--muted-foreground));text-decoration:none;">마일리지</a>
+      <a href="/card/about" style="color:hsl(var(--muted-foreground));text-decoration:none;">서비스 소개</a>
+    </nav>`;
 }
 
 const CATEGORIES = {

@@ -486,6 +486,9 @@ nav[aria-label="주요 메뉴"] {
   --sh-color-on-primary: hsl(var(--muted-foreground));
   --sh-nav-active-wash: hsl(var(--muted));
   border-bottom: 1px solid hsl(var(--border));
+  /* v3 AppShell: ShGlobalHeader도 top:0 sticky라 이 nav와 겹친다.
+     헤더 높이만큼 내려서 그 아래에 고정한다. */
+  top: var(--header-h, 56px);
 }
 
 nav[aria-label="주요 메뉴"] .sh-primary-navigation__link:hover,

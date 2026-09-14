@@ -54,10 +54,21 @@
          validate-static-output.mjs가 엔티티 url == canonical을 강제한다. -->
 
     <script>
+      // v3 6.10 - 사이트 전역 테마 키. 카테고리별로 나누지 않는다(이 앱은 원래
+      // car-tools:theme:v1을 잘못 참조하고 있었다 - card인데 car 키였다).
+      // 기존 저장값이 있으면 그대로 이전해 사용자의 선택을 유지한다.
       (() => {
         try {
-          const key = "car-tools:theme:v1";
-          const saved = localStorage.getItem(key);
+          const key = "shakilabs:theme:v1";
+          const legacyKey = "car-tools:theme:v1";
+          let saved = localStorage.getItem(key);
+          if (saved !== "dark" && saved !== "light") {
+            const legacy = localStorage.getItem(legacyKey);
+            if (legacy === "dark" || legacy === "light") {
+              saved = legacy;
+              localStorage.setItem(key, legacy);
+            }
+          }
           const prefersDark =
             typeof window.matchMedia === "function" &&
             window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -70,6 +81,7 @@
           if (theme === "dark") {
             document.documentElement.classList.add("dark");
           }
+          document.documentElement.style.colorScheme = theme;
         } catch {}
       })();
     </script>
@@ -106,10 +118,14 @@
         --loss: 0 74% 42%;
         --loss-foreground: 0 0% 100%;
 
-        /* sticky 내비(ShPrimaryNavigation) 높이 — scroll-padding-top 계산의 단일
-           출처. AppHeader는 sticky가 아니라서 내비만 고려하면 된다.
-           모바일 실측(390px 기준) ~56px, 데스크톱 ~49px — 여유를 둔 3.5rem(56px). */
-        --header-h: 3.5rem;
+        /* v3 AppShell: ShGlobalHeader(검정, sticky)가 새로 생겨 --header-h는 이제
+           그 높이(56px, 패키지 고정값)를 가리킨다. SecondaryNav(ShPrimaryNavigation)
+           높이는 --secondary-nav-h로 분리한다 — scroll-padding-top 계산의 단일 출처.
+           모바일 실측(390px 기준) 약 105px(2행 그리드, 이번 마이그레이션 범위 밖). */
+        --header-h: 56px;
+        --secondary-nav-h: 105px;
+        --accent-hsl: var(--primary);
+        --accent-muted-hsl: 174 60% 95%;
 
         /* 라이트 의미색은 카드(0 0% 100%) 위 6.41~7.42:1로 전부 통과 상태다.
            불필요한 시각 변화를 피하려고 실측 후 의도적으로 그대로 둔다. */
@@ -145,6 +161,8 @@
         --border: 33 9% 24%;
         --input: 33 9% 28%;
         --ring: 174 70% 45%;
+        --accent-hsl: var(--primary);
+        --accent-muted-hsl: 174 40% 20%;
         --savings: 160 56% 50%;
         /* bg-savings 위 흰 글자는 2.15:1이었다. 지금은 솔리드 사용처가 없지만
            값이 남아 있으면 다음에 배지 하나 만들 때 그대로 새는 함정이 된다. */
@@ -166,10 +184,11 @@
       html {
         scroll-behavior: auto;
         font-size: 16px;
-        /* sticky 내비(top:0)가 페이지 내 앵커 대상을 가리던 문제 — 내비 높이만큼
-           미리 확보한다. router의 scrollBehavior top:80 오프셋과는 별개로, 브라우저가
-           네이티브 프래그먼트 이동(#main-content 등)을 처리할 때도 적용된다. */
-        scroll-padding-top: calc(var(--header-h) + 1rem);
+        /* sticky 헤더+내비(둘 다 top:0 부근에 고정)가 페이지 내 앵커 대상을 가리던
+           문제 — 두 높이 합만큼 미리 확보한다. router의 scrollBehavior top:80
+           오프셋과는 별개로, 브라우저가 네이티브 프래그먼트 이동(#main-content 등)을
+           처리할 때도 적용된다. */
+        scroll-padding-top: calc(var(--header-h, 56px) + var(--secondary-nav-h, 0px) + 8px);
       }
 
       @media (max-width: 640px) {
