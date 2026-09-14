@@ -54,10 +54,21 @@
          validate-static-output.mjs가 엔티티 url == canonical을 강제한다. -->
 
     <script>
+      // v3 6.10 - 사이트 전역 테마 키. 카테고리별로 나누지 않는다(이 앱은 원래
+      // car-tools:theme:v1을 잘못 참조하고 있었다 - card인데 car 키였다).
+      // 기존 저장값이 있으면 그대로 이전해 사용자의 선택을 유지한다.
       (() => {
         try {
-          const key = "car-tools:theme:v1";
-          const saved = localStorage.getItem(key);
+          const key = "shakilabs:theme:v1";
+          const legacyKey = "car-tools:theme:v1";
+          let saved = localStorage.getItem(key);
+          if (saved !== "dark" && saved !== "light") {
+            const legacy = localStorage.getItem(legacyKey);
+            if (legacy === "dark" || legacy === "light") {
+              saved = legacy;
+              localStorage.setItem(key, legacy);
+            }
+          }
           const prefersDark =
             typeof window.matchMedia === "function" &&
             window.matchMedia("(prefers-color-scheme: dark)").matches;
@@ -70,6 +81,7 @@
           if (theme === "dark") {
             document.documentElement.classList.add("dark");
           }
+          document.documentElement.style.colorScheme = theme;
         } catch {}
       })();
     </script>
@@ -78,12 +90,15 @@
       :root {
         /* Archive 톤 중성 — root와 온도를 맞춘다 (docs/ARCHIVE_TONE_SPEC.md §1).
            앱 브랜드색(--primary teal)은 그대로 두고 중성만 옮긴다. */
-        --background: 40 25% 99%;
-        --foreground: 40 7% 12%;
+        /* v3 §2.1 역할 토큰 — 목표 hex에서 HSL을 역산했다(반올림하면 빗나간다:
+           `60 9% 96%`는 #F6F6F4). `40 25% 99%`(=#FDFDFC 실측)는 v3가 폐기 목록에
+           올린 아이보리다 — 순백 카드와 대비가 1% 남짓이라 canvas/card 계층이 안 보였다. */
+        --background: 60 11.11% 96.47%; /* color.canvas #F7F7F5 */
+        --foreground: 0 0% 3.92%; /* color.ink #0A0A0A */
         --muted: 36 14% 95%;
-        --muted-foreground: 30 8% 38%;
-        --card: 0 0% 100%;
-        --card-foreground: 40 7% 12%;
+        --muted-foreground: 60 3.37% 34.9%; /* color.ink-muted #5C5C56 */
+        --card: 0 0% 100%; /* color.card #FFFFFF */
+        --card-foreground: 0 0% 3.92%;
         --primary: 174 87% 21%;
         --primary-foreground: 0 0% 100%;
         --secondary: 174 20% 93%;
@@ -97,8 +112,8 @@
            이미 같은 파일이 쓰는 통과값 --loss/--status-danger(0 74% 42%)로 통일한다. */
         --destructive: 0 74% 42%;
         --destructive-foreground: 210 40% 98%;
-        --border: 33 14% 87%;
-        --input: 33 14% 87%;
+        --border: 60 8% 90.2%; /* color.line #E8E8E4 */
+        --input: 60 8% 90.2%;
         --ring: 174 87% 21%;
         --radius: 0.4rem;
         --savings: 160 94% 23%;
@@ -106,10 +121,14 @@
         --loss: 0 74% 42%;
         --loss-foreground: 0 0% 100%;
 
-        /* sticky 내비(ShPrimaryNavigation) 높이 — scroll-padding-top 계산의 단일
-           출처. AppHeader는 sticky가 아니라서 내비만 고려하면 된다.
-           모바일 실측(390px 기준) ~56px, 데스크톱 ~49px — 여유를 둔 3.5rem(56px). */
-        --header-h: 3.5rem;
+        /* v3 AppShell: ShGlobalHeader(검정, sticky)가 새로 생겨 --header-h는 이제
+           그 높이(56px, 패키지 고정값)를 가리킨다. SecondaryNav(ShPrimaryNavigation)
+           높이는 --secondary-nav-h로 분리한다 — scroll-padding-top 계산의 단일 출처.
+           v3 §3.3-1로 모바일 인라인 내비가 사라져 데스크톱 1행(실측 49px)만 남는다. */
+        --header-h: 56px;
+        --secondary-nav-h: 49px;
+        --accent-hsl: var(--primary);
+        --accent-muted-hsl: 174 60% 95%;
 
         /* 라이트 의미색은 카드(0 0% 100%) 위 6.41~7.42:1로 전부 통과 상태다.
            불필요한 시각 변화를 피하려고 실측 후 의도적으로 그대로 둔다. */
@@ -145,6 +164,8 @@
         --border: 33 9% 24%;
         --input: 33 9% 28%;
         --ring: 174 70% 45%;
+        --accent-hsl: var(--primary);
+        --accent-muted-hsl: 174 40% 20%;
         --savings: 160 56% 50%;
         /* bg-savings 위 흰 글자는 2.15:1이었다. 지금은 솔리드 사용처가 없지만
            값이 남아 있으면 다음에 배지 하나 만들 때 그대로 새는 함정이 된다. */
@@ -166,14 +187,21 @@
       html {
         scroll-behavior: auto;
         font-size: 16px;
-        /* sticky 내비(top:0)가 페이지 내 앵커 대상을 가리던 문제 — 내비 높이만큼
-           미리 확보한다. router의 scrollBehavior top:80 오프셋과는 별개로, 브라우저가
-           네이티브 프래그먼트 이동(#main-content 등)을 처리할 때도 적용된다. */
-        scroll-padding-top: calc(var(--header-h) + 1rem);
+        /* sticky 헤더+내비(둘 다 top:0 부근에 고정)가 페이지 내 앵커 대상을 가리던
+           문제 — 두 높이 합만큼 미리 확보한다. router의 scrollBehavior top:80
+           오프셋과는 별개로, 브라우저가 네이티브 프래그먼트 이동(#main-content 등)을
+           처리할 때도 적용된다. */
+        scroll-padding-top: calc(var(--header-h, 56px) + var(--secondary-nav-h, 0px) + 8px);
       }
 
       @media (max-width: 640px) {
         html { font-size: 14px; }
+      }
+
+      /* v3 §3.3-1 — <48rem에서는 인라인 2차 내비가 숨고 헤더 드로어가 대신한다.
+         스티키 층이 헤더 하나뿐이므로 앵커 오프셋에서도 2차 내비 높이를 빼야 한다. */
+      @media (max-width: 47.99rem) {
+        :root { --secondary-nav-h: 0px; }
       }
 
       body {

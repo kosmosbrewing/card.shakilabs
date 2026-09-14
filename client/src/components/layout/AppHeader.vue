@@ -1,68 +1,40 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { Moon, Sun } from "lucide-vue-next";
-import { ShButton } from "@shakilabs/ui";
+// v3 3.2 - GlobalHeader 내용은 로고 + 사이트 링크 + 테마 버튼뿐이다. 앱은 자체
+// 헤더 마크업을 갖지 않는다. 티커(안내 문구)는 헤더 밖 얇은 배너로 내린다.
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { ShGlobalHeader } from "@shakilabs/ui";
+import { RouterLink } from "vue-router";
+import ThemeToggle from "@/components/layout/ThemeToggle.vue";
 import TickerBar from "@/components/common/TickerBar.vue";
 import { tickerMessages } from "@/data/tickerMessages";
+import {
+  PRIMARY_NAV_ITEMS,
+  findActiveNavItem,
+} from "../../../scripts/primary-nav-items.mjs";
 
-const THEME_STORAGE_KEY = "car-tools:theme:v1";
-type ThemeMode = "light" | "dark";
-
-const theme = ref<ThemeMode>("light");
-
-function applyTheme(next: ThemeMode): void {
-  theme.value = next;
-  document.documentElement.classList.toggle("dark", next === "dark");
-  localStorage.setItem(THEME_STORAGE_KEY, next);
-}
-
-function toggleTheme(): void {
-  applyTheme(theme.value === "dark" ? "light" : "dark");
-}
-
-onMounted(() => {
-  theme.value = document.documentElement.classList.contains("dark") ? "dark" : "light";
-});
+// v3 §3.3-1 — 모바일 좌측 드로어. 목록은 2차 내비와 같은 모듈에서 온다(복제 금지).
+// 비우면 패키지가 드로어 자체를 렌더하지 않으므로, 여기서 넘기는 것이 유일한 배선이다.
+const route = useRoute();
+const navActiveKey = computed(() => findActiveNavItem(route.path)?.key ?? "");
 </script>
 
 <template>
-  <header class="border-b border-border bg-card">
-    <div class="container pt-2.5 pb-2.5">
-      <div class="overflow-hidden">
-        <div class="retro-titlebar h-[44px] border-b-0 px-2 bg-transparent">
-          <div class="flex h-full w-full items-center gap-4">
-            <!-- 로고 -->
-            <a href="/card/fuel-card" aria-label="ShakiLabs 홈"
-              class="inline-flex h-[44px] w-[44px] shrink-0 items-center justify-center gap-1.5 px-0.5 text-muted-foreground transition-colors hover:text-foreground sm:h-8 sm:w-auto sm:justify-start"
-            >
-              <span class="inline-flex h-6 w-6 items-center justify-center rounded-md bg-muted/60 ring-1 ring-border/60" aria-hidden="true">
-                <img src="/favicon.png" alt="" class="h-4 w-4 shrink-0" />
-              </span>
-              <span class="hidden sm:inline font-brand text-tiny font-semibold tracking-wide text-foreground/90">
-                ShakiLabs
-              </span>
-            </a>
-
-            <!-- 티커 -->
-            <div class="flex min-w-0 flex-1 items-center justify-center text-center font-title text-caption font-semibold sm:text-body">
-              <TickerBar :messages="tickerMessages" />
-            </div>
-
-            <!-- 테마 토글 -->
-            <ShButton
-              type="button"
-              variant="secondary"
-              size="sm"
-              class="design-system-theme-toggle shrink-0 text-muted-foreground"
-              :aria-label="theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'"
-              @click="toggleTheme"
-            >
-              <Moon v-if="theme === 'dark'" class="h-4 w-4" />
-              <Sun v-else class="h-4 w-4" />
-            </ShButton>
-          </div>
-        </div>
-      </div>
+  <ShGlobalHeader
+    home-href="/"
+    brand="ShakiLabs"
+    :nav-items="PRIMARY_NAV_ITEMS"
+    :nav-active-key="navActiveKey"
+    nav-title="카드 도구"
+    :link-component="RouterLink"
+  >
+    <template #utility>
+      <ThemeToggle />
+    </template>
+  </ShGlobalHeader>
+  <div class="border-b border-border bg-background">
+    <div class="container flex min-h-7 items-center justify-center px-3 py-1 text-center sm:px-4">
+      <TickerBar :messages="tickerMessages" />
     </div>
-  </header>
+  </div>
 </template>

@@ -7,6 +7,8 @@
 
 import { readFileSync } from "node:fs";
 
+import { PRIMARY_NAV_ITEMS } from "./primary-nav-items.mjs";
+
 // 공유 카탈로그 단일 출처 — Vue 푸터와 같은 목록을 정적 HTML에도 심는다(JS 없이도 크롤 경로 확보)
 const SERVICE_CATALOG = JSON.parse(
   readFileSync(
@@ -39,20 +41,52 @@ function buildOtherServicesBlock() {
       </nav>`;
 }
 
+// v3 AppShell: 프리렌더 정적 마크업도 실제 Vue 출력(검정 ShGlobalHeader + 흰 SecondaryNav)과
+// 같은 모양이어야 수화 전후 헤더가 깜빡이지 않는다(BL-038). header/nav를 별개의
+// body 직계 블록으로 나눈다 - removePrerenderChrome()이 HEADER/NAV 태그를 각각 지운다.
+/**
+ * v3 §3.3-1 모바일 좌측 드로어의 **정적 쌍둥이**.
+ *
+ * 왜 필요한가: 이 앱의 프리렌더 산출물에는 Vue 출력이 없다 — 크롤러와 첫 페인트가
+ * 보는 셸은 전부 이 파일이 만든다. 드로어를 Vue에만 두면 모바일 내비를 숨긴 순간
+ * 34개 원시 HTML에서 도구 11개로 가는 헤더 경로가 사라진다.
+ * 수화 후 헤더와 같은 클래스·같은 목록(scripts/primary-nav-items.mjs)으로 심는다.
+ *
+ * 트리거는 수화 전이라 동작하지 않는다. 패널은 패키지 CSS가
+ * `visibility:hidden; transform:translate(-100%)`로 숨기므로(스타일시트는 렌더
+ * 블로킹이라 첫 페인트에 이미 도착해 있다) 화면에는 보이지 않고 DOM에만 남는다.
+ */
+function buildPrerenderDrawer() {
+  const links = PRIMARY_NAV_ITEMS.map(
+    ({ to, label }) => `<a class="sh-nav-drawer__link" href="/card${to}">${label}</a>`,
+  ).join("");
+
+  return `<button type="button" class="sh-nav-drawer__trigger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="sh-nav-drawer-prerender" style="border:0;background:transparent;color:#fafafa;">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="22" height="22"><path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" /></svg>
+        </button>
+        <div class="sh-nav-drawer" data-open="false">
+          <div class="sh-nav-drawer__scrim"></div>
+          <nav id="sh-nav-drawer-prerender" class="sh-nav-drawer__panel" aria-label="카드 도구 메뉴" aria-hidden="true" tabindex="-1">
+            <p class="sh-nav-drawer__title">카드 도구</p>${links}
+          </nav>
+        </div>`;
+}
+
 export function buildPrerenderHeader() {
   return `
-    <header data-seo-prerender="header" style="max-width:1120px;margin:0 auto;padding:14px 16px;border-bottom:1px solid hsl(var(--border));">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
-        <a href="/card/fuel-card" style="font-weight:700;font-size:18px;color:hsl(var(--foreground));text-decoration:none;">ShakiLabs 카드 계산기</a>
-        <nav aria-label="주요 메뉴" style="display:flex;gap:16px;flex-wrap:wrap;font-size:14px;">
-          <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">주유 할인카드</a>
-          <a href="/card/overseas-payment" style="color:hsl(var(--muted-foreground));text-decoration:none;">해외결제</a>
-          <a href="/card/annual-fee" style="color:hsl(var(--muted-foreground));text-decoration:none;">연회비</a>
-          <a href="/card/mileage" style="color:hsl(var(--muted-foreground));text-decoration:none;">마일리지</a>
-          <a href="/card/about" style="color:hsl(var(--muted-foreground));text-decoration:none;">서비스 소개</a>
-        </nav>
+    <header data-seo-prerender="header" class="sh-global-header" style="background:#0a0a0a;">
+      <div class="sh-global-header__inner" style="max-width:1120px;margin:0 auto;padding:0 16px;height:56px;display:flex;align-items:center;gap:8px;">
+        ${buildPrerenderDrawer()}
+        <a class="sh-global-header__brand" href="/" style="font-weight:700;font-size:15px;color:#fafafa;text-decoration:none;">ShakiLabs</a>
       </div>
-    </header>`;
+    </header>
+    <nav aria-label="주요 메뉴" data-seo-prerender="nav" style="max-width:1120px;margin:0 auto;padding:10px 16px;border-bottom:1px solid hsl(var(--border));display:flex;gap:16px;flex-wrap:wrap;font-size:14px;">
+      <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">주유 할인카드</a>
+      <a href="/card/overseas-payment" style="color:hsl(var(--muted-foreground));text-decoration:none;">해외결제</a>
+      <a href="/card/annual-fee" style="color:hsl(var(--muted-foreground));text-decoration:none;">연회비</a>
+      <a href="/card/mileage" style="color:hsl(var(--muted-foreground));text-decoration:none;">마일리지</a>
+      <a href="/card/about" style="color:hsl(var(--muted-foreground));text-decoration:none;">서비스 소개</a>
+    </nav>`;
 }
 
 const CATEGORIES = {
