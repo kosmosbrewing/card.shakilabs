@@ -7,6 +7,7 @@
 import { buildRichContent } from "../../scripts/prerender-content.mjs";
 import { buildCardHubExtraContent } from "../../scripts/prerender-card-hub.mjs";
 import { buildHomeExtraContent } from "../../scripts/prerender-home.mjs";
+import { wrapPrerenderedTables } from "../../scripts/prerender-table-scroll.mjs";
 import { guidePlacementFor, hasInAppGuide } from "./guideRoutes";
 
 export { guidePlacementFor, hasInAppGuide };
@@ -24,6 +25,12 @@ function demoteHeading(html: string): string {
  * 사용자 입력이 문자열에 섞이는 경로가 없다. (v-html 사용 근거)
  */
 export function richContentFor(path: string): string {
+  // 표 가로 스크롤 래퍼는 정적 프리렌더와 화면 양쪽에 똑같이 들어가야 한다.
+  // 표는 min-content 폭 아래로 줄지 않아서, 감싸지 않으면 390px에서 문서가 가로로 밀린다.
+  return wrapPrerenderedTables(richContentRawFor(path));
+}
+
+function richContentRawFor(path: string): string {
   const placement = guidePlacementFor(path);
   if (placement === "none") return "";
 

@@ -10,6 +10,7 @@
     "build": "vite build && node scripts/prerender.mjs && npm run verify:static && node scripts/verify-fonts.mjs",
     "verify:static": "node scripts/validate-static-output.mjs",
     "verify:hydration": "node scripts/verify-hydration-survival.mjs",
+    "verify:mobile-overflow": "node scripts/verify-mobile-overflow.mjs",
     "verify:brand-font": "node scripts/collect-brand-charset.mjs --check",
     "verify:supply-chain": "node scripts/verify-vendored-artifacts.mjs && node scripts/verify-sbom-identity.mjs",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
