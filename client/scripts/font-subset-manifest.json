@@ -1,27 +1,29 @@
 {
   "schemaVersion": 2,
-  "characterCount": 901,
-  "characterSha256": "af2c84e0b6b6012319736ae93e967fb474c6fe5ee55678fe9b06813bc2cd64ec",
+  "characterCount": 913,
+  "characterSha256": "f5a2ad5e90dd86ac096f8d4e771878b9f0a05545a74cfccb3a5783eb87b4631a",
   "fonts": [
     {
       "publicName": "Pretendard-Regular-subset.woff2",
-      "bytes": 63036,
-      "sha256": "923ced0c7bd261a6202f86f6931c6e3538d1b5ee0589f9e7ae74ce32bafd16cc"
+      "bytes": 63696,
+      "sha256": "c68b0158ddce8a55b17bb20000cc823055d1b056457c0e40afe4743ad8804a2a"
     },
     {
       "publicName": "Pretendard-SemiBold-subset.woff2",
-      "bytes": 63668,
-      "sha256": "1058768514b911dd27862f60018fb8518a2426b21dd7cc4d1dbe37ebd5418376"
+      "bytes": 64472,
+      "sha256": "762d8b85e173ab156e019911663b0adea888c35dab9e4ad95a602e1bc0bb1257"
     },
     {
       "publicName": "Pretendard-Bold-subset.woff2",
-      "bytes": 64040,
-      "sha256": "1baa1b4c370a8e24aa75fd86aea7d182b1e6e5ed907ba3d5a71fb69f9bd211c8"
+      "bytes": 64856,
+      "sha256": "b5c850c8b02e14776ee8cc40a41dd5aa3516bfe4a1f22da70d38d6a9a7c12ec9"
     },
     {
-      "publicName": "GmarketSansBold-subset-v3.woff2",
-      "bytes": 111992,
-      "sha256": "3cc4ea5ae43f3abf455cdf39b50324e2a1af8b3456516d1d97dec3f365a24252"
+      "publicName": "GmarketSansBold-brand-v1.woff2",
+      "bytes": 10408,
+      "sha256": "da755b052c229464a13054e07a22df50a62ccee868a83bce415dd549e75b7e91",
+      "shippedCharacters": " $%()+,-./0123456789BCDGKLOPTsv~·▲▼가간개건결경계과관교구국금급기나남년노는달담대데도동드러력로롯료률리마만매면명문묻미민바반발배베별보본부분비산삼상석선성세소수순시신실안액약억엔연영예와외요용운원월위유율이인일입자적전절점정제조좌주준중지직질처천체초총최추출치카크태택통트파포표하한할함해현혜화환회후휘",
+      "droppedCharacters": "🏆"
     }
   ]
 }

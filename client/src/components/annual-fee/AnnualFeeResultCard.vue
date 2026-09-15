@@ -2,6 +2,7 @@
 import { AlertTriangle, Trophy } from "lucide-vue-next";
 import type { AnnualFeeCalcResult } from "@/utils/annualFeeCalculator";
 import { formatBreakEven, formatRoiRatio } from "@/utils/annualFeeCalculator";
+import ResultHero from "@/components/common/ResultHero.vue";
 
 defineProps<{
   result: AnnualFeeCalcResult;
@@ -33,7 +34,15 @@ defineProps<{
         <span class="text-body text-muted-foreground">{{ result.card.name }}</span>
       </div>
 
-      <div class="result-metric-grid grid grid-cols-3 gap-2">
+      <!-- 대표 수치: 1위 카드만 히어로로 올린다(BL-020) -->
+      <ResultHero
+        v-if="rank === 1"
+        label="연 순혜택"
+        :value="`${result.annualNetBenefit.toLocaleString()}원`"
+        :value-class="result.annualNetBenefit >= 0 ? 'text-savings' : 'text-loss'"
+      />
+
+      <div class="result-metric-grid grid gap-2" :class="rank === 1 ? 'grid-cols-2' : 'grid-cols-3'">
         <div class="text-center">
           <div class="text-tiny text-muted-foreground">회수 기간</div>
           <div
@@ -49,7 +58,7 @@ defineProps<{
             {{ formatRoiRatio(result.roiRatio) }}
           </div>
         </div>
-        <div class="text-center">
+        <div v-if="rank !== 1" class="text-center">
           <div class="text-tiny text-muted-foreground">연 순혜택</div>
           <div
             class="text-heading font-bold tabular-nums"

@@ -49,6 +49,12 @@ jobs:
       - name: Verify hydration survival
         run: npm run verify:hydration
 
+      # 브랜드 폰트 문자셋도 같은 이유로 브라우저가 필요하다 — 제목·히어로 수치는
+      # 마운트 후에 그려져서 dist HTML엔 없다. 서브셋 cmap에 없는 글자가 화면에
+      # 남아 있으면(= 그 글자만 다른 서체로 찍히면) 여기서 빨개진다.
+      - name: Verify brand font coverage
+        run: npm run verify:brand-font
+
       # 공급망 신원 검증: vendor tgz↔README↔package.json 대조 + 커밋된 SBOM의 신원 대조.
       # 네트워크·재생성 없이 파일만 읽으므로 1초 미만이고 결정적이다.
       # (SBOM 재생성 후 diff 방식은 timestamp·documentNamespace·npm 버전 때문에 상시 실패한다)

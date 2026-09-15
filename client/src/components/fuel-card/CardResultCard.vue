@@ -2,6 +2,7 @@
 import { Trophy, AlertTriangle, CheckCircle } from "lucide-vue-next";
 import type { FuelCardCalcResult } from "@/utils/calculator";
 import { formatDiscountType } from "@/utils/calculator";
+import ResultHero from "@/components/common/ResultHero.vue";
 
 defineProps<{
   result: FuelCardCalcResult;
@@ -39,9 +40,17 @@ defineProps<{
         </span>
       </div>
 
+      <!-- 대표 수치: 1위 카드만 히어로로 올린다(BL-020) -->
+      <ResultHero
+        v-if="rank === 1"
+        label="월 절약"
+        :value="`${result.monthlyNet.toLocaleString()}원`"
+        value-class="text-savings"
+      />
+
       <!-- 핵심 수치 -->
-      <div class="fuel-result-stats grid grid-cols-3 gap-2">
-        <div class="text-center">
+      <div class="fuel-result-stats grid gap-2" :class="rank === 1 ? 'grid-cols-2' : 'grid-cols-3'">
+        <div v-if="rank !== 1" class="text-center">
           <div class="text-tiny text-muted-foreground">월 절약</div>
           <div class="text-heading font-bold tabular-nums text-savings">
             {{ result.monthlyNet.toLocaleString() }}원
