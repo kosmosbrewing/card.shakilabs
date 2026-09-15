@@ -49,6 +49,13 @@ jobs:
       - name: Verify hydration survival
         run: npm run verify:hydration
 
+      # 390px 가로 오버플로 게이트. 판정은 "문서가 가로로 밀리는가"라서 소스 grep으로는
+      # 못 한다 — 감싼 표는 아무리 넓어도 페이지를 안 밀고, 안 감싼 표만 민다.
+      # 브라우저가 필요하므로 CI에만 둔다(빌드에 넣으면 Vercel 빌드 이미지가 크로미움을
+      # 받아야 한다). 원시 HTML 쪽은 브라우저 없이 validate-static-output.mjs가 본다.
+      - name: Verify mobile horizontal overflow
+        run: npm run verify:mobile-overflow
+
       # 브랜드 폰트 문자셋도 같은 이유로 브라우저가 필요하다 — 제목·히어로 수치는
       # 마운트 후에 그려져서 dist HTML엔 없다. 서브셋 cmap에 없는 글자가 화면에
       # 남아 있으면(= 그 글자만 다른 서체로 찍히면) 여기서 빨개진다.

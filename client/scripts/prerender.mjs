@@ -3,6 +3,7 @@ import { dirname, resolve } from "path";
 import { SEO_ROUTES, canonicalPathFor } from "./seo-routes.mjs";
 import { buildPrerenderHeader, buildPrerenderFooter } from "./prerender-layout.mjs";
 import { buildRichContent } from "./prerender-content.mjs";
+import { wrapPrerenderedTables } from "./prerender-table-scroll.mjs";
 import { buildAllToolsMeta } from "./prerender-all-tools.mjs";
 import { appendCardHubLink, buildCardHubContent } from "./prerender-card-hub.mjs";
 import { buildHomeContent, buildHomeMeta } from "./prerender-home.mjs";
@@ -552,6 +553,14 @@ function buildPrerenderSection(meta) {
 }
 
 function buildRouteContent(route) {
+  const html = buildRouteContentRaw(route);
+  // 표는 min-content 폭 아래로 줄지 않아서, 감싸지 않으면 390px에서 문서 자체를 가로로 민다.
+  // 세 빌더의 출력이 여기로만 합류하므로 래핑도 여기 한 곳에서만 한다
+  // (앱 쪽 같은 본문은 src/seo/routeRichContent.ts가 같은 함수를 부른다).
+  return html ? wrapPrerenderedTables(html) : html;
+}
+
+function buildRouteContentRaw(route) {
   if (route === "/") return buildHomeContent();
   if (route === "/all") return buildCardHubContent();
   return buildRichContent(route);
