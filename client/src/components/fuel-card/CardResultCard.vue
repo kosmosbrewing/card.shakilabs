@@ -45,20 +45,20 @@ defineProps<{
         v-if="rank === 1"
         label="월 절약"
         :value="`${result.monthlyNet.toLocaleString()}원`"
-        value-class="text-savings"
+        value-class="text-status-success"
       />
 
       <!-- 핵심 수치 -->
       <div class="fuel-result-stats grid gap-2" :class="rank === 1 ? 'grid-cols-2' : 'grid-cols-3'">
         <div v-if="rank !== 1" class="text-center">
           <div class="text-tiny text-muted-foreground">월 절약</div>
-          <div class="text-heading font-bold tabular-nums text-savings">
+          <div class="text-heading font-bold tabular-nums text-status-success">
             {{ result.monthlyNet.toLocaleString() }}원
           </div>
         </div>
         <div class="text-center">
           <div class="text-tiny text-muted-foreground">연 절약</div>
-          <div class="text-heading font-bold tabular-nums text-savings">
+          <div class="text-heading font-bold tabular-nums text-status-success">
             {{ result.annualNet.toLocaleString() }}원
           </div>
         </div>
@@ -86,7 +86,7 @@ defineProps<{
         </div>
         <div
           v-else
-          class="flex items-center gap-1 text-savings"
+          class="flex items-center gap-1 text-status-success"
         >
           <CheckCircle class="h-3.5 w-3.5" />
           전 주유소 가능

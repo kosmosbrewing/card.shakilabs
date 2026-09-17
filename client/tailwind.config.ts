@@ -62,19 +62,11 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // 도메인 색상: 절약(양수), 손해(음수)
-        savings: {
-          DEFAULT: "hsl(var(--savings))",
-          foreground: "hsl(var(--savings-foreground))",
-        },
-        loss: {
-          DEFAULT: "hsl(var(--loss))",
-          foreground: "hsl(var(--loss-foreground))",
-        },
+        // 의미색은 v3 §2.1의 넷뿐이다. 절약/손해 도메인 별칭은 폐기했다 —
+        // "이득"은 success, "손해"는 danger로 읽혀야 앱을 옮겨도 뜻이 같다.
         status: {
           success: "hsl(var(--status-success))",
           warning: "hsl(var(--status-warning))",
-          caution: "hsl(var(--status-caution))",
           danger: "hsl(var(--status-danger))",
           info: "hsl(var(--status-info))",
         },

@@ -556,23 +556,10 @@ nav[aria-label="주요 메뉴"] .sh-primary-navigation__link:focus-visible {
   background: hsl(var(--primary));
 }
 
-/* ui 0.3.10 차트 승격: 패키지 톤을 card 의미색으로 고정 (승격 전 색 그대로 유지).
-   패키지 success/danger는 --status-success/--destructive를 쓰는데, card 막대는 --savings/--loss였다. */
-.sh-chart-fill--success {
-  fill: hsl(var(--savings));
-}
-
-.sh-chart-fill--danger {
-  fill: hsl(var(--loss));
-}
-
-.sh-metric-bars__label--success {
-  color: hsl(var(--savings));
-}
-
-.sh-metric-bars__label--danger {
-  color: hsl(var(--loss));
-}
+/* ui 0.3.10 차트 승격 때 앱 브랜드 초록·빨강 별칭으로 고정해 두었던 네 개의
+   덮어쓰기를 지웠다. 패키지가 성공색을 status-success에서, 위험색을 destructive에서
+   가져오는데 이제 그 둘이 v3 고정 의미색과 같은 값이라 덮어쓸 것이 없다.
+   남겨 두면 같은 색에 이름이 둘 생긴다. */
 
 /* 톤 없는 기본 막대는 승격 전 fill-primary/65였다. 패키지 기본 baseTone(muted)의 채움만
    같은 농도의 primary로 되돌린다(글자색은 muted 톤이 이미 foreground라 그대로 맞는다). */

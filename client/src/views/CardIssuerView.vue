@@ -124,7 +124,7 @@ const seoDescription = computed(
                 v-for="r in sim.results"
                 :key="r.cardId"
                 class="px-3 py-2 text-right tabular-nums"
-                :class="r.annualNet > 0 ? 'text-savings font-semibold' : 'text-loss'"
+                :class="r.annualNet > 0 ? 'text-status-success font-semibold' : 'text-status-danger'"
               >
                 연 {{ r.annualNet.toLocaleString() }}원
               </td>

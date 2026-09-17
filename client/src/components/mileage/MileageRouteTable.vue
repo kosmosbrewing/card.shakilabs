@@ -77,7 +77,7 @@ const sortOptions: { key: MileageSortKey; label: string }[] = [
               <ShTableCell>{{ item.seatClassLabel }}</ShTableCell>
               <ShTableCell numeric>{{ item.milesRequired.toLocaleString() }}</ShTableCell>
               <ShTableCell numeric>{{ item.cashPrice.toLocaleString() }}원</ShTableCell>
-              <ShTableCell numeric emphasis class="text-savings">
+              <ShTableCell numeric emphasis class="text-status-success">
                 {{ formatValuePerMile(item.valuePerMile) }}
               </ShTableCell>
               <ShTableCell numeric>

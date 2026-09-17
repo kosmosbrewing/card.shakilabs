@@ -48,7 +48,7 @@ const groupedRoutes = computed(() => {
           >
             <div class="text-caption font-semibold text-foreground">{{ item.seatClassLabel }}</div>
             <div class="mt-1 text-caption text-muted-foreground">{{ item.example }}</div>
-            <div class="mt-1 text-body font-semibold tabular-nums text-savings">
+            <div class="mt-1 text-body font-semibold tabular-nums text-status-success">
               {{ formatValuePerMile(item.valuePerMile) }}
             </div>
             <div class="mt-1 text-tiny text-muted-foreground">

@@ -48,7 +48,7 @@ const sortOptions: { key: AnnualFeeSortKey; label: string }[] = [
           :key="`${result.cardId}-mobile`"
           :class="[
             'rounded-xl border p-3',
-            idx === 0 ? 'border-savings/30 bg-savings/10' : 'border-border/60 bg-background/60',
+            idx === 0 ? 'border-status-success/30 bg-status-success/10' : 'border-border/60 bg-background/60',
           ]"
         >
           <div class="flex items-center justify-between gap-3">
@@ -58,7 +58,7 @@ const sortOptions: { key: AnnualFeeSortKey; label: string }[] = [
           <div class="result-metric-grid mt-2 grid grid-cols-3 gap-2">
             <div>
               <div class="text-tiny text-muted-foreground">월 혜택</div>
-              <div class="text-caption font-semibold tabular-nums text-savings">▲ {{ result.totalMonthlyBenefit.toLocaleString() }}원</div>
+              <div class="text-caption font-semibold tabular-nums text-status-success">▲ {{ result.totalMonthlyBenefit.toLocaleString() }}원</div>
             </div>
             <div>
               <div class="text-tiny text-muted-foreground">회수 기간</div>
@@ -66,7 +66,7 @@ const sortOptions: { key: AnnualFeeSortKey; label: string }[] = [
             </div>
             <div>
               <div class="text-tiny text-muted-foreground">연 순혜택</div>
-              <div class="text-caption font-semibold tabular-nums" :class="result.annualNetBenefit >= 0 ? 'text-savings' : 'text-loss'">
+              <div class="text-caption font-semibold tabular-nums" :class="result.annualNetBenefit >= 0 ? 'text-status-success' : 'text-status-danger'">
                 {{ result.annualNetBenefit >= 0 ? '▲' : '▼' }} {{ Math.abs(result.annualNetBenefit).toLocaleString() }}원
               </div>
             </div>
@@ -100,7 +100,7 @@ const sortOptions: { key: AnnualFeeSortKey; label: string }[] = [
               :key="result.cardId"
               :class="[
                 'border-b border-border/50 transition-colors',
-                idx === 0 ? 'bg-savings/10 hover:bg-savings/15' : 'hover:bg-accent/20',
+                idx === 0 ? 'bg-status-success/10 hover:bg-status-success/15' : 'hover:bg-accent/20',
               ]"
             >
               <td class="px-3 py-2">
@@ -121,12 +121,12 @@ const sortOptions: { key: AnnualFeeSortKey; label: string }[] = [
               <td class="px-3 py-2 text-right font-semibold tabular-nums">
                 {{ formatBreakEven(result.breakEvenMonths) }}
               </td>
-              <td class="px-3 py-2 text-right font-semibold tabular-nums text-savings">
+              <td class="px-3 py-2 text-right font-semibold tabular-nums text-status-success">
                 {{ formatRoiRatio(result.roiRatio) }}
               </td>
               <td
                 class="px-3 py-2 text-right font-semibold tabular-nums"
-                :class="result.annualNetBenefit >= 0 ? 'text-savings' : 'text-loss'"
+                :class="result.annualNetBenefit >= 0 ? 'text-status-success' : 'text-status-danger'"
               >
                 {{ result.annualNetBenefit >= 0 ? '▲' : '▼' }} {{ Math.abs(result.annualNetBenefit).toLocaleString() }}원
               </td>

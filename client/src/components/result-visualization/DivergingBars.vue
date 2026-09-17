@@ -16,7 +16,7 @@ const props = defineProps<{
   formatValue: (value: number) => string;
 }>();
 
-// 승격 전 fill-loss/fill-savings를 그대로 유지한다(앱 CSS가 danger→--loss, success→--savings로 고정).
+// 톤 이름(danger/success)은 그대로 두고 색만 v3 의미색을 따른다 — 패키지 기본 배선이다.
 const metrics = computed<MetricBarGroup[]>(() => [{
   key: "diverging",
   label: props.metricLabel,
