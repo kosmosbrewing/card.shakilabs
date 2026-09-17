@@ -49,7 +49,7 @@ const sortOptions: { key: SortKey; label: string }[] = [
           :key="`${r.cardId}-mobile`"
           :class="[
             'fuel-table-card rounded-xl border p-3',
-            idx === 0 ? 'border-savings/30 bg-savings/10' : 'border-border/60 bg-background/60',
+            idx === 0 ? 'border-status-success/30 bg-status-success/10' : 'border-border/60 bg-background/60',
           ]"
         >
           <div class="fuel-table-card-header flex items-center justify-between gap-3">
@@ -62,11 +62,11 @@ const sortOptions: { key: SortKey; label: string }[] = [
           <div class="fuel-table-card-stats mt-2 grid grid-cols-3 gap-2">
             <div>
               <div class="text-tiny text-muted-foreground">월 절약</div>
-              <div class="text-caption font-semibold tabular-nums text-savings">▲ {{ r.monthlyNet.toLocaleString() }}원</div>
+              <div class="text-caption font-semibold tabular-nums text-status-success">▲ {{ r.monthlyNet.toLocaleString() }}원</div>
             </div>
             <div>
               <div class="text-tiny text-muted-foreground">연 절약</div>
-              <div class="text-caption font-semibold tabular-nums text-savings">▲ {{ r.annualNet.toLocaleString() }}원</div>
+              <div class="text-caption font-semibold tabular-nums text-status-success">▲ {{ r.annualNet.toLocaleString() }}원</div>
             </div>
               <div>
                 <div class="text-tiny text-muted-foreground">실적</div>
@@ -106,7 +106,7 @@ const sortOptions: { key: SortKey; label: string }[] = [
               :key="r.cardId"
               :class="[
                 'border-b border-border/50 transition-colors',
-                idx === 0 ? 'bg-savings/10 hover:bg-savings/15' : 'hover:bg-accent/20',
+                idx === 0 ? 'bg-status-success/10 hover:bg-status-success/15' : 'hover:bg-accent/20',
               ]"
             >
               <td class="px-3 py-2 font-bold tabular-nums">
@@ -123,10 +123,10 @@ const sortOptions: { key: SortKey; label: string }[] = [
                 </div>
               </td>
               <td class="px-3 py-2 whitespace-nowrap">{{ formatDiscountType(r.card) }}</td>
-              <td class="px-3 py-2 text-right tabular-nums font-semibold text-savings">
+              <td class="px-3 py-2 text-right tabular-nums font-semibold text-status-success">
                 ▲ {{ r.monthlyNet.toLocaleString() }}원
               </td>
-              <td class="px-3 py-2 text-right tabular-nums font-semibold text-savings">
+              <td class="px-3 py-2 text-right tabular-nums font-semibold text-status-success">
                 ▲ {{ r.annualNet.toLocaleString() }}원
               </td>
               <td class="px-3 py-2 text-right tabular-nums">
@@ -142,7 +142,7 @@ const sortOptions: { key: SortKey; label: string }[] = [
                   </span>
                 </template>
                 <template v-else>
-                  <span class="text-savings">전체</span>
+                  <span class="text-status-success">전체</span>
                 </template>
               </td>
             </tr>

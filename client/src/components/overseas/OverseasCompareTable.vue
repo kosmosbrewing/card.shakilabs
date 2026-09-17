@@ -48,7 +48,7 @@ const sortOptions: { key: OverseasSortKey; label: string }[] = [
           :key="`${result.cardId}-mobile`"
           :class="[
             'rounded-xl border p-3',
-            idx === 0 ? 'border-savings/30 bg-savings/10' : 'border-border/60 bg-background/60',
+            idx === 0 ? 'border-status-success/30 bg-status-success/10' : 'border-border/60 bg-background/60',
           ]"
         >
           <div class="flex items-center justify-between gap-3">
@@ -58,11 +58,11 @@ const sortOptions: { key: OverseasSortKey; label: string }[] = [
           <div class="result-metric-grid mt-2 grid grid-cols-3 gap-2">
             <div>
               <div class="text-tiny text-muted-foreground">현지통화</div>
-              <div class="text-caption font-semibold tabular-nums text-savings">▲ {{ result.localCurrencyNet.toLocaleString() }}원</div>
+              <div class="text-caption font-semibold tabular-nums text-status-success">▲ {{ result.localCurrencyNet.toLocaleString() }}원</div>
             </div>
             <div>
               <div class="text-tiny text-muted-foreground">DCC 손해</div>
-              <div class="text-caption font-semibold tabular-nums text-loss">▼ {{ result.dccDifference.toLocaleString() }}원</div>
+              <div class="text-caption font-semibold tabular-nums text-status-danger">▼ {{ result.dccDifference.toLocaleString() }}원</div>
             </div>
             <div>
               <div class="text-tiny text-muted-foreground">수수료</div>
@@ -100,7 +100,7 @@ const sortOptions: { key: OverseasSortKey; label: string }[] = [
               :key="result.cardId"
               :class="[
                 'border-b border-border/50 transition-colors',
-                idx === 0 ? 'bg-savings/10 hover:bg-savings/15' : 'hover:bg-accent/20',
+                idx === 0 ? 'bg-status-success/10 hover:bg-status-success/15' : 'hover:bg-accent/20',
               ]"
             >
               <td class="px-3 py-2 font-bold tabular-nums">
@@ -118,13 +118,13 @@ const sortOptions: { key: OverseasSortKey; label: string }[] = [
               </td>
               <td class="px-3 py-2 whitespace-nowrap">{{ formatFeeRate(result.card) }}</td>
               <td class="px-3 py-2">{{ formatPrimaryBenefit(result.card) }}</td>
-              <td class="px-3 py-2 text-right font-semibold tabular-nums text-savings">
+              <td class="px-3 py-2 text-right font-semibold tabular-nums text-status-success">
                 ▲ {{ result.localCurrencyNet.toLocaleString() }}원
               </td>
               <td class="px-3 py-2 text-right tabular-nums">
                 {{ result.dccTotal.toLocaleString() }}원
               </td>
-              <td class="px-3 py-2 text-right font-semibold tabular-nums text-loss">
+              <td class="px-3 py-2 text-right font-semibold tabular-nums text-status-danger">
                 ▼ {{ result.dccDifference.toLocaleString() }}원
               </td>
             </tr>

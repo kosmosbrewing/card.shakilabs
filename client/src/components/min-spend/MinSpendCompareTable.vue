@@ -49,7 +49,7 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
           :key="`${result.cardId}-mobile`"
           :class="[
             'rounded-xl border p-3',
-            idx === 0 ? 'border-savings/30 bg-savings/10' : 'border-border/60 bg-background/60',
+            idx === 0 ? 'border-status-success/30 bg-status-success/10' : 'border-border/60 bg-background/60',
           ]"
         >
           <div class="flex items-center justify-between gap-3">
@@ -67,7 +67,7 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
             </div>
             <div>
               <div class="text-tiny text-muted-foreground">순혜택</div>
-              <div class="text-caption font-semibold tabular-nums" :class="result.netBenefitIncludingGap >= 0 ? 'text-savings' : 'text-loss'">
+              <div class="text-caption font-semibold tabular-nums" :class="result.netBenefitIncludingGap >= 0 ? 'text-status-success' : 'text-status-danger'">
                 {{ result.netBenefitIncludingGap >= 0 ? '▲' : '▼' }} {{ Math.abs(result.netBenefitIncludingGap).toLocaleString() }}원
               </div>
             </div>
@@ -101,7 +101,7 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
               :key="result.cardId"
               :class="[
                 'border-b border-border/50 transition-colors',
-                idx === 0 ? 'bg-savings/10 hover:bg-savings/15' : 'hover:bg-accent/20',
+                idx === 0 ? 'bg-status-success/10 hover:bg-status-success/15' : 'hover:bg-accent/20',
               ]"
             >
               <td class="px-3 py-2 font-bold tabular-nums">{{ idx === 0 ? "🏆" : idx + 1 }}</td>
@@ -123,7 +123,7 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
               </td>
               <td
                 class="px-3 py-2 text-right font-semibold tabular-nums"
-                :class="result.netBenefitIncludingGap >= 0 ? 'text-savings' : 'text-loss'"
+                :class="result.netBenefitIncludingGap >= 0 ? 'text-status-success' : 'text-status-danger'"
               >
                 {{ result.netBenefitIncludingGap >= 0 ? '▲' : '▼' }} {{ Math.abs(result.netBenefitIncludingGap).toLocaleString() }}원
               </td>

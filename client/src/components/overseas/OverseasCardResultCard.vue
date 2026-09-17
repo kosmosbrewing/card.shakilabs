@@ -38,13 +38,13 @@ defineProps<{
         v-if="rank === 1"
         label="현지통화 실부담"
         :value="`${result.localCurrencyNet.toLocaleString()}원`"
-        value-class="text-savings"
+        value-class="text-status-success"
       />
 
       <div class="result-metric-grid grid gap-2" :class="rank === 1 ? 'grid-cols-2' : 'grid-cols-3'">
         <div v-if="rank !== 1" class="text-center">
           <div class="text-tiny text-muted-foreground">현지통화 실부담</div>
-          <div class="text-heading font-bold tabular-nums text-savings">
+          <div class="text-heading font-bold tabular-nums text-status-success">
             {{ result.localCurrencyNet.toLocaleString() }}원
           </div>
         </div>
@@ -56,7 +56,7 @@ defineProps<{
         </div>
         <div class="text-center">
           <div class="text-tiny text-muted-foreground">DCC 손해</div>
-          <div class="text-heading font-bold tabular-nums text-loss">
+          <div class="text-heading font-bold tabular-nums text-status-danger">
             ▼ {{ result.dccDifference.toLocaleString() }}원
           </div>
         </div>
@@ -65,7 +65,7 @@ defineProps<{
       <div class="space-y-1 text-caption">
         <div class="text-muted-foreground">{{ formatFeeRate(result.card) }}</div>
         <div class="text-muted-foreground">{{ formatPrimaryBenefit(result.card) }}</div>
-        <div class="flex items-center gap-1 text-loss">
+        <div class="flex items-center gap-1 text-status-danger">
           <ArrowRightLeft class="h-3.5 w-3.5" />
           DCC 선택 시 {{ (result.dccDifferenceRate * 100).toFixed(1) }}% 더 비쌉니다
         </div>

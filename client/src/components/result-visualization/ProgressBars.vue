@@ -26,7 +26,7 @@ function percent(rate: number): number {
         <li v-for="item in items" :key="item.key" class="space-y-1.5">
           <div class="flex items-baseline justify-between gap-3">
             <span class="text-caption font-semibold text-foreground">{{ item.label }}</span>
-            <strong class="text-caption tabular-nums" :class="item.rate >= 1 ? 'text-savings' : 'text-status-warning'">
+            <strong class="text-caption tabular-nums" :class="item.rate >= 1 ? 'text-status-success' : 'text-status-warning'">
               {{ percent(item.rate) }}%
             </strong>
           </div>
@@ -45,7 +45,7 @@ function percent(rate: number): number {
               <rect
                 :width="progressBarWidth(item.rate)"
                 height="12"
-                :class="item.rate >= 1 ? 'fill-savings' : item.rate >= 0.8 ? 'fill-status-warning' : 'fill-loss'"
+                :class="item.rate >= 1 ? 'fill-status-success' : item.rate >= 0.8 ? 'fill-status-warning' : 'fill-status-danger'"
               />
             </svg>
           </div>

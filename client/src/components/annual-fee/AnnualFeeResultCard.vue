@@ -39,7 +39,7 @@ defineProps<{
         v-if="rank === 1"
         label="연 순혜택"
         :value="`${result.annualNetBenefit.toLocaleString()}원`"
-        :value-class="result.annualNetBenefit >= 0 ? 'text-savings' : 'text-loss'"
+        :value-class="result.annualNetBenefit >= 0 ? 'text-status-success' : 'text-status-danger'"
       />
 
       <div class="result-metric-grid grid gap-2" :class="rank === 1 ? 'grid-cols-2' : 'grid-cols-3'">
@@ -47,14 +47,14 @@ defineProps<{
           <div class="text-tiny text-muted-foreground">회수 기간</div>
           <div
             class="text-heading font-bold tabular-nums"
-            :class="result.breakEvenMonths && result.breakEvenMonths <= 3 ? 'text-savings' : result.breakEvenMonths ? 'text-status-warning' : 'text-loss'"
+            :class="result.breakEvenMonths && result.breakEvenMonths <= 3 ? 'text-status-success' : result.breakEvenMonths ? 'text-status-warning' : 'text-status-danger'"
           >
             {{ formatBreakEven(result.breakEvenMonths) }}
           </div>
         </div>
         <div class="text-center">
           <div class="text-tiny text-muted-foreground">ROI</div>
-          <div class="text-heading font-bold tabular-nums text-savings">
+          <div class="text-heading font-bold tabular-nums text-status-success">
             {{ formatRoiRatio(result.roiRatio) }}
           </div>
         </div>
@@ -62,7 +62,7 @@ defineProps<{
           <div class="text-tiny text-muted-foreground">연 순혜택</div>
           <div
             class="text-heading font-bold tabular-nums"
-            :class="result.annualNetBenefit >= 0 ? 'text-savings' : 'text-loss'"
+            :class="result.annualNetBenefit >= 0 ? 'text-status-success' : 'text-status-danger'"
           >
             {{ result.annualNetBenefit.toLocaleString() }}원
           </div>

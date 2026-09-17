@@ -46,7 +46,7 @@ defineProps<{
             </p>
             <p
               class="text-caption font-semibold"
-              :class="result.isSimplifiedBetter ? 'text-savings' : 'text-muted-foreground'"
+              :class="result.isSimplifiedBetter ? 'text-status-success' : 'text-muted-foreground'"
             >
               {{ result.isSimplifiedBetter ? "간이세율이 더 유리합니다." : "일반세율보다 불리하거나 동일합니다." }}
             </p>

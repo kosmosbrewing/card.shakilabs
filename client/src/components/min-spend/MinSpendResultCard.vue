@@ -12,9 +12,9 @@ const props = defineProps<{
 }>();
 
 const progressTone = computed(() => {
-  if (props.result.qualificationRate >= 1) return "fill-savings";
+  if (props.result.qualificationRate >= 1) return "fill-status-success";
   if (props.result.qualificationRate >= 0.8) return "fill-status-warning";
-  return "fill-loss";
+  return "fill-status-danger";
 });
 
 // 표시 숫자와 aria-valuenow가 같은 값을 쓰도록 한 곳에서 반올림한다(전에는 aria만 소수점이 남았다).
@@ -72,7 +72,7 @@ const percent = computed(() => {
         </div>
         <div
           class="flex items-center gap-1 text-caption"
-          :class="result.isQualified ? 'text-savings' : 'text-status-warning'"
+          :class="result.isQualified ? 'text-status-success' : 'text-status-warning'"
         >
           <CheckCircle2 v-if="result.isQualified" class="h-3.5 w-3.5" />
           <AlertTriangle v-else class="h-3.5 w-3.5" />
@@ -85,13 +85,13 @@ const percent = computed(() => {
         v-if="rank === 1"
         label="순 혜택"
         :value="`${result.netBenefitIncludingGap >= 0 ? '▲' : '▼'} ${Math.abs(result.netBenefitIncludingGap).toLocaleString()}원`"
-        :value-class="result.netBenefitIncludingGap >= 0 ? 'text-savings' : 'text-loss'"
+        :value-class="result.netBenefitIncludingGap >= 0 ? 'text-status-success' : 'text-status-danger'"
       />
 
       <div class="result-metric-grid grid gap-2" :class="rank === 1 ? 'grid-cols-2' : 'grid-cols-3'">
         <div class="text-center">
           <div class="text-tiny text-muted-foreground">월 할인</div>
-          <div class="text-heading font-bold tabular-nums text-savings">
+          <div class="text-heading font-bold tabular-nums text-status-success">
             {{ result.monthlyDiscount.toLocaleString() }}원
           </div>
         </div>
@@ -105,7 +105,7 @@ const percent = computed(() => {
           <div class="text-tiny text-muted-foreground">순 혜택</div>
           <div
             class="text-heading font-bold tabular-nums"
-            :class="result.netBenefitIncludingGap >= 0 ? 'text-savings' : 'text-loss'"
+            :class="result.netBenefitIncludingGap >= 0 ? 'text-status-success' : 'text-status-danger'"
           >
             {{ result.netBenefitIncludingGap >= 0 ? '▲' : '▼' }} {{ Math.abs(result.netBenefitIncludingGap).toLocaleString() }}원
           </div>
@@ -125,7 +125,7 @@ const percent = computed(() => {
         </div>
         <div
           v-if="!result.isQualified"
-          :class="result.netBenefitIncludingGap >= 0 ? 'text-savings' : 'text-loss'"
+          :class="result.netBenefitIncludingGap >= 0 ? 'text-status-success' : 'text-status-danger'"
         >
           추가 {{ result.gap.toLocaleString() }}원 지출 감안 → 순혜택 {{ result.netBenefitIncludingGap >= 0 ? '▲' : '▼' }} {{ Math.abs(result.netBenefitIncludingGap).toLocaleString() }}원
         </div>

@@ -45,7 +45,7 @@ defineProps<{
             <div class="mt-1 text-caption text-muted-foreground">
               월 {{ detail.monthlySpend.toLocaleString() }}원 사용
             </div>
-            <div class="mt-1 text-body font-semibold tabular-nums text-savings">
+            <div class="mt-1 text-body font-semibold tabular-nums text-status-success">
               {{ detail.cappedBenefit.toLocaleString() }}원 혜택
             </div>
             <div v-if="detail.monthlyCap > 0" class="mt-1 text-tiny text-muted-foreground">

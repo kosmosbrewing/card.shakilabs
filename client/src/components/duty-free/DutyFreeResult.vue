@@ -20,7 +20,7 @@ defineProps<{
       <ResultHero
         label="최종 세액"
         :value="`${result.finalTax.toLocaleString()}원`"
-        value-class="text-loss"
+        value-class="text-status-danger"
       />
 
       <div class="grid grid-cols-1 gap-2 sm:grid-cols-3">
@@ -46,14 +46,14 @@ defineProps<{
 
       <div
         v-if="isExempt(result)"
-        class="flex items-center gap-2 rounded-xl border border-savings/25 bg-savings/10 px-3 py-2 text-caption font-semibold text-savings"
+        class="flex items-center gap-2 rounded-xl border border-status-success/25 bg-status-success/10 px-3 py-2 text-caption font-semibold text-status-success"
       >
         <BadgeCheck class="h-4 w-4" />
         면세 한도 이하여서 세금은 0원으로 예상됩니다.
       </div>
       <div
         v-else
-        class="flex items-center gap-2 rounded-xl border border-loss/25 bg-loss/10 px-3 py-2 text-caption font-semibold text-loss"
+        class="flex items-center gap-2 rounded-xl border border-status-danger/25 bg-status-danger/10 px-3 py-2 text-caption font-semibold text-status-danger"
       >
         <AlertTriangle class="h-4 w-4" />
         {{ result.finalTaxMethod === "simplified" ? "간이세율" : "일반세율" }} 기준 참고 계산으로 {{ result.finalTax.toLocaleString() }}원 세금이 예상됩니다.
