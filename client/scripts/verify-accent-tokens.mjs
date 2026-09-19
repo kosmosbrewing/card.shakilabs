@@ -34,7 +34,11 @@ const EXPECTED = {
     "--secondary-foreground": "222 47% 11%",
     "--accent": "174 68% 95%",
     "--accent-foreground": "174 70% 28%",
-    "--ring": "174 70% 24%",
+    // Focus ring is ink, not brand (v3 2.1 color.focus). A teal ring makes the
+    // "you are here" signal read as decoration and its contrast follows the
+    // accent instead of the page. Expected values live here as well as in
+    // index.html on purpose: when only one side moves, this gate fails.
+    "--ring": "0 0% 3.92%",
   },
   dark: {
     "--primary": "174 70% 45%",
@@ -43,7 +47,7 @@ const EXPECTED = {
     "--secondary-foreground": "210 40% 96%",
     "--accent": "174 50% 22%",
     "--accent-foreground": "174 70% 78%",
-    "--ring": "174 70% 45%",
+    "--ring": "0 0% 96.08%",
   },
 };
 

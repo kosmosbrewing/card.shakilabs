@@ -32,7 +32,11 @@ const guideFirst = computed(() => guidePlacementFor(route.path) === "before");
     <AppHeader />
     <TabNavigation />
     <main id="main-content" tabindex="-1" class="flex-1 relative">
-      <SeoRichContent v-if="guideFirst" placement="before" />
+      <!-- 약관·처리방침·소개는 가이드 본문이 곧 페이지다 = v3 §2.7 prose 역할(672px).
+           계산기 아래에 붙는 "after" 가이드는 도구 본문의 일부라 여기서 좁히지 않는다. -->
+      <div v-if="guideFirst" class="sh-container sh-container--prose">
+        <SeoRichContent placement="before" />
+      </div>
       <slot />
       <SeoRichContent v-if="!guideFirst" placement="after" />
     </main>

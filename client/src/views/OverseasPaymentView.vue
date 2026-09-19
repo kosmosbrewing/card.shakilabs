@@ -83,7 +83,7 @@ const {
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="해외결제 카드 비교 계산기" />
 
     <OverseasInput

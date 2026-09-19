@@ -118,7 +118,10 @@
         --destructive-foreground: 210 40% 98%;
         --border: 60 8% 90.2%; /* color.line #E8E8E4 */
         --input: 60 8% 90.2%;
-        --ring: 174 70% 24%;
+        /* 포커스 링은 브랜드색이 아니라 잉크다(v3 §2.1 color.focus). 액센트 청록을
+           쓰면 링이 앱마다 다른 색이 되어 "지금 여기 포커스가 있다"는 신호가
+           브랜드 장식으로 읽힌다. 배경 대비도 잉크 쪽이 항상 높다. */
+        --ring: 0 0% 3.92%;
         --radius: 0.4rem;
 
         /* v3 AppShell: ShGlobalHeader(검정, sticky)가 새로 생겨 --header-h는 이제
@@ -162,7 +165,7 @@
         --destructive-foreground: 0 65% 12%;
         --border: 33 9% 24%;
         --input: 33 9% 28%;
-        --ring: 174 70% 45%;
+        --ring: 0 0% 96.08%;
         --accent-hsl: var(--primary);
         --accent-muted-hsl: 174 50% 22%;
 

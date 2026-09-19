@@ -22,7 +22,7 @@ const seoDescription =
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="면세 한도 초과 관세 계산기" />
 
     <DutyFreeInput

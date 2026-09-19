@@ -52,11 +52,11 @@ const jsonLd = [
 
 <template>
   <SEOHead :title="TITLE" :description="DESCRIPTION" :json-ld="jsonLd" />
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--page space-y-5 py-5">
     <ShSurface padding="lg">
       <ShText as="p" variant="caption" tone="muted">CARD CALCULATORS</ShText>
       <ShText as="h1" variant="display" class="mt-2">카드 혜택, 발급 전에 숫자로 확인하세요</ShText>
-      <ShText tone="muted" class="mt-3 max-w-3xl">
+      <ShText tone="muted" class="mt-3">
         카드 광고는 최대 할인율을 앞세우지만, 실제로 돌아오는 금액은 내 소비 규모와 월 할인 한도, 전월 실적, 연회비를 모두 반영해야 나옵니다.
         ShakiLabs 카드 계산기는 주유·해외결제·연회비·포인트 등 카드 선택에 필요한 계산을 10개 도구로 나눠 제공합니다.
         회원가입이나 개인정보 입력 없이 금액만 넣으면 결과를 바로 확인할 수 있습니다.

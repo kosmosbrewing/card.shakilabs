@@ -82,7 +82,7 @@ const summaryMessage = computed(() => {
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
-  <div class="text-resize-layout container space-y-5 py-5">
+  <div class="text-resize-layout sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="주유 할인카드 비교 계산기" />
 
     <!-- 입력 -->

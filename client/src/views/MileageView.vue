@@ -31,7 +31,7 @@ const seoDescription =
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="마일리지 가치 계산기" />
 
     <CalculatorInteractionTracker calculator-id="mileage_value" page-path="/card/mileage">

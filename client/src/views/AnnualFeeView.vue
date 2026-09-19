@@ -83,7 +83,7 @@ const {
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
-  <div class="text-resize-layout container space-y-5 py-5">
+  <div class="text-resize-layout sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="연회비 회수 계산기" />
 
     <AnnualFeeInput

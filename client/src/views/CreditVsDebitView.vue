@@ -38,7 +38,7 @@ const formatBenefit = (value: number) =>
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="신용카드 vs 체크카드 비교" />
 
     <div class="retro-panel overflow-hidden">

@@ -14,16 +14,16 @@ import { CARD_DATA_SCOPE } from "@/data/cardDataScope";
     title="카드 계산기 전체 보기 | 목적별 카드 비교 도구"
     description="혜택·고정지출, 해외·여행 결제, 포인트·결제 관리 목적별로 필요한 카드 계산기를 찾으세요."
   />
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--page space-y-5 py-5">
     <ShSurface padding="lg">
       <ShText as="p" variant="caption" tone="muted">CARD TOOL DIRECTORY</ShText>
       <ShText as="h1" variant="display" class="mt-2">카드를 고르기 전에 목적부터 정리하세요</ShText>
-      <ShText tone="muted" class="mt-3 max-w-3xl">
+      <ShText tone="muted" class="mt-3">
         혜택 회수, 해외 결제, 포인트 관리 중 지금 필요한 결정과 가까운 도구에서 시작하세요.
         각 도구에는 "언제 쓰는가"와 "무엇을 넣으면 무엇이 나오는가"를 함께 적어 두었습니다.
         계산기 이름이 아니라 지금 겪고 있는 상황과 맞는 쪽을 고르고, 필요한 입력값이 손에 있는지 열기 전에 확인하세요.
       </ShText>
-      <ShText tone="muted" class="mt-3 max-w-3xl">
+      <ShText tone="muted" class="mt-3">
         카드 혜택은 할인율만 보면 실제 절약액을 크게 벗어납니다. 월 할인 한도, 전월 실적 조건, 연회비 세 가지가 함께 걸리기 때문입니다.
         아래 계산기는 모두 이 세 가지를 반영한 순혜택 기준으로 결과를 냅니다. 회원가입이나 카드번호 입력 없이 금액만 넣으면 됩니다.
       </ShText>
@@ -55,7 +55,7 @@ import { CARD_DATA_SCOPE } from "@/data/cardDataScope";
 
     <ShSurface padding="lg" aria-labelledby="card-data-scope-title">
       <ShText id="card-data-scope-title" as="h2" variant="heading">각 계산기가 비교하는 카드</ShText>
-      <ShText tone="muted" class="mt-2 max-w-3xl">
+      <ShText tone="muted" class="mt-2">
         계산기를 열기 전에 무엇을 몇 장이나 비교하는지, 조건의 폭이 어느 정도인지 확인하세요.
         아래 숫자는 계산에 실제로 쓰이는 카드 데이터에서 그대로 뽑은 값이라, 카드가 추가되거나 조건이 바뀌면 이 표도 함께 바뀝니다.
       </ShText>
