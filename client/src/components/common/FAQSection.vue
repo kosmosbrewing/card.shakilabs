@@ -41,7 +41,9 @@ function toggle(idx: number) {
           v-if="openIndex === idx"
           class="border-t border-border/40 bg-muted/10 px-4 py-3 text-caption leading-relaxed text-muted-foreground"
         >
-          {{ faq.answer }}
+          <!-- 카드는 콘텐츠 폭을 채우고 읽는 줄만 65ch로 묶는다 —
+               카드째 좁히면 옆 계산기 카드와 우변이 어긋나 보인다. -->
+          <p class="max-w-[65ch]">{{ faq.answer }}</p>
         </div>
       </div>
     </div>
