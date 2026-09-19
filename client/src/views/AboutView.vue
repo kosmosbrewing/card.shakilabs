@@ -16,7 +16,7 @@ import { ABOUT_PAGE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences"
     description="shakilabs.com/card는 주유 할인·해외결제·연회비 등 카드 비교 계산기를 제공하는 무료 서비스입니다."
   />
 
-  <div class="container space-y-5 pb-5">
+  <div class="sh-container sh-container--prose space-y-5 pb-5">
     <CompareSourceFooter
       :sources="ABOUT_PAGE_SOURCES"
       :updated-at="SOURCE_VERIFIED_AT"

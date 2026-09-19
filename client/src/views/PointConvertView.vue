@@ -30,7 +30,7 @@ const formatChartValue = (value: number | null) => formatWon(value ?? 0);
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="포인트 전환 비교" />
 
     <div class="retro-panel overflow-hidden">

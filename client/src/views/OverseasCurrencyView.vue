@@ -85,7 +85,7 @@ const summaryMessage = computed(() => {
     canonical-path="/overseas-payment"
   />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader :title="`${rateEntry.label} 해외결제 카드 비교`" />
 
     <div class="retro-panel overflow-hidden">

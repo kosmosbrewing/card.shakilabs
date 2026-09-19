@@ -54,7 +54,7 @@ const seoDescription = computed(
     canonical-path="/fuel-card"
   />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader :title="`${FUEL_TYPE_LABELS[ft]} 주유 할인카드 비교`" />
 
     <div class="retro-panel overflow-hidden">

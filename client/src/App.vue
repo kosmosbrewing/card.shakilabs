@@ -28,7 +28,7 @@ onErrorCaptured((error, _instance, info) => {
     <RouterView v-slot="{ Component, route }">
       <Transition name="page-fade" mode="out-in">
         <div :key="getPageGroup(route.path)" class="text-resize-layout">
-          <div v-if="routeError" class="container py-10">
+          <div v-if="routeError" class="sh-container sh-container--tool py-10">
             <div class="retro-panel overflow-hidden border-status-danger/30">
               <div class="retro-titlebar rounded-t-2xl">
                 <h2 class="retro-title text-status-danger">화면을 불러오지 못했습니다</h2>
@@ -45,7 +45,7 @@ onErrorCaptured((error, _instance, info) => {
           >
             <component :is="Component" />
             <template #fallback>
-              <div class="container py-10">
+              <div class="sh-container sh-container--tool py-10">
                 <LoadingSpinner
                   variant="spinner"
                   color="muted"

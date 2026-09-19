@@ -61,7 +61,7 @@ const summaryMessage = computed(() => {
     canonical-path="/fuel-card"
   />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader :title="`월 ${amountMan}만원 주유 시 최적 카드`" />
 
     <div class="retro-panel overflow-hidden">

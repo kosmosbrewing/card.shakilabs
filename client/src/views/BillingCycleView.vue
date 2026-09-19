@@ -21,7 +21,7 @@ const { result, validationError } = useSafeCalculation(
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="결제일별 이용기간 계산기" />
 
     <div class="retro-panel overflow-hidden">
