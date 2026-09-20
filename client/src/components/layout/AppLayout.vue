@@ -32,13 +32,21 @@ const guideFirst = computed(() => guidePlacementFor(route.path) === "before");
     <AppHeader />
     <TabNavigation />
     <main id="main-content" tabindex="-1" class="flex-1 relative">
-      <!-- 약관·처리방침·소개는 가이드 본문이 곧 페이지다 = v3 §2.7 prose 역할(672px).
-           계산기 아래에 붙는 "after" 가이드는 도구 본문의 일부라 여기서 좁히지 않는다. -->
+      <!-- 약관·처리방침·소개는 가이드 본문이 곧 페이지다 = v3 §2.7 prose 역할(672px). -->
       <div v-if="guideFirst" class="sh-container sh-container--prose">
         <SeoRichContent placement="before" />
       </div>
       <slot />
-      <SeoRichContent v-if="!guideFirst" placement="after" />
+      <!-- after 가이드는 라우트 본문의 일부다. 래퍼가 없으면 화면 왼쪽 끝(x=0)에 붙는다.
+           역할을 고정하지 않고 헤더 기준선을 그대로 따라가게 해 계산기(1152)·허브(1024)
+           어디서든 본문·헤더와 같은 선에서 시작한다. -->
+      <div
+        v-if="!guideFirst"
+        class="sh-container"
+        style="max-width: var(--sh-header-content-width)"
+      >
+        <SeoRichContent placement="after" />
+      </div>
     </main>
     <AppFooter />
   </ShSurface>
