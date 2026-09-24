@@ -7,6 +7,7 @@ import { wrapPrerenderedTables } from "./prerender-table-scroll.mjs";
 import { buildAllToolsMeta } from "./prerender-all-tools.mjs";
 import { appendCardHubLink, buildCardHubContent } from "./prerender-card-hub.mjs";
 import { buildHomeContent, buildHomeMeta } from "./prerender-home.mjs";
+import { PROSE_SHELL_ROUTES } from "./prose-routes.mjs";
 const DIST_DIR = resolve(import.meta.dirname, "../dist");
 const INDEX_HTML = resolve(DIST_DIR, "index.html");
 const SITE_URL = "https://shakilabs.com/card";
@@ -552,12 +553,32 @@ function buildPrerenderSection(meta) {
     </section>`;
 }
 
+// 정책·소개 라우트의 본문 폭 래퍼. 수화 후에는 AppLayout이 같은 클래스로 감싸는데,
+// 원시 HTML에는 920px 인라인 래퍼만 있어서 첫 페인트 920 → 수화 후 672로 본문이
+// 한 번 좁아졌다(레이아웃 시프트). 폭을 px로 다시 적지 않고 패키지 CSS 클래스를
+// 그대로 쓴다 — .sh-container--prose는 <head>의 render-blocking vendor.css에 있어
+// JS가 없는 첫 페인트에도 이미 적용된다.
+//
+// 래핑을 buildRichContent()가 아니라 여기(프리렌더 전용 경로)에서 하는 이유:
+// 앱 화면은 같은 본문을 AppLayout의 래퍼 안에 이미 넣으므로, 공용 빌더에 래퍼를
+// 넣으면 화면에서만 래퍼가 이중으로 겹쳐 본문이 624 → 576으로 더 좁아진다.
+//
+// data-seo-prerender를 래퍼가 달고 있어야 마운트 시점에 본문 사본이 통째로
+// 제거된다(src/utils/prerenderFallback.ts는 body 직계만 본다). section 태그인
+// 이유도 같다 — prerender 재적용 시 기존 블록을 지우는 정규식이 보는 태그 목록에
+// div가 없다.
+function wrapInProseShell(html) {
+  return `<section data-seo-prerender="prose-shell" class="sh-container sh-container--prose">${html}</section>`;
+}
+
 function buildRouteContent(route) {
   const html = buildRouteContentRaw(route);
+  if (!html) return html;
   // 표는 min-content 폭 아래로 줄지 않아서, 감싸지 않으면 390px에서 문서 자체를 가로로 민다.
   // 세 빌더의 출력이 여기로만 합류하므로 래핑도 여기 한 곳에서만 한다
   // (앱 쪽 같은 본문은 src/seo/routeRichContent.ts가 같은 함수를 부른다).
-  return html ? wrapPrerenderedTables(html) : html;
+  const wrapped = wrapPrerenderedTables(html);
+  return PROSE_SHELL_ROUTES.includes(route) ? wrapInProseShell(wrapped) : wrapped;
 }
 
 function buildRouteContentRaw(route) {
