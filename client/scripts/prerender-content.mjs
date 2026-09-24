@@ -24,7 +24,9 @@ import {
 // most specific content.
 import { buildInsightsSection } from "./card-insights.mjs";
 
-const ARTICLE = "max-width:920px;margin:0 auto;padding:24px 16px;line-height:1.75;font-size:15px;color:hsl(var(--foreground));";
+// 폭·가운데 정렬은 싣지 않는다 — 감싸는 .sh-container(프레임)가 정한다. 920px 자체 가운데 정렬은
+// 프레임(1152) 안에서 다시 가운데로 가 본문이 제목·계산기(x=168)보다 108px 안쪽(276)에서 시작했다.
+const ARTICLE = "padding:24px 0;line-height:1.75;font-size:15px;color:hsl(var(--foreground));";
 const H1 = "font-size:28px;line-height:1.3;margin:0 0 16px;color:hsl(var(--foreground));";
 const H2 = "font-size:20px;line-height:1.35;margin:28px 0 10px;padding-bottom:6px;border-bottom:2px solid hsl(var(--border));color:hsl(var(--foreground));";
 const H3 = "font-size:16px;line-height:1.4;margin:18px 0 6px;color:hsl(var(--foreground));";

@@ -160,7 +160,7 @@ export function buildCardHubContent() {
       `<tr><td style="padding:8px 10px;border:1px solid hsl(var(--border));"><a href="/card${row.path}">${row.label}</a></td><td style="padding:8px 10px;border:1px solid hsl(var(--border));">${row.count}장</td><td style="padding:8px 10px;border:1px solid hsl(var(--border));">${row.detail}</td></tr>`,
   ).join("");
 
-  return `<article data-seo-prerender="card-tool-directory" style="max-width:920px;margin:0 auto;padding:24px 16px;line-height:1.65;">
+  return `<article data-seo-prerender="card-tool-directory" style="padding:24px 0;line-height:1.65;">
     <h1 style="font-size:28px;margin:0 0 10px;">목적별 카드 계산기 전체 보기</h1>
     <p style="margin:0 0 10px;color:hsl(var(--muted-foreground));">혜택 회수, 해외 결제, 포인트 관리 중 지금 필요한 결정과 가까운 도구에서 시작하세요. 각 도구에는 "언제 쓰는가"와 "무엇을 넣으면 무엇이 나오는가"를 함께 적어 두었습니다. 계산기 이름이 아니라 지금 겪고 있는 상황과 맞는 쪽을 고르고, 필요한 입력값이 손에 있는지 열기 전에 확인하세요.</p>
     <p style="margin:0;color:hsl(var(--muted-foreground));">카드 혜택은 할인율만 보면 실제 절약액을 크게 벗어납니다. 월 할인 한도, 전월 실적 조건, 연회비 세 가지가 함께 걸리기 때문입니다. 아래 계산기는 모두 이 세 가지를 반영한 순혜택 기준으로 결과를 냅니다. 회원가입이나 카드번호 입력 없이 금액만 넣으면 됩니다.</p>
@@ -187,5 +187,5 @@ export function buildCardHubContent() {
 
 export function appendCardHubLink(route, content) {
   if (!content || route === "/all") return content;
-  return `${content}<nav data-seo-prerender="card-directory-link" style="max-width:920px;margin:0 auto;padding:0 16px 24px;"><a href="/card/all">카드 계산기 전체 보기 →</a></nav>`;
+  return `${content}<nav data-seo-prerender="card-directory-link" style="padding:0 0 24px;"><a href="/card/all">카드 계산기 전체 보기 →</a></nav>`;
 }
