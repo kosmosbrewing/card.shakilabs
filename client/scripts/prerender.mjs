@@ -7,7 +7,6 @@ import { wrapPrerenderedTables } from "./prerender-table-scroll.mjs";
 import { buildAllToolsMeta } from "./prerender-all-tools.mjs";
 import { appendCardHubLink, buildCardHubContent } from "./prerender-card-hub.mjs";
 import { buildHomeContent, buildHomeMeta } from "./prerender-home.mjs";
-import { PROSE_SHELL_ROUTES } from "./prose-routes.mjs";
 const DIST_DIR = resolve(import.meta.dirname, "../dist");
 const INDEX_HTML = resolve(DIST_DIR, "index.html");
 const SITE_URL = "https://shakilabs.com/card";
@@ -546,7 +545,7 @@ function buildFaqPage(entities) {
 
 function buildPrerenderSection(meta) {
   return `
-    <section data-seo-prerender style="max-width:920px;margin:0 auto;padding:20px 16px;line-height:1.6;">
+    <section data-seo-prerender class="sh-container sh-container--prose" style="padding-block:20px;line-height:1.6;">
       <h1 style="font-size:28px;line-height:1.3;margin:0 0 12px;">${meta.title.split(" | ")[0]}</h1>
       <p style="margin:0 0 10px;">${meta.description}</p>
       <p style="margin:0;"><a href="/card${meta.appPath}">계산기 열기</a></p>
@@ -577,8 +576,10 @@ function buildRouteContent(route) {
   // 표는 min-content 폭 아래로 줄지 않아서, 감싸지 않으면 390px에서 문서 자체를 가로로 민다.
   // 세 빌더의 출력이 여기로만 합류하므로 래핑도 여기 한 곳에서만 한다
   // (앱 쪽 같은 본문은 src/seo/routeRichContent.ts가 같은 함수를 부른다).
-  const wrapped = wrapPrerenderedTables(html);
-  return PROSE_SHELL_ROUTES.includes(route) ? wrapInProseShell(wrapped) : wrapped;
+  // 정책 라우트만이 아니라 전 라우트를 같은 셸로 감싼다(0.3.35 단일 프레임) — article은 이제
+  // 자기 폭이 없어서, 셸이 없으면 첫 페인트에서 화면 왼쪽 끝(x=0)에 붙는다.
+  // 수화 후 AppLayout도 가이드를 같은 클래스로 감싸므로 첫 페인트와 시작선(x=168)이 같다.
+  return wrapInProseShell(wrapPrerenderedTables(html));
 }
 
 function buildRouteContentRaw(route) {
