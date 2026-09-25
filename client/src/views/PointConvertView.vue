@@ -3,7 +3,8 @@ import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
-import RankedBars from "@/components/result-visualization/RankedBars.vue";
+import type { GapBarItem } from "@shakilabs/ui";
+import GapBars from "@/components/result-visualization/GapBars.vue";
 import { CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
 import { formatWon } from "@/lib/utils";
 import { calculatePointConversions } from "@/utils/cardTabCalculator";
@@ -17,14 +18,13 @@ const { result, validationError } = useSafeCalculation(
   () => calculatePointConversions({ pointAmount: pointAmount.value }),
   calculatePointConversions({ pointAmount: 120_000 }),
 );
-const chartItems = computed(() => result.value.items.map((item, index) => ({
+// 질문은 "어디로 넘겨야 가장 이득이고, 나머지는 얼마나 손해인가" — 1위 대비 차이로 그린다.
+const chartItems = computed<GapBarItem[]>(() => result.value.items.map((item) => ({
   key: item.key,
   label: item.label,
   value: item.estimatedValue,
   detail: `${item.units.toLocaleString()} ${item.unitLabel}`,
-  highlight: index === 0,
 })));
-const formatChartValue = (value: number | null) => formatWon(value ?? 0);
 </script>
 
 <template>
@@ -52,11 +52,12 @@ const formatChartValue = (value: number | null) => formatWon(value ?? 0);
       </div>
     </div>
 
-    <RankedBars
+    <GapBars
       title="전환처별 예상 가치"
-      note="동일한 보유 포인트를 전환했을 때의 예상 원화 가치이며 길수록 높습니다."
+      note="동일한 보유 포인트를 전환했을 때의 예상 원화 가치입니다. 막대는 1위보다 덜 받는 금액입니다."
       :items="chartItems"
-      :format-value="formatChartValue"
+      :format-value="formatWon"
+      better="higher"
     />
 
     <div class="grid gap-3">

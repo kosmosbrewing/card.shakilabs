@@ -1,25 +1,28 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import RankedBars from "@/components/result-visualization/RankedBars.vue";
+import type { GapBarItem } from "@shakilabs/ui";
+import GapBars from "@/components/result-visualization/GapBars.vue";
 import type { OverseasCalcResult } from "@/utils/overseasCalculator";
 
 const props = defineProps<{ results: OverseasCalcResult[] }>();
-const minimum = computed(() => Math.min(...props.results.map((result) => result.localCurrencyNet)));
-const items = computed(() => props.results.map((result) => ({
+
+// 카드 간 실부담은 결제액이 같아 수천 원 차이로 모인다 — 0부터 그리면 막대가 전부 같은 길이였다.
+// 1위(최저 부담) 대비 더 내는 금액을 막대로 그린다.
+const items = computed<GapBarItem[]>(() => props.results.map((result) => ({
   key: result.cardId,
-  label: result.card.issuer,
+  // 발급사만 쓰면 같은 발급사의 카드가 같은 이름으로 두 번 나온다 — 결과 카드·비교표와 같은 "발급사 카드명"
+  label: `${result.card.issuer} ${result.card.name}`,
   value: result.localCurrencyNet,
-  highlight: result.localCurrencyNet === minimum.value,
-  tone: result.localCurrencyNet === minimum.value ? "positive" as const : "primary" as const,
 })));
-const formatWon = (value: number | null) => `${(value ?? 0).toLocaleString()}원`;
+const formatWon = (value: number) => `${value.toLocaleString()}원`;
 </script>
 
 <template>
-  <RankedBars
+  <GapBars
     title="카드별 실부담 비교"
-    note="막대 길이는 실제 원화 부담액에 직접 비례하며 짧을수록 유리합니다."
+    note="막대는 1위(최저 부담)보다 더 내는 원화 금액입니다. 오른쪽 숫자가 카드별 실제 부담액입니다."
     :items="items"
     :format-value="formatWon"
+    better="lower"
   />
 </template>
