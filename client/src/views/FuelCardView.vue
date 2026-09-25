@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { ShCalculatorSplit } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
@@ -85,28 +86,34 @@ const summaryMessage = computed(() => {
   <div class="text-resize-layout sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="주유 할인카드 비교 계산기" />
 
-    <!-- 입력 -->
-    <FuelCardInput
-      :fuel-type="fuelType"
-      :monthly-spend="monthlySpend"
-      :preferred-brand="preferredBrand"
-      @update:fuel-type="fuelType = $event"
-      @update:monthly-spend="monthlySpend = $event"
-      @update:preferred-brand="preferredBrand = $event"
-      @share-request="openShare"
-    />
+    <ShCalculatorSplit>
+      <template #input>
+        <FuelCardInput
+          :fuel-type="fuelType"
+          :monthly-spend="monthlySpend"
+          :preferred-brand="preferredBrand"
+          @update:fuel-type="fuelType = $event"
+          @update:monthly-spend="monthlySpend = $event"
+          @update:preferred-brand="preferredBrand = $event"
+          @share-request="openShare"
+        />
+      </template>
 
-    <!-- TOP 3 카드 결과 -->
-    <TopCardList v-if="topCards.length > 0" :cards="topCards" />
+      <template #result>
+        <SummaryBanner v-if="bestCard" :message="summaryMessage" />
+        <!-- 추천 1위가 이 계산기의 핵심 결과다 — 요약 배너만 두면 오른쪽 칸이 비고, 목록 전체(약 1,050px)를
+             두면 왼쪽이 빈다(1440px 실측). 제목 + 1위만 결과 칸에, 2~3위는 1×2 아래 전폭(2열)으로. -->
+        <TopCardList v-if="topCards.length > 0" :cards="topCards" part="top" />
+      </template>
+    </ShCalculatorSplit>
+
+    <TopCardList v-if="topCards.length > 1" :cards="topCards" part="rest" />
 
     <AffiliateLinkPanel
       title="주유 관련 상품도 함께 확인하세요"
       description="카드 비교 결과를 봤다면 실제 주유 혜택 상품과 주유권 가격도 같이 확인해 보세요."
       :items="fuelAffiliateItems"
     />
-
-    <!-- SummaryBanner -->
-    <SummaryBanner v-if="bestCard" :message="summaryMessage" />
 
     <FuelCardNextActions v-if="bestCard" />
 

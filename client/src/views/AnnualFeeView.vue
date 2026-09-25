@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
+import { ShCalculatorSplit } from "@shakilabs/ui";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
@@ -86,16 +87,25 @@ const {
   <div class="text-resize-layout sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="연회비 회수 계산기" />
 
-    <AnnualFeeInput
-      :spending="spending"
-      :total-monthly-spend="totalMonthlySpend"
-      @update:spending="updateSpending($event.categoryId, $event.amount)"
-      @share-request="openShare"
-    />
+    <ShCalculatorSplit>
+      <template #input>
+        <AnnualFeeInput
+          :spending="spending"
+          :total-monthly-spend="totalMonthlySpend"
+          @update:spending="updateSpending($event.categoryId, $event.amount)"
+          @share-request="openShare"
+        />
+      </template>
 
-    <AnnualFeeTopCards v-if="topCards.length > 0" :cards="topCards" />
+      <template #result>
+        <SummaryBanner v-if="bestCard" :message="summaryMessage" />
+        <!-- 추천 1위가 이 계산기의 핵심 결과다 — 요약 배너만 두면 오른쪽 칸이 비고, 목록 전체(약 1,050px)를
+             두면 왼쪽이 빈다(1440px 실측). 제목 + 1위만 결과 칸에, 2~3위는 1×2 아래 전폭(2열)으로. -->
+        <AnnualFeeTopCards v-if="topCards.length > 0" :cards="topCards" part="top" />
+      </template>
+    </ShCalculatorSplit>
 
-    <SummaryBanner v-if="bestCard" :message="summaryMessage" />
+    <AnnualFeeTopCards v-if="topCards.length > 1" :cards="topCards" part="rest" />
 
     <AdSlot slot="annual-fee-top" label="연회비 계산 상단" />
 

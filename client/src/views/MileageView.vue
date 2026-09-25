@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
+import { ShCalculatorSplit } from "@shakilabs/ui";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
@@ -34,26 +35,34 @@ const seoDescription =
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="마일리지 가치 계산기" />
 
-    <CalculatorInteractionTracker calculator-id="mileage_value" page-path="/card/mileage">
-      <MileageInput
-        :airline-id="airlineId"
-        :mileage-balance="mileageBalance"
-        :selected-class="selectedClass"
-        @update:airline-id="airlineId = $event"
-        @update:mileage-balance="mileageBalance = $event"
-        @update:selected-class="selectedClass = $event"
-      />
-    </CalculatorInteractionTracker>
+    <ShCalculatorSplit>
+      <template #input>
+        <CalculatorInteractionTracker calculator-id="mileage_value" page-path="/card/mileage">
+          <MileageInput
+            :airline-id="airlineId"
+            :mileage-balance="mileageBalance"
+            :selected-class="selectedClass"
+            @update:airline-id="airlineId = $event"
+            @update:mileage-balance="mileageBalance = $event"
+            @update:selected-class="selectedClass = $event"
+          />
+        </CalculatorInteractionTracker>
+      </template>
 
-    <div class="rounded-xl border border-border bg-muted/30 p-4 text-caption leading-relaxed text-foreground">
-      <p class="font-semibold">공식 공제 기준: {{ MILEAGE_ASSUMPTIONS.journey }}</p>
-      <p class="mt-1 text-muted-foreground">
-        원/마일은 {{ MILEAGE_ASSUMPTIONS.cashFare }}로 계산하며,
-        {{ MILEAGE_ASSUMPTIONS.exclusions }}입니다. “마일 충족”은 좌석 예약 가능을 뜻하지 않습니다.
-      </p>
-    </div>
+      <template #result>
+        <MileageSummaryCard :result="result" />
+      </template>
 
-    <MileageSummaryCard :result="result" />
+      <template #below-input>
+        <div class="rounded-xl border border-border bg-muted/30 p-4 text-caption leading-relaxed text-foreground">
+          <p class="font-semibold">공식 공제 기준: {{ MILEAGE_ASSUMPTIONS.journey }}</p>
+          <p class="mt-1 text-muted-foreground">
+            원/마일은 {{ MILEAGE_ASSUMPTIONS.cashFare }}로 계산하며,
+            {{ MILEAGE_ASSUMPTIONS.exclusions }}입니다. “마일 충족”은 좌석 예약 가능을 뜻하지 않습니다.
+          </p>
+        </div>
+      </template>
+    </ShCalculatorSplit>
 
     <AdSlot slot="mileage-top" label="마일리지 상단" />
 

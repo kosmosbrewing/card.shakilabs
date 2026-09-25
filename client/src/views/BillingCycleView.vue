@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { ShCalculatorSplit } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
@@ -24,45 +25,58 @@ const { result, validationError } = useSafeCalculation(
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="결제일별 이용기간 계산기" />
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">이용기간 조건</h2>
-        <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
-      </div>
-      <div class="retro-panel-content grid gap-3 md:grid-cols-2" role="group" :aria-describedby="validationError ? 'billing-cycle-error' : undefined">
-        <label class="space-y-1 text-caption font-semibold text-foreground">
-          카드 사용일
-          <input v-model.number="purchaseDay" type="number" min="1" max="31" class="retro-input w-full" />
-        </label>
-        <label class="space-y-1 text-caption font-semibold text-foreground">
-          결제일
-          <select v-model.number="billingDay" class="retro-input w-full">
-            <option v-for="day in BILLING_DAY_OPTIONS" :key="day" :value="day">{{ day }}일</option>
-          </select>
-        </label>
-        <p v-if="validationError" id="billing-cycle-error" class="text-caption font-semibold text-destructive md:col-span-2" role="alert">
-          {{ validationError }}
-        </p>
-      </div>
-    </div>
+    <ShCalculatorSplit>
+      <template #input>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">이용기간 조건</h2>
+            <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
+          </div>
+          <div class="retro-panel-content grid gap-3 md:grid-cols-2" role="group" :aria-describedby="validationError ? 'billing-cycle-error' : undefined">
+            <label class="space-y-1 text-caption font-semibold text-foreground">
+              카드 사용일
+              <input v-model.number="purchaseDay" type="number" min="1" max="31" class="retro-input w-full" />
+            </label>
+            <label class="space-y-1 text-caption font-semibold text-foreground">
+              결제일
+              <select v-model.number="billingDay" class="retro-input w-full">
+                <option v-for="day in BILLING_DAY_OPTIONS" :key="day" :value="day">{{ day }}일</option>
+              </select>
+            </label>
+            <p v-if="validationError" id="billing-cycle-error" class="text-caption font-semibold text-destructive md:col-span-2" role="alert">
+              {{ validationError }}
+            </p>
+          </div>
+        </div>
+      </template>
 
-    <div class="grid gap-3 md:grid-cols-3">
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">청구 사이클</p>
-        <p class="mt-2 text-heading font-bold text-foreground">{{ result.cycleDays }}일</p>
-      </div>
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">총 이용 가능 기간</p>
-        <p class="mt-2 text-heading font-bold text-primary">{{ result.usableDays }}일</p>
-      </div>
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">최적 결제일 직후 사용</p>
-        <p class="mt-2 text-heading font-bold text-foreground">{{ result.bestUsableDays }}일</p>
-      </div>
-    </div>
+      <template #result>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">이용기간 결과</h2>
+          </div>
+          <div class="retro-panel-content space-y-4">
+            <div class="grid gap-3 md:grid-cols-3 lg:grid-cols-1">
+              <div class="retro-panel-muted px-4 py-4">
+                <p class="text-tiny text-muted-foreground">청구 사이클</p>
+                <p class="mt-2 text-heading font-bold text-foreground">{{ result.cycleDays }}일</p>
+              </div>
+              <div class="retro-panel-muted px-4 py-4">
+                <p class="text-tiny text-muted-foreground">총 이용 가능 기간</p>
+                <p class="mt-2 text-heading font-bold text-primary">{{ result.usableDays }}일</p>
+              </div>
+              <div class="retro-panel-muted px-4 py-4">
+                <p class="text-tiny text-muted-foreground">최적 결제일 직후 사용</p>
+                <p class="mt-2 text-heading font-bold text-foreground">{{ result.bestUsableDays }}일</p>
+              </div>
+            </div>
 
-    <div class="retro-panel px-4 py-4 text-caption leading-relaxed text-foreground">
-      현재 입력은 {{ result.nextStatementLabel }} 기준이며, 결제일 다음 날인 {{ result.bestPurchaseDay }}일에 결제하면 가장 긴 이용기간을 확보할 수 있습니다.
-    </div>
+            <div class="retro-panel-muted px-4 py-4 text-caption leading-relaxed text-foreground">
+              현재 입력은 {{ result.nextStatementLabel }} 기준이며, 결제일 다음 날인 {{ result.bestPurchaseDay }}일에 결제하면 가장 긴 이용기간을 확보할 수 있습니다.
+            </div>
+          </div>
+        </div>
+      </template>
+    </ShCalculatorSplit>
   </div>
 </template>

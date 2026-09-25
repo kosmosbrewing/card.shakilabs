@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
+import { ShCalculatorSplit } from "@shakilabs/ui";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
@@ -25,18 +26,26 @@ const seoDescription =
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="면세 한도 초과 관세 계산기" />
 
-    <DutyFreeInput
-      :purchase-amount-usd="purchaseAmountUsd"
-      :category="category"
-      @update:purchase-amount-usd="purchaseAmountUsd = $event"
-      @update:category="category = $event"
-    />
+    <ShCalculatorSplit>
+      <template #input>
+        <DutyFreeInput
+          :purchase-amount-usd="purchaseAmountUsd"
+          :category="category"
+          @update:purchase-amount-usd="purchaseAmountUsd = $event"
+          @update:category="category = $event"
+        />
+      </template>
 
-    <div class="rounded-2xl border border-status-warning/30 bg-status-warning/10 px-4 py-3 text-caption leading-relaxed text-foreground">
-      관세청 실시간 세액 조회가 아닌 참고 계산입니다. 통관 시점 환율, 세율, 품목 분류에 따라 실제 세액은 달라질 수 있습니다.
-    </div>
+      <template #result>
+        <DutyFreeResult :result="result" />
+      </template>
 
-    <DutyFreeResult :result="result" />
+      <template #below-input>
+        <div class="rounded-2xl border border-status-warning/30 bg-status-warning/10 px-4 py-3 text-caption leading-relaxed text-foreground">
+          관세청 실시간 세액 조회가 아닌 참고 계산입니다. 통관 시점 환율, 세율, 품목 분류에 따라 실제 세액은 달라질 수 있습니다.
+        </div>
+      </template>
+    </ShCalculatorSplit>
 
     <AdSlot slot="duty-free-top" label="관세 계산 상단" />
 

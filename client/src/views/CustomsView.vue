@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { ShBreakdownBar } from "@shakilabs/ui";
+import { ShBreakdownBar, ShCalculatorSplit } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
@@ -36,46 +36,59 @@ const taxSegments = computed(() => [
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="해외직구 관세 계산기" />
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">과세 조건</h2>
-        <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
-      </div>
-      <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'customs-error' : undefined">
-        <label class="space-y-1 text-caption font-semibold text-foreground">
-          상품가(USD)
-          <input v-model.number="productUsd" type="number" min="1" class="retro-input w-full" />
-        </label>
-        <label class="space-y-1 text-caption font-semibold text-foreground">
-          배송비(USD)
-          <input v-model.number="shippingUsd" type="number" min="0" class="retro-input w-full" />
-        </label>
-        <label class="space-y-1 text-caption font-semibold text-foreground">
-          품목
-          <select v-model="categoryKey" class="retro-input w-full">
-            <option v-for="item in CARD_CUSTOMS_CATEGORIES" :key="item.key" :value="item.key">{{ item.label }}</option>
-          </select>
-        </label>
-        <p v-if="validationError" id="customs-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
-          {{ validationError }}
-        </p>
-      </div>
-    </div>
+    <ShCalculatorSplit>
+      <template #input>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">과세 조건</h2>
+            <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
+          </div>
+          <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'customs-error' : undefined">
+            <label class="space-y-1 text-caption font-semibold text-foreground">
+              상품가(USD)
+              <input v-model.number="productUsd" type="number" min="1" class="retro-input w-full" />
+            </label>
+            <label class="space-y-1 text-caption font-semibold text-foreground">
+              배송비(USD)
+              <input v-model.number="shippingUsd" type="number" min="0" class="retro-input w-full" />
+            </label>
+            <label class="space-y-1 text-caption font-semibold text-foreground">
+              품목
+              <select v-model="categoryKey" class="retro-input w-full">
+                <option v-for="item in CARD_CUSTOMS_CATEGORIES" :key="item.key" :value="item.key">{{ item.label }}</option>
+              </select>
+            </label>
+            <p v-if="validationError" id="customs-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+              {{ validationError }}
+            </p>
+          </div>
+        </div>
+      </template>
 
-    <div class="grid gap-3 md:grid-cols-3">
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">총 결제 금액</p>
-        <p class="mt-2 text-heading font-bold text-foreground">{{ result.totalUsd.toLocaleString() }}달러</p>
-      </div>
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">예상 관부가세</p>
-        <p class="mt-2 text-heading font-bold text-primary">{{ formatWon(result.totalTax) }}</p>
-      </div>
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">원화 착지가</p>
-        <p class="mt-2 text-heading font-bold text-foreground">{{ formatWon(result.landedCost) }}</p>
-      </div>
-    </div>
+      <template #result>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">과세 결과</h2>
+          </div>
+          <div class="retro-panel-content">
+            <div class="grid gap-3 md:grid-cols-3 lg:grid-cols-1">
+              <div class="retro-panel-muted px-4 py-4">
+                <p class="text-tiny text-muted-foreground">총 결제 금액</p>
+                <p class="mt-2 text-heading font-bold text-foreground">{{ result.totalUsd.toLocaleString() }}달러</p>
+              </div>
+              <div class="retro-panel-muted px-4 py-4">
+                <p class="text-tiny text-muted-foreground">예상 관부가세</p>
+                <p class="mt-2 text-heading font-bold text-primary">{{ formatWon(result.totalTax) }}</p>
+              </div>
+              <div class="retro-panel-muted px-4 py-4">
+                <p class="text-tiny text-muted-foreground">원화 착지가</p>
+                <p class="mt-2 text-heading font-bold text-foreground">{{ formatWon(result.landedCost) }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </ShCalculatorSplit>
 
     <ShBreakdownBar
       label="예상 관부가세 구성"

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
+import { ShCalculatorSplit } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
@@ -86,19 +87,28 @@ const {
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="해외결제 카드 비교 계산기" />
 
-    <OverseasInput
-      :currency="currency"
-      :foreign-amount="foreignAmount"
-      :dcc-markup-rate="dccMarkupRate"
-      @update:currency="currency = $event"
-      @update:foreign-amount="foreignAmount = $event"
-      @update:dcc-markup-rate="dccMarkupRate = $event"
-      @share-request="openShare"
-    />
+    <ShCalculatorSplit>
+      <template #input>
+        <OverseasInput
+          :currency="currency"
+          :foreign-amount="foreignAmount"
+          :dcc-markup-rate="dccMarkupRate"
+          @update:currency="currency = $event"
+          @update:foreign-amount="foreignAmount = $event"
+          @update:dcc-markup-rate="dccMarkupRate = $event"
+          @share-request="openShare"
+        />
+      </template>
 
-    <OverseasTopCardList v-if="topCards.length > 0" :cards="topCards" />
+      <template #result>
+        <SummaryBanner v-if="bestCard" :message="summaryMessage" />
+        <!-- 추천 1위가 이 계산기의 핵심 결과다 — 요약 배너만 두면 오른쪽 칸이 비고, 목록 전체(약 1,050px)를
+             두면 왼쪽이 빈다(1440px 실측). 제목 + 1위만 결과 칸에, 2~3위는 1×2 아래 전폭(2열)으로. -->
+        <OverseasTopCardList v-if="topCards.length > 0" :cards="topCards" part="top" />
+      </template>
+    </ShCalculatorSplit>
 
-    <SummaryBanner v-if="bestCard" :message="summaryMessage" />
+    <OverseasTopCardList v-if="topCards.length > 1" :cards="topCards" part="rest" />
 
     <AdSlot slot="overseas-top" label="해외결제 결과 상단" />
 
