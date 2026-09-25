@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
+import { ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
@@ -86,31 +87,49 @@ const {
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="해외결제 카드 비교 계산기" />
 
-    <OverseasInput
-      :currency="currency"
-      :foreign-amount="foreignAmount"
-      :dcc-markup-rate="dccMarkupRate"
-      @update:currency="currency = $event"
-      @update:foreign-amount="foreignAmount = $event"
-      @update:dcc-markup-rate="dccMarkupRate = $event"
-      @share-request="openShare"
-    />
+    <ShCalculatorSplit>
+      <template #input>
+        <OverseasInput
+          :currency="currency"
+          :foreign-amount="foreignAmount"
+          :dcc-markup-rate="dccMarkupRate"
+          @update:currency="currency = $event"
+          @update:foreign-amount="foreignAmount = $event"
+          @update:dcc-markup-rate="dccMarkupRate = $event"
+          @share-request="openShare"
+        />
+      </template>
 
-    <OverseasTopCardList v-if="topCards.length > 0" :cards="topCards" />
+      <template #result>
+        <SummaryBanner v-if="bestCard" :message="summaryMessage" />
+        <!-- 추천 1위가 이 계산기의 핵심 결과다 — 요약 배너만 두면 오른쪽 칸이 비고, 목록 전체(약 1,050px)를
+             두면 왼쪽이 빈다(1440px 실측). 제목 + 1위만 결과 칸에, 2~3위는 1×2 아래 전폭(2열)으로. -->
+        <OverseasTopCardList v-if="topCards.length > 0" :cards="topCards" part="top" />
+      </template>
+    </ShCalculatorSplit>
 
-    <SummaryBanner v-if="bestCard" :message="summaryMessage" />
+    <!-- 계산기 아래 데이터 블록 2열(ShPairRow, 사용자 결정 2026-09-25). 순서는 유지하고 짧은 블록은 한 칸에 쌓는다.
+         광고는 묶음 사이로 옮겼다 — 블록 사이에 있으면 짝을 지을 수 없고, 두 광고가 붙지 않게 본문을 사이에 둔다. -->
+    <ShPairRow>
+      <template #start>
+        <OverseasTopCardList v-if="topCards.length > 1" :cards="topCards" part="rest" stack />
+      </template>
+      <template #end>
+        <DCCCompareSection
+          v-if="bestCard"
+          :result="bestCard"
+          :currency-code="currency"
+          :currency-symbol="rateEntry.symbol"
+        />
+      </template>
+    </ShPairRow>
 
     <AdSlot slot="overseas-top" label="해외결제 결과 상단" />
 
-    <DCCCompareSection
-      v-if="bestCard"
-      :result="bestCard"
-      :currency-code="currency"
-      :currency-symbol="rateEntry.symbol"
-    />
-
     <OverseasBarChart v-if="sortedResults.length > 0" :results="sortedResults" />
 
+    <!-- 전체 카드 비교표: 7열이라 반폭(1024px)에서 9px 가려짐(inner-scroll 실측).
+         4열 이하 표만 min-w 하한을 풀 수 있어 이 표는 짝에서 빼고 전폭으로 둔다. -->
     <OverseasCompareTable
       v-if="sortedResults.length > 0"
       :results="sortedResults"

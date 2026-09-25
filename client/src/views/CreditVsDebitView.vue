@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { ShCalculatorSplit } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
@@ -41,53 +42,66 @@ const formatBenefit = (value: number) =>
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="신용카드 vs 체크카드 비교" />
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">비교 조건</h2>
-        <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
-      </div>
-      <div class="retro-panel-content space-y-4">
-        <div class="grid gap-3 md:grid-cols-2" role="group" :aria-describedby="validationError ? 'credit-debit-error' : undefined">
-          <label class="space-y-1 text-caption font-semibold text-foreground">
-            월 카드 사용액
-            <input v-model.number="monthlySpend" type="number" min="100000" step="10000" class="retro-input w-full" />
-          </label>
-          <label class="space-y-1 text-caption font-semibold text-foreground">
-            신용카드 연회비
-            <input v-model.number="annualFee" type="number" min="0" step="1000" class="retro-input w-full" />
-          </label>
-          <label class="space-y-1 text-caption font-semibold text-foreground">
-            신용카드 혜택률
-            <input v-model.number="creditRate" type="number" min="0" max="0.1" step="0.001" class="retro-input w-full" />
-          </label>
-          <label class="space-y-1 text-caption font-semibold text-foreground">
-            체크카드 혜택률
-            <input v-model.number="debitRate" type="number" min="0" max="0.1" step="0.001" class="retro-input w-full" />
-          </label>
+    <ShCalculatorSplit>
+      <template #input>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">비교 조건</h2>
+            <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
+          </div>
+          <div class="retro-panel-content space-y-4">
+            <div class="grid gap-3 md:grid-cols-2" role="group" :aria-describedby="validationError ? 'credit-debit-error' : undefined">
+              <label class="space-y-1 text-caption font-semibold text-foreground">
+                월 카드 사용액
+                <input v-model.number="monthlySpend" type="number" min="100000" step="10000" class="retro-input w-full" />
+              </label>
+              <label class="space-y-1 text-caption font-semibold text-foreground">
+                신용카드 연회비
+                <input v-model.number="annualFee" type="number" min="0" step="1000" class="retro-input w-full" />
+              </label>
+              <label class="space-y-1 text-caption font-semibold text-foreground">
+                신용카드 혜택률
+                <input v-model.number="creditRate" type="number" min="0" max="0.1" step="0.001" class="retro-input w-full" />
+              </label>
+              <label class="space-y-1 text-caption font-semibold text-foreground">
+                체크카드 혜택률
+                <input v-model.number="debitRate" type="number" min="0" max="0.1" step="0.001" class="retro-input w-full" />
+              </label>
+            </div>
+            <p class="text-caption text-muted-foreground">
+              현재 설정은 신용카드 {{ formatPercent(creditRate, 1) }}, 체크카드 {{ formatPercent(debitRate, 1) }}를 가정합니다.
+            </p>
+            <p v-if="validationError" id="credit-debit-error" class="text-caption font-semibold text-destructive" role="alert">
+              {{ validationError }}
+            </p>
+          </div>
         </div>
-        <p class="text-caption text-muted-foreground">
-          현재 설정은 신용카드 {{ formatPercent(creditRate, 1) }}, 체크카드 {{ formatPercent(debitRate, 1) }}를 가정합니다.
-        </p>
-        <p v-if="validationError" id="credit-debit-error" class="text-caption font-semibold text-destructive" role="alert">
-          {{ validationError }}
-        </p>
-      </div>
-    </div>
+      </template>
 
-    <div class="grid gap-3 md:grid-cols-3">
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">신용카드 순혜택</p>
-        <p class="mt-2 text-heading font-bold text-foreground">{{ formatWon(result.annualCreditBenefit) }}</p>
-      </div>
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">체크카드 순혜택</p>
-        <p class="mt-2 text-heading font-bold text-foreground">{{ formatWon(result.annualDebitBenefit) }}</p>
-      </div>
-      <div class="retro-panel-muted px-4 py-4">
-        <p class="text-tiny text-muted-foreground">추천</p>
-        <p class="mt-2 text-heading font-bold text-primary">{{ result.winner === "credit" ? "신용카드" : "체크카드" }}</p>
-      </div>
-    </div>
+      <template #result>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">비교 결과</h2>
+          </div>
+          <div class="retro-panel-content">
+            <div class="grid gap-3 md:grid-cols-3 lg:grid-cols-1">
+              <div class="retro-panel-muted px-4 py-4">
+                <p class="text-tiny text-muted-foreground">신용카드 순혜택</p>
+                <p class="mt-2 text-heading font-bold text-foreground">{{ formatWon(result.annualCreditBenefit) }}</p>
+              </div>
+              <div class="retro-panel-muted px-4 py-4">
+                <p class="text-tiny text-muted-foreground">체크카드 순혜택</p>
+                <p class="mt-2 text-heading font-bold text-foreground">{{ formatWon(result.annualDebitBenefit) }}</p>
+              </div>
+              <div class="retro-panel-muted px-4 py-4">
+                <p class="text-tiny text-muted-foreground">추천</p>
+                <p class="mt-2 text-heading font-bold text-primary">{{ result.winner === "credit" ? "신용카드" : "체크카드" }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </ShCalculatorSplit>
 
     <DivergingBars
       title="연회비 반영 연간 순혜택"

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
+import { ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
@@ -25,63 +26,83 @@ const seoDescription =
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="면세 한도 초과 관세 계산기" />
 
-    <DutyFreeInput
-      :purchase-amount-usd="purchaseAmountUsd"
-      :category="category"
-      @update:purchase-amount-usd="purchaseAmountUsd = $event"
-      @update:category="category = $event"
-    />
+    <ShCalculatorSplit>
+      <template #input>
+        <DutyFreeInput
+          :purchase-amount-usd="purchaseAmountUsd"
+          :category="category"
+          @update:purchase-amount-usd="purchaseAmountUsd = $event"
+          @update:category="category = $event"
+        />
+      </template>
 
-    <div class="rounded-2xl border border-status-warning/30 bg-status-warning/10 px-4 py-3 text-caption leading-relaxed text-foreground">
-      관세청 실시간 세액 조회가 아닌 참고 계산입니다. 통관 시점 환율, 세율, 품목 분류에 따라 실제 세액은 달라질 수 있습니다.
-    </div>
+      <template #result>
+        <DutyFreeResult :result="result" />
+      </template>
 
-    <DutyFreeResult :result="result" />
+      <template #below-input>
+        <div class="rounded-2xl border border-status-warning/30 bg-status-warning/10 px-4 py-3 text-caption leading-relaxed text-foreground">
+          관세청 실시간 세액 조회가 아닌 참고 계산입니다. 통관 시점 환율, 세율, 품목 분류에 따라 실제 세액은 달라질 수 있습니다.
+        </div>
+      </template>
+    </ShCalculatorSplit>
 
+    <!-- 계산기 아래 데이터 블록 2열(ShPairRow, 사용자 결정 2026-09-25). 순서는 유지하고 짧은 블록은 한 칸에 쌓는다.
+         광고는 묶음 사이로 옮겼다 — 블록 사이에 있으면 짝을 지을 수 없고, 두 광고가 붙지 않게 본문을 사이에 둔다. -->
     <AdSlot slot="duty-free-top" label="관세 계산 상단" />
 
-    <TaxBreakdownSection :result="result" />
+    <ShPairRow>
+      <template #start>
+        <TaxBreakdownSection :result="result" />
+      </template>
+      <template #end>
+        <DutyFreeBarChart :purchase-amount-usd="purchaseAmountUsd" :category="category" />
 
-    <DutyFreeBarChart :purchase-amount-usd="purchaseAmountUsd" :category="category" />
-
-    <AdSlot slot="duty-free-middle" label="관세 계산 중단" />
-
-    <div class="retro-panel-muted px-4 py-4 text-caption font-semibold leading-relaxed text-foreground">
-      {{ formatTaxBreakdown(result) }}
-    </div>
+        <div class="retro-panel-muted px-4 py-4 text-caption font-semibold leading-relaxed text-foreground">
+          {{ formatTaxBreakdown(result) }}
+        </div>
+      </template>
+    </ShPairRow>
 
     <AdSlot slot="duty-free-bottom" label="관세 FAQ 하단" />
 
-    <CompareSourceFooter
-      :sources="DUTY_FREE_SOURCES"
-      :updated-at="SOURCE_VERIFIED_AT"
-      note="※ 실제 세액은 통관 시점 환율, 세율, 품목 세번 분류, 자진신고 여부에 따라 달라질 수 있습니다."
-    />
+    <ShPairRow>
+      <template #start>
+        <CompareSourceFooter
+          :sources="DUTY_FREE_SOURCES"
+          :updated-at="SOURCE_VERIFIED_AT"
+          note="※ 실제 세액은 통관 시점 환율, 세율, 품목 세번 분류, 자진신고 여부에 따라 달라질 수 있습니다."
+        />
+      </template>
+      <template #end>
+        <div class="space-y-3">
+          <div class="section-heading-block">
+            <h2 class="section-title">다른 계산기도 함께 보기</h2>
+          </div>
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <RouterLink
+              to="/overseas-payment"
+              class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
+            >
+              해외결제 카드 비교
+            </RouterLink>
+            <RouterLink
+              to="/annual-fee"
+              class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
+            >
+              연회비 회수 계산기
+            </RouterLink>
+            <RouterLink
+              to="/fuel-card"
+              class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
+            >
+              주유 할인카드 비교
+            </RouterLink>
+          </div>
+        </div>
+      </template>
+    </ShPairRow>
 
-    <div class="space-y-3">
-      <div class="section-heading-block">
-        <h2 class="section-title">다른 계산기도 함께 보기</h2>
-      </div>
-      <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
-        <RouterLink
-          to="/overseas-payment"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
-        >
-          해외결제 카드 비교
-        </RouterLink>
-        <RouterLink
-          to="/annual-fee"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
-        >
-          연회비 회수 계산기
-        </RouterLink>
-        <RouterLink
-          to="/fuel-card"
-          class="retro-panel-muted px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
-        >
-          주유 할인카드 비교
-        </RouterLink>
-      </div>
-    </div>
+    <AdSlot slot="duty-free-middle" label="관세 계산 중단" />
   </div>
 </template>

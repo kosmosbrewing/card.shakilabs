@@ -29,7 +29,8 @@ function trackRelatedClick(toTool: string): void {
     <ShText id="fuel-card-next-actions-title" as="h2" variant="heading" class="mb-3">
       추천 카드의 조건까지 이어서 확인하세요
     </ShText>
-    <div class="grid gap-3 md:grid-cols-3">
+    <!-- lg에선 아래 2열 묶음의 반폭 칸에 들어간다 — 3열이면 카드당 약 170px라 설명이 여러 줄로 부서진다 -->
+    <div class="grid gap-3 md:grid-cols-3 lg:grid-cols-1">
       <ShSurface
         v-for="item in actions"
         :key="item.key"

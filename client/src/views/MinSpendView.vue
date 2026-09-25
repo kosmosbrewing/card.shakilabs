@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
+import { ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
@@ -93,39 +94,62 @@ const {
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="전월 실적 계산기" />
 
-    <MinSpendInput
-      :fuel-type="fuelType"
-      :fuel-spend="fuelSpend"
-      :spending="spending"
-      :preferred-brand="preferredBrand"
-      :total-spending="totalSpending"
-      @update:fuel-type="fuelType = $event"
-      @update:fuel-spend="fuelSpend = $event"
-      @update:preferred-brand="preferredBrand = $event"
-      @update:spending="updateSpending($event.categoryId, $event.amount)"
-      @share-request="openShare"
-    />
+    <ShCalculatorSplit>
+      <template #input>
+        <MinSpendInput
+          :fuel-type="fuelType"
+          :fuel-spend="fuelSpend"
+          :spending="spending"
+          :preferred-brand="preferredBrand"
+          :total-spending="totalSpending"
+          @update:fuel-type="fuelType = $event"
+          @update:fuel-spend="fuelSpend = $event"
+          @update:preferred-brand="preferredBrand = $event"
+          @update:spending="updateSpending($event.categoryId, $event.amount)"
+          @share-request="openShare"
+        />
+      </template>
 
-    <MinSpendTopCards v-if="topCards.length > 0" :cards="topCards" />
+      <template #result>
+        <SummaryBanner v-if="bestCard" :message="summaryMessage" />
+        <!-- 추천 1위가 이 계산기의 핵심 결과다 — 요약 배너만 두면 오른쪽 칸이 비고, 목록 전체(약 1,050px)를
+             두면 왼쪽이 빈다(1440px 실측). 제목 + 1위만 결과 칸에, 2~3위는 1×2 아래 전폭(2열)으로. -->
+        <MinSpendTopCards v-if="topCards.length > 0" :cards="topCards" part="top" />
+      </template>
+    </ShCalculatorSplit>
 
-    <SummaryBanner v-if="bestCard" :message="summaryMessage" />
+    <!-- 계산기 아래 데이터 블록 2열(ShPairRow, 사용자 결정 2026-09-25). 순서는 유지하고 짧은 블록은 한 칸에 쌓는다.
+         광고는 묶음 사이로 옮겼다 — 블록 사이에 있으면 짝을 지을 수 없고, 두 광고가 붙지 않게 본문을 사이에 둔다. -->
+    <ShPairRow>
+      <template #start>
+        <MinSpendTopCards v-if="topCards.length > 1" :cards="topCards" part="rest" stack />
+      </template>
+      <template #end>
+        <QualificationChart v-if="sortedResults.length > 0" :results="sortedResults" />
+      </template>
+    </ShPairRow>
 
     <AdSlot slot="min-spend-top" label="실적 분석 상단" />
 
-    <QualificationChart v-if="sortedResults.length > 0" :results="sortedResults" />
-
-    <MinSpendNetBenefitChart v-if="sortedResults.length > 0" :results="sortedResults" />
-
-    <MinSpendCompareTable
-      v-if="sortedResults.length > 0"
-      :results="sortedResults"
-      :mismatch-results="mismatchResults"
-      :sort-key="sortKey"
-      @update:sort-key="sortKey = $event"
-    />
+    <ShPairRow>
+      <template #start>
+        <MinSpendNetBenefitChart v-if="sortedResults.length > 0" :results="sortedResults" />
+      </template>
+      <template #end>
+        <MinSpendCompareTable
+          v-if="sortedResults.length > 0"
+          :results="sortedResults"
+          :mismatch-results="mismatchResults"
+          :sort-key="sortKey"
+          @update:sort-key="sortKey = $event"
+        />
+      </template>
+    </ShPairRow>
 
     <AdSlot slot="min-spend-middle" label="실적 비교표 하단" />
 
+    <!-- 카드별 실적 분석은 반폭에서 1,110px까지 늘어나 rounded-2xl+링크 그리드(445px)와 짝지으면
+         비율 0.40으로 pair-audit 불균형 기준(0.5) 미달 — 짝을 풀고 원래 순서(전폭)로 둔다. -->
     <MinSpendDetailSection v-if="sortedResults.length > 0" :results="sortedResults" />
 
     <AdSlot slot="min-spend-bottom" label="실적 FAQ 하단" />
@@ -134,15 +158,6 @@ const {
       :sources="MIN_SPEND_SOURCES"
       :updated-at="SOURCE_VERIFIED_AT"
       note="※ 실적 인정 제외 업종과 할인 적용 조건은 카드사별로 다르므로 실제 카드사 기준을 반드시 함께 확인하세요."
-    />
-
-    <ShareModal
-      :show="showShareModal"
-      :kakao-busy="kakaoBusy"
-      :summary-text="shareSummary"
-      @close="closeShare"
-      @share-kakao="shareKakao"
-      @copy-link="copyLink"
     />
 
     <div class="space-y-3">
@@ -188,5 +203,14 @@ const {
         </RouterLink>
       </div>
     </div>
+
+    <ShareModal
+      :show="showShareModal"
+      :kakao-busy="kakaoBusy"
+      :summary-text="shareSummary"
+      @close="closeShare"
+      @share-kakao="shareKakao"
+      @copy-link="copyLink"
+    />
   </div>
 </template>

@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
-import type { GapBarItem } from "@shakilabs/ui";
+import { ShCalculatorSplit, type GapBarItem } from "@shakilabs/ui";
 import GapBars from "@/components/result-visualization/GapBars.vue";
 import { CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
 import { formatWon } from "@/lib/utils";
@@ -33,32 +33,38 @@ const chartItems = computed<GapBarItem[]>(() => result.value.items.map((item) =>
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="포인트 전환 비교" />
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">전환 조건</h2>
-        <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
-      </div>
-      <div class="retro-panel-content space-y-4">
-        <label class="space-y-1 text-caption font-semibold text-foreground" :aria-describedby="validationError ? 'point-convert-error' : undefined">
-          보유 포인트
-          <input v-model.number="pointAmount" type="number" min="1000" step="1000" class="retro-input w-full" />
-        </label>
-        <p v-if="validationError" id="point-convert-error" class="text-caption font-semibold text-destructive" role="alert">
-          {{ validationError }}
-        </p>
-        <div class="rounded-2xl border border-border bg-muted/30 px-4 py-3 text-caption text-foreground">
-          가장 높은 예상 가치는 <strong>{{ result.bestOption.label }}</strong> 전환이며 약 {{ formatWon(result.bestOption.estimatedValue) }}입니다.
+    <ShCalculatorSplit>
+      <template #input>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">전환 조건</h2>
+            <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
+          </div>
+          <div class="retro-panel-content space-y-4">
+            <label class="space-y-1 text-caption font-semibold text-foreground" :aria-describedby="validationError ? 'point-convert-error' : undefined">
+              보유 포인트
+              <input v-model.number="pointAmount" type="number" min="1000" step="1000" class="retro-input w-full" />
+            </label>
+            <p v-if="validationError" id="point-convert-error" class="text-caption font-semibold text-destructive" role="alert">
+              {{ validationError }}
+            </p>
+            <div class="rounded-2xl border border-border bg-muted/30 px-4 py-3 text-caption text-foreground">
+              가장 높은 예상 가치는 <strong>{{ result.bestOption.label }}</strong> 전환이며 약 {{ formatWon(result.bestOption.estimatedValue) }}입니다.
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </template>
 
-    <GapBars
-      title="전환처별 예상 가치"
-      note="동일한 보유 포인트를 전환했을 때의 예상 원화 가치입니다. 막대는 1위보다 덜 받는 금액입니다."
-      :items="chartItems"
-      :format-value="formatWon"
-      better="higher"
-    />
+      <template #result>
+        <GapBars
+          title="전환처별 예상 가치"
+          note="동일한 보유 포인트를 전환했을 때의 예상 원화 가치입니다. 막대는 1위보다 덜 받는 금액입니다."
+          :items="chartItems"
+          :format-value="formatWon"
+          better="higher"
+        />
+      </template>
+    </ShCalculatorSplit>
 
     <div class="grid gap-3">
       <div v-for="item in result.items" :key="item.key" class="retro-panel-muted px-4 py-4">
