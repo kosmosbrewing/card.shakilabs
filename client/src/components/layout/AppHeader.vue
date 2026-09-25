@@ -3,9 +3,8 @@
 // 0.3.38 "순수 내비게이션"(2026-09-25): 가운데 티커(안내 문구)는 정보라 뺐다.
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { ShGlobalHeader, type GlobalHeaderLink } from "@shakilabs/ui";
+import { ShGlobalHeader, ShThemeToggle, type GlobalHeaderLink } from "@shakilabs/ui";
 import { RouterLink } from "vue-router";
-import ThemeToggle from "@/components/layout/ThemeToggle.vue";
 import {
   PRIMARY_NAV_ITEMS,
   findActiveNavItem,
@@ -34,7 +33,7 @@ const navActiveKey = computed(() => findActiveNavItem(route.path)?.key ?? "");
     :link-component="RouterLink"
   >
     <template #utility>
-      <ThemeToggle />
+      <ShThemeToggle storage-key="shakilabs:theme:v1" />
     </template>
   </ShGlobalHeader>
 </template>
