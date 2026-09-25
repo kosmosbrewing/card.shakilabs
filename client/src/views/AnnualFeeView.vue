@@ -105,6 +105,9 @@ const {
       </template>
     </ShCalculatorSplit>
 
+    <!-- 계산기 아래 데이터 블록: 전체 카드 비교표가 6열이라 반폭(1440/1024px)에서 6~17px 가려진다(inner-scroll 실측).
+         4열 이하 표만 min-w 하한을 풀 수 있어 이 표는 짝을 지을 수 없고, 남은 2위+회수기간 묶음도 짝 상대가 없어
+         이 구간은 전폭 순서를 그대로 둔다(사용자 결정 2026-09-25 — 짝은 되는 곳만). -->
     <AnnualFeeTopCards v-if="topCards.length > 1" :cards="topCards" part="rest" />
 
     <AdSlot slot="annual-fee-top" label="연회비 계산 상단" />

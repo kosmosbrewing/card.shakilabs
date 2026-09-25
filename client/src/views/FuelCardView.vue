@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { ShCalculatorSplit } from "@shakilabs/ui";
+import { ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
@@ -107,7 +107,16 @@ const summaryMessage = computed(() => {
       </template>
     </ShCalculatorSplit>
 
-    <TopCardList v-if="topCards.length > 1" :cards="topCards" part="rest" />
+    <!-- 계산기 아래 데이터 블록 2열(ShPairRow, 사용자 결정 2026-09-25). 순서는 유지하고 짧은 블록은 한 칸에 쌓는다.
+         광고는 묶음 사이로 옮겼다 — 블록 사이에 있으면 짝을 지을 수 없고, 두 광고가 붙지 않게 본문을 사이에 둔다. -->
+    <ShPairRow>
+      <template #start>
+        <TopCardList v-if="topCards.length > 1" :cards="topCards" part="rest" stack />
+      </template>
+      <template #end>
+        <FuelCardNextActions v-if="bestCard" />
+      </template>
+    </ShPairRow>
 
     <AffiliateLinkPanel
       title="주유 관련 상품도 함께 확인하세요"
@@ -115,15 +124,14 @@ const summaryMessage = computed(() => {
       :items="fuelAffiliateItems"
     />
 
-    <FuelCardNextActions v-if="bestCard" />
-
     <!-- 광고 상단 -->
     <AdSlot slot="fuel-card-top" label="비교 결과 하단" />
 
     <!-- 연간 절약액 차트 -->
     <SavingsBarChart v-if="sortedResults.length > 0" :results="sortedResults" />
 
-    <!-- 전체 카드 비교표 -->
+    <!-- 전체 카드 비교표: 8열이라 반폭(542/478px)에서 순위 열 등이 최대 274px 가려진다(inner-scroll 실측).
+         4열 이하 표만 min-w 하한을 풀 수 있어 이 표는 짝에서 빼고 전폭으로 둔다. -->
     <FeeCompareTable
       v-if="sortedResults.length > 0"
       :results="sortedResults"
@@ -147,6 +155,8 @@ const summaryMessage = computed(() => {
       note="※ 유가와 카드 혜택은 수시로 바뀌므로 실제 할인 조건과 연회비는 각 카드사 공식 페이지를 다시 확인하세요."
     />
 
+    <FuelCardInternalLinks />
+
     <ShareModal
       :show="showShareModal"
       :kakao-busy="kakaoBusy"
@@ -156,7 +166,6 @@ const summaryMessage = computed(() => {
       @copy-link="copyLink"
     />
 
-    <FuelCardInternalLinks />
     <AffiliateDisclosure v-if="fuelAffiliateItems.length > 0" />
   </div>
 </template>

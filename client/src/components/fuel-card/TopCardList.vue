@@ -7,8 +7,10 @@ withDefaults(
     cards: FuelCardCalcResult[];
     /** 1×2 틀에서 나눠 그릴 때: "top" = 제목 + 1위(결과 칸), "rest" = 2~3위(틀 아래 전폭). 기본은 전부 */
     part?: "all" | "top" | "rest";
+    /** 2~3위를 반폭 칸(아래 2열 묶음)에 둘 때 lg에서 한 줄씩 — 반폭에서 2열이면 카드당 약 260px라 수치 줄이 비좁다 */
+    stack?: boolean;
   }>(),
-  { part: "all" },
+  { part: "all", stack: false },
 );
 </script>
 
@@ -28,7 +30,7 @@ withDefaults(
     />
 
     <!-- 2~3위: 2컬럼 -->
-    <div v-if="part !== 'top' && cards.length > 1" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div v-if="part !== 'top' && cards.length > 1" class="grid grid-cols-1 sm:grid-cols-2 gap-3" :class="{ 'lg:grid-cols-1': stack }">
       <CardResultCard
         v-for="(card, idx) in cards.slice(1)"
         :key="card.cardId"

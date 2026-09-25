@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { ShCalculatorSplit } from "@shakilabs/ui";
+import { ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
@@ -64,6 +64,9 @@ const seoDescription =
       </template>
     </ShCalculatorSplit>
 
+    <!-- 계산기 아래 데이터 블록: 노선/좌석 비교표(ShTable)가 6열이라 반폭(1440/1024px)에서 최대 266px
+         가려진다(inner-scroll 실측). 4열 이하 표만 min-w 하한을 풀 수 있어 이 표는 짝을 지을 수 없고,
+         차트·상세분석도 남는 짝 상대가 없어 이 구간은 전폭 순서를 그대로 둔다(사용자 결정 2026-09-25 — 짝은 되는 곳만). -->
     <AdSlot slot="mileage-top" label="마일리지 상단" />
 
     <MileageValueChart :values="sortedValues" />
@@ -80,36 +83,41 @@ const seoDescription =
 
     <AdSlot slot="mileage-bottom" label="마일리지 FAQ 하단" />
 
-    <CompareSourceFooter
-      :sources="MILEAGE_SOURCES"
-      :updated-at="SOURCE_VERIFIED_AT"
-      note="※ 공식 평수기 성인 왕복 공제표 기준입니다. 현금가는 내부 예시이며 성수기, 제세공과금, 보너스 좌석 재고는 별도 확인해야 합니다."
-    />
-
-    <div class="space-y-3">
-      <div class="section-heading-block">
-        <h2 class="section-title">다른 계산기도 함께 보기</h2>
-      </div>
-      <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
-        <RouterLink
-          to="/overseas-payment"
-          class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
-        >
-          해외결제 카드 비교
-        </RouterLink>
-        <RouterLink
-          to="/annual-fee"
-          class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
-        >
-          연회비 회수 계산기
-        </RouterLink>
-        <RouterLink
-          to="/duty-free"
-          class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
-        >
-          관세 계산기
-        </RouterLink>
-      </div>
-    </div>
+    <ShPairRow>
+      <template #start>
+        <CompareSourceFooter
+          :sources="MILEAGE_SOURCES"
+          :updated-at="SOURCE_VERIFIED_AT"
+          note="※ 공식 평수기 성인 왕복 공제표 기준입니다. 현금가는 내부 예시이며 성수기, 제세공과금, 보너스 좌석 재고는 별도 확인해야 합니다."
+        />
+      </template>
+      <template #end>
+        <div class="space-y-3">
+          <div class="section-heading-block">
+            <h2 class="section-title">다른 계산기도 함께 보기</h2>
+          </div>
+          <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            <RouterLink
+              to="/overseas-payment"
+              class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
+            >
+              해외결제 카드 비교
+            </RouterLink>
+            <RouterLink
+              to="/annual-fee"
+              class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
+            >
+              연회비 회수 계산기
+            </RouterLink>
+            <RouterLink
+              to="/duty-free"
+              class="retro-panel-muted flex min-h-[44px] items-center px-3 py-2.5 text-caption font-medium text-foreground transition-colors hover:bg-background"
+            >
+              관세 계산기
+            </RouterLink>
+          </div>
+        </div>
+      </template>
+    </ShPairRow>
   </div>
 </template>
