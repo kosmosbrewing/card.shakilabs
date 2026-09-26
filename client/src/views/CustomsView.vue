@@ -43,7 +43,9 @@ const taxSegments = computed(() => [
             <h2 class="retro-title">과세 조건</h2>
             <FreshBadge :message="`${CARD_TOOL_UPDATED_AT} 기준`" />
           </div>
-          <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'customs-error' : undefined">
+          <!-- 반폭 칸(lg)에서 3열이면 칸마다 159px(1024px 창 138px)라 격자는 최대 2열:
+               상품가·배송비는 짧은 숫자 쌍으로 2열, 품목 셀렉트는 한 줄 전체. 태블릿(md)은 칸이 전폭이라 3열 유지. -->
+          <div class="retro-panel-content grid gap-3 md:grid-cols-3 lg:grid-cols-2" role="group" :aria-describedby="validationError ? 'customs-error' : undefined">
             <label class="space-y-1 text-caption font-semibold text-foreground">
               상품가(USD)
               <input v-model.number="productUsd" type="number" min="1" class="retro-input w-full" />
@@ -52,13 +54,13 @@ const taxSegments = computed(() => [
               배송비(USD)
               <input v-model.number="shippingUsd" type="number" min="0" class="retro-input w-full" />
             </label>
-            <label class="space-y-1 text-caption font-semibold text-foreground">
+            <label class="space-y-1 text-caption font-semibold text-foreground lg:col-span-2">
               품목
               <select v-model="categoryKey" class="retro-input w-full">
                 <option v-for="item in CARD_CUSTOMS_CATEGORIES" :key="item.key" :value="item.key">{{ item.label }}</option>
               </select>
             </label>
-            <p v-if="validationError" id="customs-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+            <p v-if="validationError" id="customs-error" class="text-caption font-semibold text-destructive md:col-span-3 lg:col-span-2" role="alert">
               {{ validationError }}
             </p>
           </div>

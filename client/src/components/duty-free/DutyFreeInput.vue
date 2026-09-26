@@ -43,8 +43,9 @@ function handleAmountInput(event: Event) {
     </div>
 
     <div class="retro-panel-content space-y-4">
-      <!-- 금액 + 카테고리 (2컬럼) -->
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <!-- 금액 + 카테고리: 태블릿은 2열, 입력 칸이 반폭이 되는 데스크톱(lg)은 1열.
+           반폭에서 2열이면 금액 칸이 1024px 창에서 107px라 10,000달러(시계·가방)부터 잘린다. -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
         <div class="space-y-1.5">
           <label :for="amountInputId" class="text-caption font-semibold text-muted-foreground">
             구매 예상 금액

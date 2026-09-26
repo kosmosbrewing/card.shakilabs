@@ -78,8 +78,9 @@ function handleDccInput(event: Event) {
     </div>
 
     <div class="retro-panel-content space-y-4">
-      <!-- 통화 + 금액 입력 (2컬럼) -->
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <!-- 통화 + 금액 입력: 태블릿은 2열, 입력 칸이 반폭이 되는 데스크톱(lg)은 1열.
+           반폭에서 2열이면 금액 칸이 1024px 창에서 107px라 10,000(엔화 흔한 값)부터 잘린다. -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
         <div class="space-y-1.5">
           <p class="text-caption font-semibold text-muted-foreground">통화</p>
           <div class="space-y-1.5">
