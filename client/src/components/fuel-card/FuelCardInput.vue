@@ -55,8 +55,9 @@ function handleAmountInput(e: Event) {
       </button>
     </div>
     <div class="retro-panel-content space-y-4">
-      <!-- 유종 + 월 주유비 (2컬럼) -->
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <!-- 유종 + 월 주유비: 태블릿은 2열, 입력 칸이 반폭이 되는 데스크톱(lg)은 1열.
+           반폭에서 2열이면 ± 버튼 사이 금액 칸이 139px(1024px 창은 107px)로 줄어 기본값 200,000부터 잘린다. -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
         <div class="space-y-1.5">
           <span :id="fuelTypeLabelId" class="text-caption font-semibold text-muted-foreground">유종</span>
           <ShPresetGroup

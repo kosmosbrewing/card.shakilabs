@@ -50,8 +50,9 @@ const classPresetOptions = computed(() => classOptions.map((value) => ({
     </div>
 
     <div class="retro-panel-content space-y-4">
-      <!-- 항공사 + 보유 마일리지 (2컬럼) -->
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <!-- 항공사 + 보유 마일리지: 태블릿은 2열, 입력 칸이 반폭이 되는 데스크톱(lg)은 1열.
+           반폭에서 2열이면 "마일" 접미사 뒤 글자 칸이 좁아 1280px 창은 100,000부터, 1024px 창은 기본값부터 잘린다. -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
         <div class="space-y-1.5">
           <p class="text-caption font-semibold text-muted-foreground">항공사</p>
           <ShPresetGroup

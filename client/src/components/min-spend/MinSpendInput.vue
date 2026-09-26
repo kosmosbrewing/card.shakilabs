@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, useId } from "vue";
 import { Fuel, Share2 } from "lucide-vue-next";
 import { ShPresetGroup, ShSlider, ShStepper } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
@@ -28,6 +28,8 @@ const emit = defineEmits<{
 }>();
 
 const showAdvanced = ref(false);
+// 보이는 "월 주유비" 라벨을 칸에 연결한다 — aria-label만으로는 라벨을 눌러도 칸에 포커스가 가지 않는다.
+const fuelSpendId = useId();
 const fuelTypes: FuelType[] = ["gasoline", "diesel", "lpg"];
 const fuelTypeOptions = fuelTypes.map((value) => ({ label: FUEL_TYPE_LABELS[value], value }));
 const brandOptions = GAS_STATION_BRANDS.map((brand) => ({ label: brand.name, value: brand.id }));
@@ -68,8 +70,9 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
     </div>
 
     <div class="retro-panel-content space-y-4">
-      <!-- 유종 + 주유비 (2컬럼) -->
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <!-- 유종 + 주유비: 태블릿은 2열, 입력 칸이 반폭이 되는 데스크톱(lg)은 1열.
+           반폭에서 2열이면 ± 버튼 사이 금액 칸이 139px(1024px 창은 107px)로 줄어 기본값 200,000부터 잘린다. -->
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-1">
         <div class="space-y-1.5">
           <label class="text-caption font-semibold text-muted-foreground">유종</label>
           <ShPresetGroup
@@ -81,7 +84,7 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
         </div>
 
         <div class="space-y-1.5">
-          <label class="text-caption font-semibold text-muted-foreground">월 주유비</label>
+          <label :for="fuelSpendId" class="text-caption font-semibold text-muted-foreground">월 주유비</label>
           <ShStepper
             class="w-full"
             :model-value="fuelSpend"
@@ -93,7 +96,7 @@ function handleSpendingInput(categoryId: SpendingCategoryId, event: Event) {
           >
             <div class="retro-stepper-field">
               <input
-                aria-label="월 주유비"
+                :id="fuelSpendId"
                 type="text"
                 inputmode="numeric"
                 class="retro-input retro-input-with-right-affix text-right tabular-nums"
