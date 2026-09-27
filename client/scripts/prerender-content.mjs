@@ -927,7 +927,10 @@ const STATIC_CATEGORIES = {
   },
 };
 
-// 모든 정적 페이지 공통으로 추가되는 보조 섹션
+// 카드 고르기 공통 보조 섹션 — **카드를 고르는 화면에만** 붙인다. 관세·면세·포인트 전환·결제일·해외결제 수수료·소개처럼
+// 주제가 다른 화면에 붙으면 주제와 무관한 반복 문단이 된다(외부 애드센스 점검 09-27: 카드 화면 문장 중복률 24~32%의 원인).
+const CARD_CHOICE_ROUTES = new Set(["/fuel-card", "/annual-fee", "/min-spend", "/credit-vs-debit", "/mileage"]);
+
 function buildCommonExtraSection() {
   return `
       <h2 style="${H2}">카드 선택 전 공통 체크리스트</h2>
@@ -978,9 +981,8 @@ function buildStaticContent(route) {
     .map((l) => `<li style="${LI}"><a href="${l.path}">${l.label}</a></li>`)
     .join("");
 
-  // privacy/terms는 법적 페이지라 공통 섹션 미포함
-  const isLegal = route === "/privacy" || route === "/terms";
-  const extraSection = isLegal ? "" : buildCommonExtraSection();
+  // 법적 페이지(privacy/terms)·소개와 카드 선택이 주제가 아닌 계산기는 공통 섹션 미포함
+  const extraSection = CARD_CHOICE_ROUTES.has(route) ? buildCommonExtraSection() : "";
 
   return `
     <article data-seo-prerender="static" style="${ARTICLE}">
@@ -1033,7 +1035,8 @@ export function buildRichContent(route) {
   // 해외결제 통화별
   const currencyMatch = route.match(/^\/overseas-payment\/(usd|eur|jpy|gbp|cny|thb|vnd)$/);
   if (currencyMatch) {
-    return injectCommonSection(buildOverseasCurrencyContent(currencyMatch[1]));
+    // 통화별 해외결제 수수료 — 카드 고르기 체크리스트는 주제 밖
+    return buildOverseasCurrencyContent(currencyMatch[1]);
   }
 
   // 정적 카테고리 (이미 buildStaticContent 내에서 공통 섹션 포함)
