@@ -40,6 +40,13 @@ export function cardsForIssuer(slug) {
   return issuer ? FUEL_CARDS.filter((card) => issuer.cardIds.includes(card.id)) : [];
 }
 
+// KNOWN SIMPLIFICATION (kept on purpose, same as src/utils/calculator.ts):
+// the spend tier is picked from the monthly FUEL spend alone, as if fuel were
+// the whole previous-month card spend. A tiered card (Hyundai O: 400k/800k/1.2M
+// -> cap 10k/20k/35k) therefore stays on its lowest cap at every fuel amount
+// shown here, even for a reader whose total card spend reaches a higher tier.
+// The pages say "previous-month spend assumed met" and quote every tier in the
+// terms table; changing this means changing the calculator, not the copy.
 export function savingsAt(card, monthlySpend) {
   return fuelResult(card, { fuelType: FUEL_TYPE, monthlySpend, preferredBrand: "all" });
 }

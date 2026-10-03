@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildRichContent } from "../../scripts/prerender-content.mjs";
 import { CARD_ISSUERS, MONTHLY_AMOUNTS } from "../../scripts/seo-routes.mjs";
 import { ISSUER_SIMULATION_AMOUNTS } from "../../scripts/seo-meta.mjs";
+import { LIGHT_CAR_FUEL_REFUND } from "../../scripts/fuel-card-copy.mjs";
 import {
   FUEL_CARDS,
   ISSUER_DISPLAY_NAME,
@@ -175,6 +176,24 @@ describe("/fuel-card 가이드 = 카드 데이터", () => {
       const label = issuerCards(slug).map(displayName).join("·");
       expect(html).toContain(`<a href="/card/fuel-card/${slug}">${label}</a>`);
     }
+  });
+
+  it("경차 유류세 환급 문장이 법령 값(조특법 제111조의2·시행령 제112조의2)이고, 데이터에 없는 조합 예시가 없다", () => {
+    // 2026-10-03에 확인한 법령 값(MST 284389·288915). 법이 개정되면 이 값과 fuel-card-copy.mjs를 같이 고친다.
+    expect(LIGHT_CAR_FUEL_REFUND).toEqual({
+      perLiter: 250,
+      annualCap: 300000,
+      until: "2026년 12월 31일",
+      maxDisplacementCc: 1000,
+      checkedAt: "2026-10-03",
+    });
+    expect(text).toContain(
+      `${LIGHT_CAR_FUEL_REFUND.until}까지 휘발유·경유 리터당 ${won(LIGHT_CAR_FUEL_REFUND.perLiter)}을 연 ${won(LIGHT_CAR_FUEL_REFUND.annualCap)} 한도로`,
+    );
+    expect(text).not.toContain("연 20만원 한도");
+    expect(text).not.toContain("지자체 경차");
+    expect(text).not.toContain("엔크린 할인을 중복");
+    expect(text).not.toContain("현대카드 O + SK엔크린");
   });
 
   it("절약액 범위가 계산기 엔진 값이다", () => {

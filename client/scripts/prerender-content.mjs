@@ -32,6 +32,7 @@ import {
   fuelHubFaqLowSpend,
   fuelHubIntro,
   fuelHubIssuerParagraph,
+  fuelHubOtherDiscounts,
   fuelHubSimulation,
   fuelIssuerLinks,
 } from "./fuel-card-copy.mjs";
@@ -425,7 +426,7 @@ const STATIC_CATEGORIES = {
       { h2: "카드사별 대표 주유카드", body: fuelHubIssuerParagraph() },
       { h2: "실제 절약 효과 시뮬레이션", body: fuelHubSimulation() },
       { h2: "실적 관리 팁", body: "주유만으로 실적을 채우기 어렵다면 생활비·외식비·교통비를 같은 카드로 결제하면 됩니다. 단, 세금·공과금·상품권·포인트 사용은 실적에서 제외되니 카드사 약관을 반드시 확인하세요. 월말 전 실적이 부족하다면 정기결제(구독료·보험료 일부)나 대형마트 장보기로 집중 결제하는 것이 효과적입니다. 카드사 앱에서 실시간 실적 현황을 확인할 수 있으니 매월 25일경 확인하는 습관을 들이세요." },
-      { h2: "주유 카드 vs 유가 할인 혜택", body: "주유 할인카드 외에도 지자체 경차 유류세 환급(연 20만원 한도), 주유소 포인트 적립(OK캐쉬백·L.포인트 등), 멤버십 앱 할인(SK엔크린·GS 포인트) 등 다양한 할인 제도가 있습니다. 이들과 카드 할인은 대부분 중복 적용되므로, 조합 사용 시 할인 효과가 더 커집니다. 예를 들어 현대카드 O + SK엔크린카드 조합 사용 시 카드 할인 10% + 리터당 60원 엔크린 할인을 중복 받을 수 있습니다." },
+      { h2: "주유 카드 vs 유가 할인 혜택", body: fuelHubOtherDiscounts() },
       { h2: "FAQ - 주유 할인카드", body: `${fuelHubFaqLowSpend()} Q2. 카드 2~3장 쓰면 더 유리한가요? A. 실적을 모두 채울 수 있다면 유리하지만 분산하면 오히려 손해입니다. 메인 1장 + 서브 1장 조합이 관리 편의성과 효과 면에서 가장 좋습니다. Q3. 할인과 적립 중 어느 게 유리한가요? A. 할인은 즉시 현금 이익, 적립은 포인트 소진 시점에 따라 가치가 다릅니다. 할인이 보통 더 확실한 이익입니다.` },
     ],
     links: [

@@ -12,6 +12,7 @@
 // NOTE: comments here are intentionally ASCII-only. scripts/ is scanned by
 // font-subset-config.mjs and every character becomes part of the shipped font
 // subset. Korean strings are page copy and belong in the subset.
+import { formatWon } from "./card-data-derived.mjs";
 import { FUEL_CARDS, FUEL_PRICES } from "./card-data-mirror.mjs";
 import {
   FUEL_TYPE,
@@ -99,6 +100,37 @@ export function fuelHubFaqLowSpend() {
     `Q1. 월 주유비가 적으면 할인카드가 의미 없나요? A. 월 ${manWon(HUB_SPENDS[0])}을 주유하면 카드 ${rows.length}장의 연간 할인은 ${wonRange(yearly)}이고, ` +
     `연회비를 빼면 ${wonRange(rows.map((row) => row.annualNet))}이 남습니다(전월 실적 충족 가정). ` +
     "주유 외 결제로 실적을 채우기 어렵다면 연회비 0원 기본 카드가 유리할 수 있습니다."
+  );
+}
+
+// Light-car fuel tax refund, read from the statute rather than from memory.
+// The old copy said "local-government refund, KRW 200,000 a year"; both parts
+// were wrong. Source (law.go.kr open API, fetched 2026-10-03):
+//   - Restriction of Special Taxation Act art. 111-2 (MST 284389, in force
+//     2026-09-18): national excise refund, KRW 250/L on gasoline and diesel,
+//     the full excise on butane, purchases through 2026-12-31, paid only on
+//     the refund card issued by ONE card company designated by the NTS (para 4-5).
+//   - Enforcement Decree art. 112-2 (MST 288915, in force 2026-09-18):
+//     para 1 under 1,000cc and 3.6 x 1.6 x 2.0 m; para 2 one passenger car per
+//     household; para 3 annual cap KRW 300,000, counted Jan 1 - Dec 31.
+// The sunset date is in the copy on purpose. Re-check both MSTs when the act
+// is amended (it has been extended year by year) and update this object.
+export const LIGHT_CAR_FUEL_REFUND = {
+  perLiter: 250,
+  annualCap: 300000,
+  until: "2026년 12월 31일",
+  maxDisplacementCc: 1000,
+  checkedAt: "2026-10-03",
+};
+
+export function fuelHubOtherDiscounts() {
+  const refund = LIGHT_CAR_FUEL_REFUND;
+  return (
+    `주유 할인카드 외에도 경차 유류세 환급, 주유소 포인트 적립(OK캐쉬백·L.포인트 등), 멤버십 앱 할인(SK엔크린·GS 포인트) 같은 제도가 있습니다. ` +
+    `경차 유류세 환급은 조세특례제한법 제111조의2에 따라 배기량 ${formatWon(refund.maxDisplacementCc)}cc 미만 등 요건을 갖춘 경차가 가구(주민등록상 동거가족)의 유일한 승용차인 경우 ` +
+    `${refund.until}까지 휘발유·경유 리터당 ${won(refund.perLiter)}을 연 ${won(refund.annualCap)} 한도로 돌려받는 제도입니다(같은 법 시행령 제112조의2, ${refund.checkedAt} 확인). ` +
+    "환급은 국세청이 지정한 카드사 한 곳에서 발급받은 환급용 유류구매카드로 결제한 주유에만 적용되므로, 다른 카드사의 주유 할인카드로 결제한 주유에는 붙지 않습니다. " +
+    "포인트 적립·멤버십 할인과 카드 할인을 함께 받을 수 있는지는 주유소와 카드사 약관에서 확인하세요."
   );
 }
 

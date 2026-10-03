@@ -54,6 +54,8 @@ export function calculateCardSavings(
 ): FuelCardCalcResult {
   const fuelPrice = getFuelPrice(input.fuelType);
   const monthlyLiters = fuelPrice > 0 ? input.monthlySpend / fuelPrice : 0;
+  // 알려진 단순화: 실적 구간을 월 주유비만으로 고른다(주유비 = 전월 실적으로 본다).
+  // 구간형 카드(현대카드 O)는 카드 전체 실적이 더 높은 사람에게도 낮은 구간 한도로 계산된다.
   const appliedTier = getFuelCardTierForSpend(card, input.monthlySpend, true);
   const appliedMinSpend = appliedTier?.minSpend ?? getFuelCardMinimumSpend(card);
   const appliedMonthlyCap = appliedTier?.monthlyCap ?? card.discount.monthlyCap;
