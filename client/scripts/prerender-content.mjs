@@ -23,6 +23,9 @@ import {
 // own "FAQ - X" text, which read as an afterthought rather than the page's
 // most specific content.
 import { buildInsightsSection } from "./card-insights.mjs";
+// The six /fuel-card/<issuer> bodies are built from the card data rows; see
+// prerender-fuel-issuer.mjs for why they no longer live in this file.
+import { buildFuelCardIssuerContent } from "./prerender-fuel-issuer.mjs";
 
 // 폭·가운데 정렬은 싣지 않는다 — 감싸는 .sh-container(프레임)가 정한다. 920px 자체 가운데 정렬은
 // 프레임(1152) 안에서 다시 가운데로 가 본문이 제목·계산기(x=168)보다 108px 안쪽(276)에서 시작했다.
@@ -39,57 +42,6 @@ const LI = "margin-bottom:4px;";
 const CALLOUT = "background:hsl(var(--accent));border-left:4px solid hsl(var(--primary));padding:12px 14px;margin:12px 0 16px;border-radius:4px;";
 
 // --- 정적 데이터 ---
-const ISSUER_DATA = {
-  hyundai: {
-    label: "현대카드",
-    tagline: "프리미엄 카드의 대명사",
-    strengths: ["연회비 대비 혜택 밀도가 높음", "공항 라운지·여행 특화", "주유 할인 구간형"],
-    mainFuelCard: "현대카드 O (주유 10% 할인·월 1~3.5만원 한도)",
-    annualFee: "2만원 ~ 80만원",
-    note: "프리미엄 라인(The Red/Black/Purple)은 고소득자 대상이며, O·X·Zero는 일반 소비자용입니다.",
-  },
-  shinhan: {
-    label: "신한카드",
-    tagline: "국내 1위 시장 점유율",
-    strengths: ["폭넓은 가맹점 혜택", "신한 마이페이 통합", "마이카·Hi-Point 인기"],
-    mainFuelCard: "신한 MY CAR (리터당 80원 할인·월 1만원 한도)",
-    annualFee: "0원 ~ 30만원",
-    note: "가장 대중적인 카드사로 혜택 범위가 넓지만 구간별 한도가 세분화되어 실제 할인액 계산이 복잡합니다.",
-  },
-  kb: {
-    label: "KB국민카드",
-    tagline: "KB금융그룹 통합 혜택",
-    strengths: ["탄탄대로 시리즈 인기", "은행 계좌 연동 혜택", "주유·차량 관리 특화"],
-    mainFuelCard: "KB 탄탄대로 올쇼핑 티타늄 (SK에너지·GS칼텍스 리터당 100원)",
-    annualFee: "0원 ~ 50만원",
-    note: "KB국민은행 고객이면 추가 혜택이 있어, 메인 은행과 연결 시 유리합니다.",
-  },
-  samsung: {
-    label: "삼성카드",
-    tagline: "모바일 중심 라이프스타일",
-    strengths: ["삼성페이 완벽 연동", "taptap·iD 시리즈", "간편결제 특화"],
-    mainFuelCard: "삼성카드 taptap O (주유 5% 할인)",
-    annualFee: "0원 ~ 50만원",
-    note: "삼성페이 이용이 많은 소비자에게 최적화되어 있습니다.",
-  },
-  lotte: {
-    label: "롯데카드",
-    tagline: "롯데 유통 계열 혜택",
-    strengths: ["롯데마트·롯데백화점 할인", "L.pay 연동", "페이 특화"],
-    mainFuelCard: "롯데 LOCA LIKIT ALL (주유·대중교통 7% 할인)",
-    annualFee: "0원 ~ 20만원",
-    note: "롯데 계열사를 자주 이용하는 소비자에게 적합합니다.",
-  },
-  hana: {
-    label: "하나카드",
-    tagline: "하나금융그룹 혜택",
-    strengths: ["1Q 시리즈 간편함", "하나은행 연동", "디지털 우대"],
-    mainFuelCard: "하나 1Q 카드 (주유 5% 할인)",
-    annualFee: "0원 ~ 20만원",
-    note: "하나은행 계좌 연동 시 추가 혜택을 받을 수 있습니다.",
-  },
-};
-
 const CURRENCY_DATA = {
   usd: {
     label: "미국 달러",
@@ -169,118 +121,6 @@ const CURRENCY_DATA = {
     krwEquivalent: 580000,
   },
 };
-
-// =========================
-// 주유카드 카드사별
-// =========================
-function buildFuelCardIssuerContent(issuer) {
-  const data = ISSUER_DATA[issuer];
-  if (!data) return null;
-  return `
-    <article data-seo-prerender="fuel-card-issuer" style="${ARTICLE}">
-      <nav aria-label="breadcrumb" style="font-size:13px;color:hsl(var(--muted-foreground));margin-bottom:10px;">
-        <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">홈</a> ›
-        <a href="/card/fuel-card" style="color:hsl(var(--muted-foreground));text-decoration:none;">주유 할인카드</a> ›
-        ${data.label}
-      </nav>
-
-      <h1 style="${H1}">${data.label} 주유 할인카드 비교 (2026년)</h1>
-
-      <p style="${P}">
-        <strong>${data.label}</strong>(${data.tagline})의 주유 할인카드를 비교합니다.
-        대표 주유 할인카드는 <strong>${data.mainFuelCard}</strong>이며, 연회비 범위는 ${data.annualFee}입니다.
-        전월 실적 조건과 월 할인 한도를 고려하면 실제 절약액은 월 1만원~3.5만원 수준입니다.
-      </p>
-
-      <p style="${P}">
-        주유 할인카드는 월 주유비에 따라 최적 카드가 달라집니다. 월 20만원 이하면 고정형(리터당 할인),
-        월 40만원 이상이면 구간형(정액 한도형) 카드가 유리합니다.
-        아래에서 ${data.label}의 주요 장점과 주의사항, 실제 절약 시뮬레이션을 확인하세요.
-      </p>
-
-      <h2 style="${H2}">1. ${data.label} 주유카드 특징</h2>
-      <ul style="${UL}">
-        ${data.strengths.map((s) => `<li style="${LI}">${s}</li>`).join("")}
-      </ul>
-
-      <h2 style="${H2}">2. 월 주유비별 예상 절약액</h2>
-      <table style="${TABLE}">
-        <thead>
-          <tr>
-            <th style="${TH}">월 주유비</th>
-            <th style="${TH}">예상 할인</th>
-            <th style="${TH}">실효 할인율</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td style="${TD}">20만원</td><td style="${TD}">약 1만원</td><td style="${TD}">5.0%</td></tr>
-          <tr><td style="${TD}">30만원</td><td style="${TD}">약 1.5만원</td><td style="${TD}">5.0%</td></tr>
-          <tr><td style="${TD}">50만원</td><td style="${TD}">약 2~3만원</td><td style="${TD}">4~6%</td></tr>
-          <tr><td style="${TD}">70만원</td><td style="${TD}">약 3~3.5만원</td><td style="${TD}">4.3~5%</td></tr>
-        </tbody>
-      </table>
-
-      <div style="${CALLOUT}">
-        <strong>실적 조건 확인 필수</strong><br>
-        대부분의 주유 할인카드는 "전월 40만원 이상 사용" 등 실적 조건을 만족해야 할인이 적용됩니다.
-        이 조건을 못 채우면 할인 없이 연회비만 부담할 수 있어 주의가 필요합니다.
-      </div>
-
-      <h2 style="${H2}">3. ${data.label} 추천 대상</h2>
-      <p style="${P}">${data.note}</p>
-      <ul style="${UL}">
-        <li style="${LI}">월 주유비 20만원 이상 정기 소비자</li>
-        <li style="${LI}">연회비 ${data.annualFee}을 부담할 수 있는 소비자</li>
-        <li style="${LI}">${data.label} 또는 계열 금융사 이용자</li>
-      </ul>
-
-      <h2 style="${H2}">4. 주유 할인카드 선택 체크리스트</h2>
-      <ul style="${UL}">
-        <li style="${LI}"><strong>실적 조건</strong>: 전월 사용액 기준(보통 30~50만원)</li>
-        <li style="${LI}"><strong>할인 한도</strong>: 월 최대 할인액(보통 1~3.5만원)</li>
-        <li style="${LI}"><strong>제휴 주유소</strong>: SK·GS·현대오일뱅크·S-Oil 등 중 특정 브랜드 제한 여부</li>
-        <li style="${LI}"><strong>연회비</strong>: 할인액이 연회비를 초과해야 실익 발생</li>
-        <li style="${LI}"><strong>추가 혜택</strong>: 카페·편의점·대중교통 등 생활업종 결합 여부</li>
-      </ul>
-
-      <h2 style="${H2}">5. 자주 묻는 질문 (FAQ)</h2>
-
-      <h3 style="${H3}">Q1. ${data.label} 주유카드 실적은 주유만으로 채울 수 있나요?</h3>
-      <p style="${P}">
-        대부분의 카드에서 실적 인정 금액은 전체 결제액 기준이며, 주유 외 생활업종 결제도 포함됩니다.
-        단, 세금·공과금·상품권·포인트 사용은 실적에서 제외되므로 카드사 약관을 확인해야 합니다.
-      </p>
-
-      <h3 style="${H3}">Q2. 연회비 대비 절약액이 남나요?</h3>
-      <p style="${P}">
-        월 주유비 20만원 기준 연간 절약액은 약 12만원입니다. ${data.label} 주유카드 연회비가 2만원이면
-        연 순절약액 약 10만원이 남습니다. 단, 실적 조건을 놓친 달이 있으면 절약액이 크게 줄어드니 주의하세요.
-      </p>
-
-      <h3 style="${H3}">Q3. 주유 카드와 다른 할인카드를 중복 사용할 수 있나요?</h3>
-      <p style="${P}">
-        네. 주유는 주유 특화 카드로, 생활비는 다른 포인트·캐시백 카드로 분리 사용하는 것이 가장 효율적입니다.
-        단, 카드별 실적 조건을 모두 채울 수 있는지 확인이 필요합니다.
-      </p>
-
-      <h2 style="${H2}">6. 다른 카드사 비교</h2>
-      <ul style="${UL}">
-        ${Object.entries(ISSUER_DATA)
-          .filter(([k]) => k !== issuer)
-          .map(
-            ([k, v]) =>
-              `<li style="${LI}"><a href="/card/fuel-card/${k}">${v.label} 주유카드</a></li>`
-          )
-          .join("")}
-        <li style="${LI}"><a href="/card/fuel-card">전체 주유카드 비교</a></li>
-      </ul>
-
-      <p style="font-size:12px;color:hsl(var(--muted-foreground));margin-top:24px;">
-        ※ 본 페이지는 ${data.label} 공식 페이지에서 확인 가능한 공개 정보를 기반으로 작성되었으며,
-        혜택·한도는 카드사의 정책에 따라 변경될 수 있습니다. 최종 가입 조건은 ${data.label} 공식 페이지에서 확인하세요.
-      </p>
-    </article>`;
-}
 
 // =========================
 // 주유카드 유종별 (휘발유/경유/LPG)

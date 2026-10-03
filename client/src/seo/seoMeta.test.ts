@@ -89,6 +89,7 @@ describe("재작성한 제목·설명의 주장 = 데이터", () => {
       const cards = FUEL_CARDS.filter((card) => ISSUER_SLUG_MAP[slug].includes(card.id));
       expect(FUEL_ISSUERS[slug]).toEqual({
         label: ISSUER_DISPLAY_NAME[slug],
+        cardIds: ISSUER_SLUG_MAP[slug],
         cards: cards.map((card) => card.name),
       });
       expect(pageTitleFor(`/fuel-card/${slug}`)).toBe(

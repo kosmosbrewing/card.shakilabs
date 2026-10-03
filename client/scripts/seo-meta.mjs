@@ -51,13 +51,15 @@ function sitePageTitle(name) {
   return `${name} · ${APP_NAME}`;
 }
 
+// cardIds = src/data/fuelCards.ts ISSUER_SLUG_MAP, cards = 그 카드들의 name — seoMeta.test.ts가 대조한다.
+// 카드사 페이지 본문(prerender-fuel-issuer.mjs)은 cardIds로 카드 데이터를 찾는다.
 export const FUEL_ISSUERS = {
-  hyundai: { label: "현대카드", cards: ["현대카드 O"] },
-  shinhan: { label: "신한카드", cards: ["MY CAR"] },
-  kb: { label: "KB국민카드", cards: ["탄탄대로 올쇼핑 티타늄"] },
-  samsung: { label: "삼성카드", cards: ["S-Oil 삼성카드"] },
-  lotte: { label: "롯데카드", cards: ["디지로카 Auto"] },
-  hana: { label: "하나카드", cards: ["1Q카드"] },
+  hyundai: { label: "현대카드", cardIds: ["hyundai-o"], cards: ["현대카드 O"] },
+  shinhan: { label: "신한카드", cardIds: ["shinhan-mycar"], cards: ["MY CAR"] },
+  kb: { label: "KB국민카드", cardIds: ["kb-tantandaero"], cards: ["탄탄대로 올쇼핑 티타늄"] },
+  samsung: { label: "삼성카드", cardIds: ["samsung-soil"], cards: ["S-Oil 삼성카드"] },
+  lotte: { label: "롯데카드", cardIds: ["lotte-auto"], cards: ["디지로카 Auto"] },
+  hana: { label: "하나카드", cardIds: ["hana-1q"], cards: ["1Q카드"] },
 };
 
 // 카드사 페이지의 "월 주유 금액별 절약액" 표 행(CardIssuerView.vue)과 description의 구간이
