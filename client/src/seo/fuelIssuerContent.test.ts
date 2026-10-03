@@ -1,13 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { buildRichContent } from "../../scripts/prerender-content.mjs";
-import { CARD_ISSUERS } from "../../scripts/seo-routes.mjs";
+import { CARD_ISSUERS, MONTHLY_AMOUNTS } from "../../scripts/seo-routes.mjs";
 import { ISSUER_SIMULATION_AMOUNTS } from "../../scripts/seo-meta.mjs";
 import {
   FUEL_CARDS,
+  ISSUER_DISPLAY_NAME,
   ISSUER_SLUG_MAP,
   getFuelCardSpendTiers,
   type FuelCard,
 } from "@/data/fuelCards";
+import { FUEL_PRICES } from "@/data/fuelPrices";
 import { calculateCardSavings, formatDiscountType } from "@/utils/calculator";
 
 // /fuel-card/<issuer> 본문의 주장 = fuelCards.ts 데이터·calculator.ts 엔진.
@@ -130,5 +132,101 @@ describe.each(CARD_ISSUERS)("/fuel-card/%s 본문 = 카드 데이터", (slug) =>
       `주유카드 ${FUEL_CARDS.length}장은 최저 구간 ${won(Math.min(...minSpends))}~${won(Math.max(...minSpends))}`,
     );
     expect(text).toContain(`${FUEL_CARDS.length}장 기준 ${won(Math.min(...caps))}~${won(Math.max(...caps))}`);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// /fuel-card 가이드와 /fuel-card/monthly/* — 같은 데이터·같은 공식으로 다시 계산해 대조한다.
+// ---------------------------------------------------------------------------
+const issuerLabelOf = (card: FuelCard) =>
+  ISSUER_DISPLAY_NAME[CARD_ISSUERS.find((slug) => ISSUER_SLUG_MAP[slug].includes(card.id))!];
+const displayName = (card: FuelCard) =>
+  card.name.includes(issuerLabelOf(card)) ? card.name : `${issuerLabelOf(card)} ${card.name}`;
+const range = (values: number[]) => `${won(Math.min(...values))}~${won(Math.max(...values))}`;
+const netsAt = (spend: number) => FUEL_CARDS.map((card) => gasoline(card, spend).annualNet);
+const ranked = (spend: number) =>
+  // 엔진 결과가 card를 함께 돌려준다. 동점이면 데이터 순서를 유지한다(안정 정렬).
+  FUEL_CARDS.map((card) => gasoline(card, spend)).sort((a, b) => b.annualNet - a.annualNet);
+
+describe("/fuel-card 가이드 = 카드 데이터", () => {
+  const html = buildRichContent("/fuel-card") ?? "";
+  const text = stripTags(html);
+
+  it("유가는 계산기 데이터 값과 날짜다", () => {
+    expect(text).toContain(`${FUEL_PRICES.lastUpdated} Opinet 전국 평균 리터당 ${won(FUEL_PRICES.gasoline)}`);
+    expect(text).not.toContain("1,750원");
+  });
+
+  it("카드사별 대표 주유카드 문단이 카드마다 데이터 값을 말한다", () => {
+    for (const card of FUEL_CARDS) {
+      const tiers = getFuelCardSpendTiers(card);
+      const brands = card.discount.brandRestriction;
+      expect(text).toContain(
+        `${displayName(card)}: ${formatDiscountType(card)}, ` +
+          `전월 실적 ${tiers.map((tier) => won(tier.minSpend)).join("/")} 이상 시 월 한도 ${tiers.map((tier) => won(tier.monthlyCap)).join("/")}, ` +
+          `연회비 ${won(card.annualFee)}${brands.length > 0 ? `, ${brands.join("·")} 주유소만` : ""}.`,
+      );
+    }
+    for (const claim of REMOVED_CLAIMS) expect(text).not.toContain(claim);
+  });
+
+  it("카드사 링크 이름이 데이터의 카드명이다", () => {
+    for (const slug of CARD_ISSUERS) {
+      const label = issuerCards(slug).map(displayName).join("·");
+      expect(html).toContain(`<a href="/card/fuel-card/${slug}">${label}</a>`);
+    }
+  });
+
+  it("절약액 범위가 계산기 엔진 값이다", () => {
+    expect(text).toContain(`월 30만원을 주유하면 카드 ${FUEL_CARDS.length}장의 연회비를 뺀 연간 절약액은 ${range(netsAt(300000))}입니다.`);
+    expect(text).toContain(`월 10만원 주유 시 ${range(netsAt(100000))}, 월 20만원 ${range(netsAt(200000))}, 월 30만원 ${range(netsAt(300000))}, 월 50만원 ${range(netsAt(500000))}입니다.`);
+    const yearly = FUEL_CARDS.map((card) => gasoline(card, 100000).annualNet + card.annualFee);
+    expect(text).toContain(`연간 할인은 ${range(yearly)}이고, 연회비를 빼면 ${range(netsAt(100000))}이 남습니다`);
+  });
+});
+
+describe.each(MONTHLY_AMOUNTS)("/fuel-card/monthly/%s = 카드 데이터", (amount) => {
+  const html = buildRichContent(`/fuel-card/monthly/${amount}`) ?? "";
+  const text = stripTags(html);
+  const rows = ranked(amount);
+  const label = amount.toLocaleString("ko-KR");
+
+  it("카드사별 예상 절약액 표: 6장 전부를 계산기 엔진으로 계산해 절약액 순으로 싣는다", () => {
+    const cells = rowCells(tableHtml(html, "data-monthly-savings"), "data-card-id");
+    expect([...cells.keys()]).toEqual(rows.map((row) => row.card.id));
+    for (const row of rows) {
+      const brands = row.card.discount.brandRestriction;
+      expect(cells.get(row.card.id)).toEqual([
+        issuerLabelOf(row.card),
+        row.card.name,
+        `${formatDiscountType(row.card)}${brands.length > 0 ? ` · ${brands.join("·")} 주유소만` : ""}`,
+        `${won(row.monthlyDiscount)}${row.isCapExceeded ? " (한도)" : ""}`,
+        won(row.annualNet),
+      ]);
+    }
+  });
+
+  it("1위·최하위·순위 문장이 표와 같다", () => {
+    const best = rows[0];
+    const worst = rows[rows.length - 1];
+    expect(text).toContain(`1위는 ${displayName(best.card)} (연 ${won(best.annualNet)} )이고`);
+    expect(text).toContain(`최하위는 ${displayName(worst.card)}(연 ${won(worst.annualNet)})입니다.`);
+    expect(text).toContain(
+      `순위는 ${rows.slice(0, 3).map((row, index) => `${index + 1}위 ${displayName(row.card)}(연 ${won(row.annualNet)})`).join(", ")}입니다.`,
+    );
+  });
+
+  it("실적 조건 답이 데이터의 최저 구간으로 센 값이다", () => {
+    const minSpends = FUEL_CARDS.map((card) => getFuelCardSpendTiers(card)[0].minSpend);
+    const met = minSpends.filter((minSpend) => amount >= minSpend).length;
+    expect(text).toContain(`최저 구간 ${range(minSpends)}입니다.`);
+    if (met < FUEL_CARDS.length) {
+      expect(text).toContain(`주유비 ${label}원만으로 최저 조건을 채우는 카드는 ${FUEL_CARDS.length}장 중 ${met}장이므로`);
+    }
+  });
+
+  it("가정한 평균 할인율이나 데이터에 없는 카드를 말하지 않는다", () => {
+    expect(text).not.toContain("평균 정률 할인 5%");
+    for (const claim of REMOVED_CLAIMS) expect(text).not.toContain(claim);
   });
 });

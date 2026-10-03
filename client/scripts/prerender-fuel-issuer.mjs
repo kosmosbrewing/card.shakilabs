@@ -20,7 +20,7 @@
 // NOTE: comments here are intentionally ASCII-only. scripts/ is scanned by
 // font-subset-config.mjs and every character becomes part of the shipped font
 // subset. Korean strings are page copy and belong in the subset.
-import { CARD_BENEFIT_DATA_VERIFIED_AT, formatWon } from "./card-data-derived.mjs";
+import { CARD_BENEFIT_DATA_VERIFIED_AT } from "./card-data-derived.mjs";
 import { FUEL_CARDS, FUEL_PRICES } from "./card-data-mirror.mjs";
 import {
   FUEL_TYPE,
@@ -28,8 +28,12 @@ import {
   breakEvenSpend,
   cardsForIssuer,
   discountLabel,
+  fleetScope,
+  manWon,
   savingsAt,
   spendTiers,
+  won,
+  wonRange,
 } from "./fuel-issuer-facts.mjs";
 import { FUEL_ISSUERS, ISSUER_SIMULATION_AMOUNTS } from "./seo-meta.mjs";
 
@@ -46,8 +50,6 @@ const UL = "margin:0 0 12px 20px;padding:0;";
 const LI = "margin-bottom:4px;";
 const CALLOUT = "background:hsl(var(--accent));border-left:4px solid hsl(var(--primary));padding:12px 14px;margin:12px 0 16px;border-radius:4px;";
 
-const won = (value) => `${formatWon(Math.round(value))}원`;
-const manWon = (value) => `${value / 10000}만원`;
 const pct = (rate) => `${Number((rate * 100).toFixed(1))}%`;
 
 function termsRow(card) {
@@ -150,17 +152,12 @@ function otherIssuers(slug) {
     .join("");
 }
 
-function scopeRange(values) {
-  return `${won(Math.min(...values))}~${won(Math.max(...values))}`;
-}
-
 export function buildFuelCardIssuerContent(slug) {
   const issuer = FUEL_ISSUERS[slug];
   const cards = cardsForIssuer(slug);
   if (!issuer || cards.length === 0) return null;
   const { label } = issuer;
-  const minSpends = FUEL_CARDS.map((card) => spendTiers(card)[0].minSpend);
-  const caps = FUEL_CARDS.flatMap((card) => spendTiers(card).map((tier) => tier.monthlyCap));
+  const { minSpends, caps } = fleetScope();
   const lead = cards[0];
 
   return `
@@ -201,8 +198,8 @@ export function buildFuelCardIssuerContent(slug) {
 
       <h2 style="${H2}">4. 주유 할인카드 선택 체크리스트</h2>
       <ul style="${UL}">
-        <li style="${LI}"><strong>실적 조건</strong>: 전월 사용액 기준(이 서비스의 주유카드 ${FUEL_CARDS.length}장은 최저 구간 ${scopeRange(minSpends)})</li>
-        <li style="${LI}"><strong>할인 한도</strong>: 월 최대 할인액(같은 ${FUEL_CARDS.length}장 기준 ${scopeRange(caps)})</li>
+        <li style="${LI}"><strong>실적 조건</strong>: 전월 사용액 기준(이 서비스의 주유카드 ${FUEL_CARDS.length}장은 최저 구간 ${wonRange(minSpends)})</li>
+        <li style="${LI}"><strong>할인 한도</strong>: 월 최대 할인액(같은 ${FUEL_CARDS.length}장 기준 ${wonRange(caps)})</li>
         <li style="${LI}"><strong>제휴 주유소</strong>: SK·GS·현대오일뱅크·S-Oil 등 중 특정 브랜드 제한 여부</li>
         <li style="${LI}"><strong>연회비</strong>: 할인액이 연회비를 초과해야 실익 발생</li>
         <li style="${LI}"><strong>추가 혜택</strong>: 카페·편의점·대중교통 등 생활업종 결합 여부</li>

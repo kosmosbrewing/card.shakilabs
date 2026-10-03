@@ -6,9 +6,13 @@
 // NOTE: comments here are intentionally ASCII-only. scripts/ is scanned by
 // font-subset-config.mjs and every character becomes part of the shipped font
 // subset. Korean strings are page copy and belong in the subset.
+import { formatWon } from "./card-data-derived.mjs";
 import { FUEL_CARDS, FUEL_PRICES } from "./card-data-mirror.mjs";
 import { fuelResult } from "./card-insights.mjs";
 import { FUEL_ISSUERS } from "./seo-meta.mjs";
+
+export const won = (value) => `${formatWon(Math.round(value))}원`;
+export const manWon = (value) => `${value / 10000}만원`;
 
 // The /fuel-card engine's default fuel; the Vue issuer table uses it too.
 export const FUEL_TYPE = "gasoline";
@@ -50,4 +54,38 @@ export function breakEvenSpend(card) {
   const perWon =
     card.discount.type === "perLiter" ? card.discount.amount / FUEL_PRICES[FUEL_TYPE] : card.discount.amount;
   return Math.ceil(monthlyFee / perWon / 1000) * 1000;
+}
+
+// Issuer label for a card row ("KB국민카드"), via the slug -> card id map.
+export function issuerLabelOf(card) {
+  const entry = Object.values(FUEL_ISSUERS).find((issuer) => issuer.cardIds.includes(card.id));
+  return entry ? entry.label : card.issuer;
+}
+
+// "현대카드 O" already names its issuer; "MY CAR" does not.
+export function cardDisplayName(card) {
+  const label = issuerLabelOf(card);
+  return card.name.includes(label) ? card.name : `${label} ${card.name}`;
+}
+
+// Every fuel card run through the engine at one monthly spend, best first.
+// Ties keep the data order (Array.prototype.sort is stable).
+export function rankedAt(monthlySpend) {
+  return FUEL_CARDS.map((card) => ({ card, ...savingsAt(card, monthlySpend) })).sort(
+    (a, b) => b.annualNet - a.annualNet,
+  );
+}
+
+export function wonRange(values) {
+  return `${won(Math.min(...values))}~${won(Math.max(...values))}`;
+}
+
+// Lowest-tier spend thresholds and every tier cap across the whole fuel table.
+export function fleetScope() {
+  return {
+    count: FUEL_CARDS.length,
+    minSpends: FUEL_CARDS.map((card) => spendTiers(card)[0].minSpend),
+    caps: FUEL_CARDS.flatMap((card) => spendTiers(card).map((tier) => tier.monthlyCap)),
+    fees: FUEL_CARDS.map((card) => card.annualFee),
+  };
 }
