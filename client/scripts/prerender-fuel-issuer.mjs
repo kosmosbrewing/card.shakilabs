@@ -1,3 +1,4 @@
+import { splitLongParagraphs } from "./split-long-paragraphs.mjs";
 // Body of the six /fuel-card/<issuer> pages, built from the card data only.
 //
 // Why this file exists: the previous body kept a hand-written ISSUER_DATA table
@@ -152,7 +153,7 @@ function otherIssuers(slug) {
     .join("");
 }
 
-export function buildFuelCardIssuerContent(slug) {
+function buildFuelCardIssuerContentRaw(slug) {
   const issuer = FUEL_ISSUERS[slug];
   const cards = cardsForIssuer(slug);
   if (!issuer || cards.length === 0) return null;
@@ -228,9 +229,14 @@ export function buildFuelCardIssuerContent(slug) {
         <li style="${LI}"><a href="/card/fuel-card">전체 주유카드 비교</a></li>
       </ul>
 
-      <p style="font-size:12px;color:hsl(var(--muted-foreground));margin-top:24px;">
+      <p style="font-size:13px;color:hsl(var(--muted-foreground));margin-top:24px;">
         ※ 카드 조건은 ${CARD_BENEFIT_DATA_VERIFIED_AT}에 ${label} 공식 페이지와 대조한 데이터이며,
         혜택·한도는 카드사의 정책에 따라 변경될 수 있습니다. 최종 가입 조건은 ${label} 공식 페이지에서 확인하세요.
       </p>
     </article>`;
+}
+
+// v8b: 문단 ≤250자 — 빌더 반환 HTML의 긴 <p>를 문장 경계에서 나눈다(정적·런타임 공통)
+export function buildFuelCardIssuerContent(slug) {
+  return splitLongParagraphs(buildFuelCardIssuerContentRaw(slug));
 }

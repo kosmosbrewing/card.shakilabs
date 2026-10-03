@@ -1,3 +1,4 @@
+import { splitLongParagraphs } from "./split-long-paragraphs.mjs";
 // Body of the /fuel-card/monthly/<amount> pages, computed from the card data.
 //
 // Why: the hand-written version assumed a flat "average 5%" discount for its
@@ -94,7 +95,7 @@ function minSpendAnswer(amount, amountLabel) {
   return `이 서비스의 주유카드 ${count}장은 전월 실적 조건이 최저 구간 ${wonRange(minSpends)}입니다. ${reach}`;
 }
 
-export function buildFuelMonthlyContent(amount) {
+function buildFuelMonthlyContentRaw(amount) {
   const amountLabel = amount.toLocaleString("ko-KR");
   const rows = rankedAt(amount);
   const best = rows[0];
@@ -161,8 +162,13 @@ export function buildFuelMonthlyContent(amount) {
         <li style="${LI}"><a href="/card/min-spend">최소 실적 조건</a></li>
       </ul>
 
-      <p style="font-size:12px;color:hsl(var(--muted-foreground));margin-top:24px;">
+      <p style="font-size:13px;color:hsl(var(--muted-foreground));margin-top:24px;">
         ※ 본 계산은 휘발유·전월 실적 충족을 가정한 계산값이며, 실제 할인액은 카드사·주유소·실적 조건에 따라 다를 수 있습니다.
       </p>
     </article>`;
+}
+
+// v8b: 문단 ≤250자 — 빌더 반환 HTML의 긴 <p>를 문장 경계에서 나눈다(정적·런타임 공통)
+export function buildFuelMonthlyContent(amount) {
+  return splitLongParagraphs(buildFuelMonthlyContentRaw(amount));
 }

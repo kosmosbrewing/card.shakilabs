@@ -1,3 +1,4 @@
+import { splitLongParagraphs } from "./split-long-paragraphs.mjs";
 // Card 프리렌더 페이지별 리치 콘텐츠 빌더
 // 각 라우트에 실제 정보(카드사별·통화별·카테고리별) 기반 3000+자 정적 HTML 생성
 //
@@ -269,7 +270,7 @@ function buildFuelTypeContent(fuelType) {
         <li style="${LI}"><a href="/card/annual-fee">연회비 비교</a></li>
       </ul>
 
-      <p style="font-size:12px;color:hsl(var(--muted-foreground));margin-top:24px;">
+      <p style="font-size:13px;color:hsl(var(--muted-foreground));margin-top:24px;">
         ※ 본 페이지는 공개된 카드사 약관·혜택 정보를 기반으로 작성되며, 최종 가입 조건은 각 카드사 공식 페이지에서 확인해야 합니다.
       </p>
     </article>`;
@@ -413,7 +414,7 @@ function buildOverseasCurrencyContent(currency) {
         <li style="${LI}"><a href="/card/overseas-payment">전체 해외결제 비교</a></li>
       </ul>
 
-      <p style="font-size:12px;color:hsl(var(--muted-foreground));margin-top:24px;">
+      <p style="font-size:13px;color:hsl(var(--muted-foreground));margin-top:24px;">
         ※ 본 페이지의 수수료율과 환율은 일반적 기준으로, 실제 결제 금액은 카드사·결제 시점에 따라 다를 수 있습니다.
       </p>
     </article>`;
@@ -798,7 +799,7 @@ function buildStaticContent(route) {
       ${extraSection}
       <h2 style="${H2}">관련 페이지</h2>
       <ul style="${UL}">${linksHtml}</ul>
-      <p style="font-size:12px;color:hsl(var(--muted-foreground));margin-top:24px;">
+      <p style="font-size:13px;color:hsl(var(--muted-foreground));margin-top:24px;">
         ※ 본 페이지는 공개된 카드사 정보를 기반으로 작성되었으며, 최종 가입 조건은 해당 카드사 공식 페이지에서 확인하시기 바랍니다.
       </p>
     </article>`;
@@ -815,7 +816,7 @@ function injectCommonSection(html) {
 // =========================
 // 메인 엔트리
 // =========================
-export function buildRichContent(route) {
+function buildRichContentRaw(route) {
   // 주유카드 카드사별
   const issuerMatch = route.match(/^\/fuel-card\/(hyundai|shinhan|kb|samsung|lotte|hana)$/);
   if (issuerMatch) {
@@ -849,4 +850,9 @@ export function buildRichContent(route) {
   if (staticContent) return staticContent;
 
   return null;
+}
+
+// v8b: 문단 ≤250자 — 빌더 반환 HTML의 긴 <p>를 문장 경계에서 나눈다(정적·런타임 공통)
+export function buildRichContent(route) {
+  return splitLongParagraphs(buildRichContentRaw(route));
 }

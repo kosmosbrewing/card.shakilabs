@@ -1,3 +1,4 @@
+import { splitLongParagraphs } from "./split-long-paragraphs.mjs";
 // Card app home (/) meta + rich content builder.
 // The home is the highest-authority page of the app, so it gets its own copy
 // instead of reusing the /fuel-card calculator or the /all directory listing.
@@ -174,7 +175,7 @@ function buildHomeIntroContent() {
 }
 
 // Blocks HomeView.vue does not render. Imported by src/seo/routeRichContent.ts.
-export function buildHomeExtraContent() {
+function buildHomeExtraContentRaw() {
   const pitfallItems = PITFALLS.map(
     ([heading, body]) => `
         <tr>
@@ -296,8 +297,18 @@ export function buildHomeExtraContent() {
     <p style="${P}">보통은 하나로 끝납니다. 지출이 한 항목에 몰려 있으면 그 계산기 하나면 충분하고, 주유와 해외결제처럼 두 항목이 모두 크면 각각의 순혜택을 더해 카드 한 장으로 둘 다 감당되는지 보면 됩니다.</p>`;
 }
 
-export function buildHomeContent() {
+function buildHomeContentRaw() {
   return `<article data-seo-prerender="card-home" style="${ARTICLE}">${buildHomeIntroContent()}
 ${buildHomeExtraContent()}
   </article>`;
+}
+
+// v8b: 문단 ≤250자 — 빌더 반환 HTML의 긴 <p>를 문장 경계에서 나눈다(정적·런타임 공통)
+export function buildHomeExtraContent() {
+  return splitLongParagraphs(buildHomeExtraContentRaw());
+}
+
+// v8b: 문단 ≤250자 — 빌더 반환 HTML의 긴 <p>를 문장 경계에서 나눈다(정적·런타임 공통)
+export function buildHomeContent() {
+  return splitLongParagraphs(buildHomeContentRaw());
 }
