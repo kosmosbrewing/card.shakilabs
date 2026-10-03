@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { RouterLink } from "vue-router";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
@@ -37,9 +38,8 @@ const results = computed(() => {
   return all.sort((a, b) => b.monthlyNet - a.monthlyNet);
 });
 
-const seoTitle = computed(
-  () => `2026 ${FUEL_TYPE_LABELS[ft.value]} 주유 할인카드 비교 | 리터당 최대 100원 할인`
-);
+// 프리렌더와 같은 제목(seo-meta.mjs). 예전 화면 제목의 "리터당 최대 100원"은 데이터(최대 150원/L)와 달랐다.
+const seoTitle = computed(() => pageTitle(`/fuel-card/${ft.value}`));
 const seoDescription = computed(
   () => `${FUEL_TYPE_LABELS[ft.value]} 기준 주유 할인카드를 비교합니다. 카드별 절약액, 체감 유가, 전월 실적 조건 한눈에.`
 );

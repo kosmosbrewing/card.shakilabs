@@ -4,11 +4,13 @@ import { RouterLink } from "vue-router";
 import { ShSurface, ShText } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
 import { CARD_HOME_ENTRIES } from "@/data/cardNavigation";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 
 const SITE_URL = "https://shakilabs.com/card";
 
 // 프리렌더(scripts/prerender-home.mjs)와 같은 문구를 쓴다 — 정적 HTML과 하이드레이션 후 내용이 어긋나지 않도록.
-const TITLE = "카드 계산기 | 주유·해외결제·연회비 혜택 비교 2026";
+// 제목은 seo-meta.mjs가 단일 출처다(홈 레시피: "<앱 이름> | ShakiLabs").
+const TITLE = pageTitle("/");
 const DESCRIPTION =
   "주유 할인부터 해외결제 수수료, 연회비 회수, 포인트 전환까지 카드 혜택 10가지를 목적별로 계산합니다. 내 소비 패턴에 맞는 카드를 직접 비교해 보세요.";
 

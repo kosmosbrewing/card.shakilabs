@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import { ABOUT_PAGE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
+
+const seoTitle = pageTitle("/about");
 </script>
 
 <!--
@@ -12,7 +15,7 @@ import { ABOUT_PAGE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences"
 -->
 <template>
   <SEOHead
-    title="서비스 안내 | 카드 계산기"
+    :title="seoTitle"
     description="shakilabs.com/card는 주유 할인·해외결제·연회비 등 카드 비교 계산기를 제공하는 무료 서비스입니다."
   />
 

@@ -3,6 +3,7 @@ import { RouterLink } from "vue-router";
 import { ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import DutyFreeBarChart from "@/components/duty-free/DutyFreeBarChart.vue";
@@ -15,7 +16,7 @@ import { DUTY_FREE_SOURCES, SOURCE_VERIFIED_AT } from "@/data/sourceReferences";
 
 const { purchaseAmountUsd, category, result } = useDutyFreeCalc();
 
-const seoTitle = "면세 한도 초과 관세 계산기 | 해외쇼핑 관세·부가세 자동 계산 2026";
+const seoTitle = pageTitle("/duty-free");
 const seoDescription =
   "해외 면세점과 직구 구매 금액이 800달러를 넘을 때 예상 관세와 부가세를 자동 계산합니다.";
 </script>

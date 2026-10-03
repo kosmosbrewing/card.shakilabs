@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import { ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
@@ -36,7 +37,7 @@ const {
 
 useCardExchangeRates();
 
-const seoTitle = "해외결제 카드 비교 + DCC 수수료 계산기 | Car Tools 2026";
+const seoTitle = pageTitle("/overseas-payment");
 const seoDescription =
   "해외에서 현지통화 결제와 DCC 원화결제를 비교하고, 카드별 해외수수료와 캐시백까지 한 번에 계산합니다.";
 

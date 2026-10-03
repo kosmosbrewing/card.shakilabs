@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import { ShCalculatorSplit, type GapBarItem } from "@shakilabs/ui";
 import GapBars from "@/components/result-visualization/GapBars.vue";
@@ -10,7 +11,7 @@ import { formatWon } from "@/lib/utils";
 import { calculatePointConversions } from "@/utils/cardTabCalculator";
 import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
-const seoTitle = "포인트 전환 비교 | 항공·호텔·현금성 포인트 가치 계산";
+const seoTitle = pageTitle("/point-convert");
 const seoDescription = "보유 포인트를 어디로 넘겨야 가치가 큰지 예상 환산가치 기준으로 비교합니다.";
 
 const pointAmount = ref(120_000);

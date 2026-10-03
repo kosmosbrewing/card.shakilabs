@@ -3,13 +3,14 @@ import { computed, ref } from "vue";
 import { ShBreakdownBar, ShCalculatorSplit } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import { CARD_CUSTOMS_CATEGORIES, CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
 import { formatWon } from "@/lib/utils";
 import { calculateCustoms } from "@/utils/cardTabCalculator";
 import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
-const seoTitle = "해외직구 관세 계산기 | 상품가+배송비 기준 예상 세금";
+const seoTitle = pageTitle("/customs");
 const seoDescription = "해외직구 상품가와 배송비를 입력하면 품목별 예상 관부가세를 계산합니다.";
 
 const productUsd = ref(280);

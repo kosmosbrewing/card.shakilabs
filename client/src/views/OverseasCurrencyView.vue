@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { RouterLink } from "vue-router";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
@@ -64,8 +65,9 @@ const sortedResults = computed(() => {
 const topCards = computed(() => sortedResults.value.slice(0, 3));
 const bestCard = computed(() => sortedResults.value[0] ?? null);
 
+// 프리렌더와 같은 제목(seo-meta.mjs) — 원시 HTML과 하이드레이션 뒤 <title>이 갈리지 않게.
 const seoTitle = computed(
-  () => `${rateEntry.value.label}(${selectedCurrency.value}) 해외결제 카드 비교 | DCC 수수료 계산기 2026`
+  () => pageTitle(`/overseas-payment/${selectedCurrency.value.toLowerCase()}`)
 );
 const seoDescription = computed(
   () => `${rateEntry.value.label} 결제 시 카드별 해외수수료, 혜택, DCC 추가 비용을 한눈에 비교합니다.`

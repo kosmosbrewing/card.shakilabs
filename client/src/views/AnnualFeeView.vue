@@ -4,6 +4,7 @@ import { RouterLink } from "vue-router";
 import { ShCalculatorSplit } from "@shakilabs/ui";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 
@@ -31,7 +32,7 @@ const {
   updateSpending,
 } = useAnnualFeeCalc();
 
-const seoTitle = "연회비 회수 계산기 | 카드 혜택 vs 연회비 손익분석 2026";
+const seoTitle = pageTitle("/annual-fee");
 const seoDescription =
   "월 소비 패턴을 입력하면 카드별 연회비 회수 기간, 연 순혜택, ROI를 한 번에 비교합니다.";
 

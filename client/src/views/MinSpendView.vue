@@ -4,6 +4,7 @@ import { RouterLink } from "vue-router";
 import { ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 
@@ -38,7 +39,7 @@ const {
 
 useCardFuelPrices();
 
-const seoTitle = "전월 실적 채우기 최소 비용 계산기 | 카드 실적 vs 할인 효율 분석 2026";
+const seoTitle = pageTitle("/min-spend");
 const seoDescription =
   "내 월 지출 패턴을 입력하면 카드별 전월 실적 충족 여부와 순 혜택을 자동 계산합니다.";
 

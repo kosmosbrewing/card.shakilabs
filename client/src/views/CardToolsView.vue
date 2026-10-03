@@ -7,11 +7,14 @@ import { CARD_TOOL_GROUPS } from "@/data/cardNavigation";
 // 프리렌더 허브(scripts/prerender-card-hub.mjs)가 렌더하는 것과 같은 표.
 // 한쪽에만 있으면 JS 끔/켬 자수가 갈리고, 그게 이 앱이 이미 한 번 겪은 결함이다.
 import { CARD_DATA_SCOPE } from "@/data/cardDataScope";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
+
+const seoTitle = pageTitle("/all");
 </script>
 
 <template>
   <SEOHead
-    title="카드 계산기 전체 보기 | 목적별 카드 비교 도구"
+    :title="seoTitle"
     description="혜택·고정지출, 해외·여행 결제, 포인트·결제 관리 목적별로 필요한 카드 계산기를 찾으세요."
   />
   <div class="sh-container sh-container--page space-y-5 py-5">

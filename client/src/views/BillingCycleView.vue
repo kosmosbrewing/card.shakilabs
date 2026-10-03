@@ -3,12 +3,13 @@ import { ref } from "vue";
 import { ShCalculatorSplit } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import { BILLING_DAY_OPTIONS, CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
 import { calculateBillingCycle } from "@/utils/cardTabCalculator";
 import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
-const seoTitle = "결제일별 이용기간 계산기 | 카드 결제일에 따른 최대 유예일";
+const seoTitle = pageTitle("/billing-cycle");
 const seoDescription = "카드 결제일과 사용일을 기준으로 실제 결제까지 남는 이용 가능 기간을 계산합니다.";
 
 const purchaseDay = ref(15);

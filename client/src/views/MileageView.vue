@@ -4,6 +4,7 @@ import { ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { MILEAGE_DESCRIPTION, pageTitle } from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import MileageDetailSection from "@/components/mileage/MileageDetailSection.vue";
@@ -24,9 +25,9 @@ const {
   sortedValues,
 } = useMileageCalc();
 
-const seoTitle = "마일리지 가치 계산기 | 1마일 원화 가치 · 좌석등급별 가성비 비교 2026";
-const seoDescription =
-  "항공사와 보유 마일리지를 입력하면 노선별 1마일 가치와 최적 사용처를 원화 기준으로 비교합니다.";
+// 제목·설명은 프리렌더와 같은 단일 출처(seo-meta.mjs) — 항공사 2곳·좌석 3등급 주장은 시험이 데이터와 대조한다.
+const seoTitle = pageTitle("/mileage");
+const seoDescription = MILEAGE_DESCRIPTION;
 </script>
 
 <template>

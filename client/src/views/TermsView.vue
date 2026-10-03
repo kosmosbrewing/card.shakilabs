@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
+
+const seoTitle = pageTitle("/terms");
 </script>
 
 <!--
@@ -9,7 +12,7 @@ import SEOHead from "@/components/common/SEOHead.vue";
 -->
 <template>
   <SEOHead
-    title="이용약관 | 카드 계산기"
+    :title="seoTitle"
     description="shakilabs.com/card 이용약관 — 서비스 개요, 정보 제공의 한계, 면책, 광고 게재, 준거법 안내"
   />
 </template>
