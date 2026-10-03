@@ -432,7 +432,7 @@
      흩뜨리므로 0.04em을 쓴다(ARCHIVE_TONE_SPEC.md §0 주의). */
   .eyebrow {
     color: hsl(var(--muted-foreground));
-    font-size: 0.7rem;
+    font-size: 0.8125rem; /* v8b: 0.7rem(11.2px) → 13px — 일반 CSS 클래스라 유틸리티 스캐너 사각지대였다 */
     font-weight: 600;
     letter-spacing: 0.04em;
   }

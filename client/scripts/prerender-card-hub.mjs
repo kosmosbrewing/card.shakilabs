@@ -1,3 +1,4 @@
+import { splitLongParagraphs } from "./split-long-paragraphs.mjs";
 // Static prerender of the /all directory hub.
 //
 // The "whenToUse"/"inputsOutputs" copy below is duplicated from
@@ -124,7 +125,7 @@ const PICK_STEPS = [
 // for the crawler. CardToolsView renders the hero, the three tool groups and the
 // data-scope table; the picking procedure below was prerender-only, which is why
 // /all measured 81.1% surviving sentences.
-export function buildCardHubExtraContent() {
+function buildCardHubExtraContentRaw() {
   const steps = PICK_STEPS.map(
     ([heading, body]) =>
       `<li style="margin-bottom:6px;"><strong>${heading}</strong> — ${body}</li>`,
@@ -136,7 +137,7 @@ export function buildCardHubExtraContent() {
       <p style="margin:0;color:hsl(var(--muted-foreground));font-size:14px;">계산 결과는 입력한 금액과 공개된 카드 상품 조건에 근거한 추정치입니다. 실제 청구액과 다를 수 있으며 최종 조건은 각 카드사 공식 안내에서 확인해야 합니다.</p>`;
 }
 
-export function buildCardHubContent() {
+function buildCardHubContentRaw() {
   const sections = groups
     .map(
       (group) => `
@@ -188,4 +189,14 @@ export function buildCardHubContent() {
 export function appendCardHubLink(route, content) {
   if (!content || route === "/all") return content;
   return `${content}<nav data-seo-prerender="card-directory-link" style="padding:0 0 24px;"><a href="/card/all">카드 계산기 전체 보기 →</a></nav>`;
+}
+
+// v8b: 문단 ≤250자 — 빌더 반환 HTML의 긴 <p>를 문장 경계에서 나눈다(정적·런타임 공통)
+export function buildCardHubExtraContent() {
+  return splitLongParagraphs(buildCardHubExtraContentRaw());
+}
+
+// v8b: 문단 ≤250자 — 빌더 반환 HTML의 긴 <p>를 문장 경계에서 나눈다(정적·런타임 공통)
+export function buildCardHubContent() {
+  return splitLongParagraphs(buildCardHubContentRaw());
 }
