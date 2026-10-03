@@ -37,4 +37,26 @@ describe("route rich content", () => {
     // 정책 페이지는 가이드가 곧 페이지 본문이라 h1을 유지한다.
     expect(richContentFor("/terms")).toMatch(/<h1[^>]*>이용약관<\/h1>/);
   });
+
+  // v8 결함: /about의 h1이 28px/400 Pretendard(다른 정적 섹션과 같은 상수)였다.
+  // 다른 카드 도구 페이지 h1(CalculatorPageHeader.vue)과 같은 20px/700 GmarketSans
+  // 클래스를 reuse했는지 확인한다. 역방향: 클래스를 되돌리면 이 테스트가 실패한다.
+  it("renders the /about H1 with the fleet heading style, not the plain prose H1", () => {
+    const html = richContentFor("/about");
+    expect(html).toMatch(/<h1[^>]*class="[^"]*\btext-h1\b[^"]*\bfont-brand\b[^"]*"[^>]*>서비스 소개/);
+  });
+
+  // v8 결함: "데이터 출처와 신뢰성" 섹션이 528자 문단 하나라 /about 첫 화면을 다 채웠다.
+  // 역방향: 3소제목(출처/갱신일/한계)을 되돌려 원래의 긴 단일 문단으로 합치면
+  // 아래 어느 <p>든 250자를 넘어 이 테스트가 실패한다.
+  it("keeps every rendered paragraph on /about within the 250-char readability cap", () => {
+    const html = richContentFor("/about");
+    const paragraphs = [...html.matchAll(/<p[^>]*>([\s\S]*?)<\/p>/gi)].map(([, inner]) =>
+      inner.replace(/<[^>]+>/g, "").replace(/&[a-z]+;/gi, " "),
+    );
+    expect(paragraphs.length).toBeGreaterThan(0);
+    for (const paragraph of paragraphs) {
+      expect(paragraph.length, paragraph.slice(0, 40)).toBeLessThanOrEqual(250);
+    }
+  });
 });
