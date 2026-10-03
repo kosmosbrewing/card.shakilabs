@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
+
+const seoTitle = pageTitle("/privacy");
 </script>
 
 <!--
@@ -9,7 +12,7 @@ import SEOHead from "@/components/common/SEOHead.vue";
 -->
 <template>
   <SEOHead
-    title="개인정보 처리방침 | 카드 계산기"
+    :title="seoTitle"
     description="shakilabs.com/card 개인정보 처리방침 — 수집 항목, 광고 쿠키와 맞춤 광고 해제, 보관·파기, 국외 이전 안내"
   />
 </template>

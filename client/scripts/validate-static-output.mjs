@@ -10,6 +10,7 @@ import {
   canonicalPathFor,
 } from "./seo-routes.mjs";
 import { validateUtilitiesAreGenerated } from "./validate-tailwind-utilities.mjs";
+import { normalizeTitle, pageTitleFor } from "./seo-meta.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, "..");
@@ -355,6 +356,41 @@ function validateAliasesAndNotFound() {
     "404.html must not load the AdSense script (Valuable Inventory: no ads on a contentless screen)");
 }
 
+// 제목 게이트: 서빙되는 원시 HTML의 <title>이 seo-meta.mjs 레시피 그대로인지, 그리고 <title>
+// 요소가 정확히 1개인지 본다. 1개 조건은 공용 차트의 SVG <title>이 네이버 서치어드바이저에
+// "title 요소 2개 이상"으로 잡힌 일(@shakilabs/ui 0.3.42에서 제거) 때문이다 — 패키지가 다시
+// <title>을 싣거나 프리렌더가 레시피를 우회하면 여기서 멈춘다. og:title·twitter:title도 같은 값이어야 한다.
+function decodeAttr(value) {
+  return value.replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+}
+
+function validateTitles() {
+  const pages = [
+    ...SEO_ROUTES.map((route) => [route, outputPathFor(route)]),
+    ["/404", resolve(distRoot, "404.html")],
+  ];
+  for (const [route, path] of pages) {
+    const html = readFileSync(path, "utf8");
+    const titleCount = html.match(/<title\b/gi)?.length ?? 0;
+    assert(titleCount === 1, `${route}: expected exactly one <title>, found ${titleCount}`);
+
+    const expected = normalizeTitle(pageTitleFor(route));
+    const title = decodeAttr(html.match(/<title>([^<]*)<\/title>/)?.[1] ?? "");
+    assert(title === expected, `${route}: <title> "${title}" must be "${expected}" (seo-meta.mjs)`);
+    const socialTitles = {
+      "og:title": /<meta property="og:title" content="([^"]*)"/,
+      "twitter:title": /<meta name="twitter:title" content="([^"]*)"/,
+    };
+    for (const [name, pattern] of Object.entries(socialTitles)) {
+      const value = decodeAttr(html.match(pattern)?.[1] ?? "");
+      assert(value === expected, `${route}: ${name} "${value}" must match <title>`);
+    }
+    const description = html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? "";
+    assert(description.length > 0, `${route}: missing meta description`);
+  }
+  return pages.length;
+}
+
 // The AdSense review requires the privacy policy to disclose third-party ad
 // cookies and to offer an opt-out. Both opt-out destinations are load-bearing:
 // Google's own setting page covers Google, aboutads.info covers everyone else.
@@ -450,11 +486,13 @@ validateAliasesAndNotFound();
 validatePolicyDisclosures();
 validateFuelTypeContent();
 validateTableScrollWrappers();
+const titledPages = validateTitles();
 const utilityCount = validateUtilitiesAreGenerated({ projectRoot, distRoot });
 
 console.log(
   `Validated ${SEO_ROUTES.length} card routes ` +
     `(${SITEMAP_ROUTES.length} sitemap + ${PARAM_ROUTES.length} canonicalized variants), ` +
-    `router<->sitemap parity, ${utilityCount} generated colour utilities, ` +
+    `router<->sitemap parity, ${titledPages} single-<title> recipe pages, ` +
+    `${utilityCount} generated colour utilities, ` +
     "and custom 404 output.",
 );

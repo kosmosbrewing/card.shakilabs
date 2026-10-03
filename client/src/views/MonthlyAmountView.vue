@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { RouterLink } from "vue-router";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
@@ -39,9 +40,8 @@ const bestCard = computed(() => results.value[0] ?? null);
 
 const amountMan = computed(() => (props.amount / 10000).toFixed(0));
 
-const seoTitle = computed(
-  () => `월 ${amountMan.value}만원 주유할 때 최적 카드 비교 | 2026년 유가 기준`
-);
+// 프리렌더와 같은 제목(seo-meta.mjs) — 원시 HTML과 하이드레이션 뒤 <title>이 갈리지 않게.
+const seoTitle = computed(() => pageTitle(`/fuel-card/monthly/${props.amount}`));
 const seoDescription = computed(
   () => `월 ${amountMan.value}만원 주유 시 카드별 절약액을 비교합니다. 연 최대 ${bestCard.value ? bestCard.value.annualNet.toLocaleString() : ''}원 절약.`
 );

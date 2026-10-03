@@ -5,6 +5,7 @@
 // collected into the shipped font subset (see font-subset-config.mjs).
 
 import { CAP_BINDS_UNDER_200K, CAP_THRESHOLDS, formatWon } from "./card-data-derived.mjs";
+import { pageTitleFor } from "./seo-meta.mjs";
 
 // Colors are theme tokens, not literal hex: this markup now ships into the Vue
 // DOM as well as the static file, and hardcoded light values are unreadable in
@@ -91,7 +92,8 @@ const PITFALLS = [
 ];
 
 export function buildHomeMeta(siteUrl) {
-  const title = "카드 계산기 | 주유·해외결제·연회비 혜택 비교 2026";
+  // Title comes from seo-meta.mjs so HomeView.vue renders the identical string.
+  const title = pageTitleFor("/");
   const description =
     "주유 할인부터 해외결제 수수료, 연회비 회수, 포인트 전환까지 카드 혜택 10가지를 목적별로 계산합니다. 내 소비 패턴에 맞는 카드를 직접 비교해 보세요.";
   const canonical = siteUrl;

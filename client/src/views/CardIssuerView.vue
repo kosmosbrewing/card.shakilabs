@@ -2,6 +2,11 @@
 import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import SEOHead from "@/components/common/SEOHead.vue";
+import {
+  ISSUER_SIMULATION_AMOUNTS,
+  fuelIssuerDescription,
+  pageTitle,
+} from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
@@ -32,8 +37,8 @@ const issuerCards = computed(() => {
   return FUEL_CARDS.filter((c) => ids.includes(c.id));
 });
 
-// 월별 시뮬레이션 (10만~50만)
-const simAmounts = [100000, 200000, 300000, 400000, 500000];
+// 월별 시뮬레이션 (10만~50만) — description이 같은 배열로 구간을 적으므로 seo-meta.mjs에서 읽는다.
+const simAmounts = ISSUER_SIMULATION_AMOUNTS;
 
 const simResults = computed(() =>
   simAmounts.map((amount) => ({
@@ -48,11 +53,10 @@ const simResults = computed(() =>
   }))
 );
 
-const seoTitle = computed(
-  () => `${issuerName.value} 주유 할인 총정리 | ${issuerCards.value.map((c) => c.name).join(", ")} 실적 조건, 연회비`
-);
+// 프리렌더와 같은 제목·설명(seo-meta.mjs). 라우터 정규식은 대소문자를 가리지 않아 소문자로 맞춘다.
+const seoTitle = computed(() => pageTitle(`/fuel-card/${props.issuer.toLowerCase()}`));
 const seoDescription = computed(
-  () => `${issuerName.value}의 주유 할인 카드를 상세히 비교합니다. 할인 구조, 전월 실적, 연회비, 월별 절약 시뮬레이션.`
+  () => fuelIssuerDescription(props.issuer.toLowerCase()) ?? ""
 );
 </script>
 

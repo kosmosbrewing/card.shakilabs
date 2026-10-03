@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { ShCalculatorSplit } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import DivergingBars from "@/components/result-visualization/DivergingBars.vue";
 import { CARD_TOOL_UPDATED_AT } from "@/data/cardTabData";
@@ -10,7 +11,7 @@ import { formatPercent, formatWon } from "@/lib/utils";
 import { compareCreditVsDebit } from "@/utils/cardTabCalculator";
 import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
-const seoTitle = "신용카드 vs 체크카드 비교 | 연회비까지 반영한 실속 계산";
+const seoTitle = pageTitle("/credit-vs-debit");
 const seoDescription = "월 카드 사용액과 연회비를 기준으로 신용카드와 체크카드 중 어떤 쪽이 더 실속인지 계산합니다.";
 
 const monthlySpend = ref(1_200_000);

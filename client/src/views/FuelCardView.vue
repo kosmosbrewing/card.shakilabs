@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { pageTitle } from "../../scripts/seo-meta.mjs";
 import CalculatorPageHeader from "@/components/calculator/CalculatorPageHeader.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
 import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
@@ -65,7 +66,7 @@ const {
   buttonTitle: "카드 비교하기",
 });
 
-const seoTitle = "주유 할인카드 비교 계산기 | 내 주유량에 맞는 최적 카드 찾기 2026";
+const seoTitle = pageTitle("/fuel-card");
 const seoDescription =
   "월 주유 금액만 입력하면 카드별 절약액을 즉시 비교합니다. 현대카드, 신한카드, KB국민, 삼성카드 주유 할인 한눈에.";
 

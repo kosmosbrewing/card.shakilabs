@@ -3,6 +3,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router"
 import { trackPageView } from "@/lib/analytics";
 import { buildPublicPagePath, shouldTrackPageView } from "@/utils/pageTracking";
 import { normalizeTitle } from "@/composables/useSEO";
+import { APP_NAME, pageTitleFor } from "../../scripts/seo-meta.mjs";
 
 const routes: RouteRecordRaw[] = [
   // 홈: 상황별 계산기 진입점. 리다이렉트로 두면 앱에서 검색 신뢰도가 가장 높은 URL이 빈 껍데기로 서빙된다.
@@ -149,12 +150,13 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  const title =
-    typeof to.meta.title === "string"
-      ? to.meta.title
-      : "카드 계산기";
-  // useHead가 붙기 전에 잠깐 보이는 초기 title도 최종 렌더와 같은 레시피여야
+  // useHead가 붙기 전에 잠깐 보이는 초기 title도 최종 렌더와 같은 문자열이어야
   // 한다 — 그렇지 않으면 하이드레이션 순간 title이 바뀌는 깜빡임이 생긴다.
+  // 페이지 제목은 seo-meta.mjs(뷰·프리렌더와 같은 출처)에서 먼저 찾고, meta.title은
+  // GA page_title(afterEach)로도 나가 연속성을 위해 바꾸지 않았으므로 마지막 대체값으로만 쓴다.
+  const title =
+    pageTitleFor(to.name === "NotFound" ? "/404" : to.path.toLowerCase()) ??
+    (typeof to.meta.title === "string" ? to.meta.title : APP_NAME);
   document.title = normalizeTitle(title);
   return true;
 });

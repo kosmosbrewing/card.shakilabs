@@ -7,51 +7,22 @@ import { wrapPrerenderedTables } from "./prerender-table-scroll.mjs";
 import { buildAllToolsMeta } from "./prerender-all-tools.mjs";
 import { appendCardHubLink, buildCardHubContent } from "./prerender-card-hub.mjs";
 import { buildHomeContent, buildHomeMeta } from "./prerender-home.mjs";
+import {
+  FUEL_ISSUERS,
+  MILEAGE_DESCRIPTION,
+  OVERSEAS_LABELS,
+  fuelIssuerDescription,
+  normalizeTitle,
+  pageTitleFor,
+} from "./seo-meta.mjs";
 const DIST_DIR = resolve(import.meta.dirname, "../dist");
 const INDEX_HTML = resolve(DIST_DIR, "index.html");
 const SITE_URL = "https://shakilabs.com/card";
 
-// 정본 규칙(디자인 시스템 §11.1): "{페이지} | {카테고리} | ShakiLabs".
-// client/src/composables/useSEO.ts의 normalizeTitle과 같은 레시피를 쓴다 —
-// 이 스크립트는 순수 .mjs라 TS 컴포저블을 그대로 import할 수 없어 미러링한다.
-// 이 앱은 프리렌더가 이겨서(하이드레이션 전 static HTML이 실제로 서빙되는
-// 산출물이다), 그 쪽의 title도 같은 레시피를 적용해야 실제로 보이는 title이
-// 바뀐다 — useSEO만 고쳐서는 라이브 <title>이 그대로다.
-const TITLE_CATEGORY = "카드 계산기";
-const TITLE_SUFFIX = ` | ${TITLE_CATEGORY} | ShakiLabs`;
-const TITLE_DEFAULT = TITLE_CATEGORY;
-const LEGACY_TITLE_SUFFIXES = [
-  TITLE_SUFFIX,
-  " | Car Tools 2026",
-  " | Car Tools",
-  ` | ${TITLE_CATEGORY}`,
-  " | ShakiLabs",
-];
-
-function normalizeTitle(rawTitle) {
-  const trimmed = (rawTitle ?? "").trim();
-  let baseTitle = trimmed || TITLE_DEFAULT;
-
-  for (const suffix of LEGACY_TITLE_SUFFIXES) {
-    if (baseTitle.endsWith(suffix)) {
-      baseTitle = baseTitle.slice(0, -suffix.length).trimEnd();
-      break;
-    }
-  }
-
-  if (!baseTitle) {
-    baseTitle = TITLE_DEFAULT;
-  }
-
-  // 페이지명 안의 pipe는 중점으로 — 레시피는 3단이다(useSEO.ts와 같은 규칙).
-  baseTitle = baseTitle.replace(/\s*\|\s*/g, " · ");
-
-  if (baseTitle.startsWith(TITLE_CATEGORY)) {
-    return `${baseTitle} | ShakiLabs`;
-  }
-
-  return `${baseTitle}${TITLE_SUFFIX}`;
-}
+// 제목 레시피(normalizeTitle)와 페이지 제목 문자열은 scripts/seo-meta.mjs가 단일 출처다.
+// 예전엔 useSEO.ts의 함수를 여기 손으로 복사해 두었고, 제목 문자열도 뷰와 따로 들고 있어
+// 원시 HTML(크롤러)과 하이드레이션 뒤 화면의 <title>이 갈렸다. 이 앱은 프리렌더가 이겨서
+// (static HTML이 실제로 서빙된다) 이쪽 제목이 네이버 검색 결과에 그대로 나간다.
 
 // Single source of truth for every self-referencing URL on a page. Variant
 // routes resolve to their family base (see seo-routes.mjs), so canonical,
@@ -62,24 +33,6 @@ function canonicalUrlFor(route) {
   const path = canonicalPathFor(route);
   return path === "/" ? SITE_URL : `${SITE_URL}${path}`;
 }
-
-const ISSUER_LABELS = {
-  hyundai: "현대카드",
-  shinhan: "신한카드",
-  kb: "KB국민카드",
-  samsung: "삼성카드",
-  lotte: "롯데카드",
-  hana: "하나카드",
-};
-const OVERSEAS_LABELS = {
-  usd: "미국 달러",
-  eur: "유로",
-  jpy: "일본 엔",
-  gbp: "영국 파운드",
-  cny: "중국 위안",
-  thb: "태국 바트",
-  vnd: "베트남 동",
-};
 
 if (!existsSync(INDEX_HTML)) {
   console.warn("[prerender] dist/index.html not found. Skipping prerender.");
@@ -126,9 +79,9 @@ function buildMeta(route) {
   const issuerMatch = route.match(/^\/fuel-card\/(hyundai|shinhan|kb|samsung|lotte|hana)$/);
   if (issuerMatch) {
     const issuer = issuerMatch[1];
-    const label = ISSUER_LABELS[issuer] ?? issuer;
-    const title = `${label} 주유 할인카드 비교 | 카드 계산기`;
-    const description = `${label} 주유 할인카드를 비교합니다. 월 주유비 기준 연간 절약액과 실적 조건을 한눈에 확인하세요.`;
+    const label = FUEL_ISSUERS[issuer].label;
+    const title = pageTitleFor(route);
+    const description = fuelIssuerDescription(issuer);
     const canonical = canonicalUrlFor(route);
 
     return {
@@ -153,7 +106,7 @@ function buildMeta(route) {
       : fuelType === "diesel"
         ? "경유"
         : "LPG";
-    const title = `${label} 주유 할인카드 추천 | 카드 계산기`;
+    const title = pageTitleFor(route);
     const description = `${label} 주유 시 가장 유리한 할인카드를 비교합니다. 카드별 리터당 할인액과 연간 절약액을 확인하세요.`;
     const canonical = canonicalUrlFor(route);
 
@@ -175,7 +128,7 @@ function buildMeta(route) {
   if (monthlyMatch) {
     const amount = Number.parseInt(monthlyMatch[1], 10);
     const manWon = Math.round(amount / 10000);
-    const title = `월 ${manWon}만원 주유 시 추천 카드 | 카드 계산기`;
+    const title = pageTitleFor(route);
     const description = `월 주유비 ${manWon}만원 기준 가장 절약되는 주유 할인카드를 비교합니다.`;
     const canonical = canonicalUrlFor(route);
 
@@ -210,7 +163,7 @@ function buildMeta(route) {
   if (overseasMatch) {
     const currency = overseasMatch[1];
     const label = OVERSEAS_LABELS[currency] ?? currency.toUpperCase();
-    const title = `${label} 해외결제 카드 비교 | DCC 수수료 계산기`;
+    const title = pageTitleFor(route);
     const description = `${label} 결제 시 카드별 해외수수료, 캐시백, DCC 원화결제 손해를 비교합니다.`;
     const canonical = canonicalUrlFor(route);
 
@@ -229,7 +182,7 @@ function buildMeta(route) {
   }
 
   if (route === "/overseas-payment") {
-    const title = "해외결제 카드 비교 + DCC 수수료 계산기 | 카드 계산기";
+    const title = pageTitleFor(route);
     const description = "현지통화 결제와 DCC 원화결제를 비교하고, 카드별 해외수수료와 혜택을 한 번에 계산합니다.";
     const canonical = `${SITE_URL}/overseas-payment`;
 
@@ -250,7 +203,7 @@ function buildMeta(route) {
   }
 
   if (route === "/min-spend") {
-    const title = "전월 실적 채우기 최소 비용 계산기 | 카드 계산기";
+    const title = pageTitleFor(route);
     const description = "내 월 지출 패턴을 기준으로 카드별 전월 실적 충족 여부와 추가 지출까지 반영한 순혜택을 계산합니다.";
     const canonical = `${SITE_URL}/min-spend`;
 
@@ -271,7 +224,7 @@ function buildMeta(route) {
   }
 
   if (route === "/annual-fee") {
-    const title = "연회비 회수 계산기 | 카드 혜택 vs 연회비 손익분석 2026";
+    const title = pageTitleFor(route);
     const description = "월 소비 패턴을 기준으로 카드별 연회비 회수 기간, 연 순혜택, ROI를 비교하는 계산기입니다.";
     const canonical = `${SITE_URL}/annual-fee`;
 
@@ -292,7 +245,7 @@ function buildMeta(route) {
   }
 
   if (route === "/duty-free") {
-    const title = "면세 한도 초과 관세 계산기 | 해외쇼핑 관세·부가세 자동 계산 2026";
+    const title = pageTitleFor(route);
     const description = "구매 금액과 물품 카테고리를 입력하면 800달러 초과분에 대한 예상 관세와 부가세를 계산합니다.";
     const canonical = `${SITE_URL}/duty-free`;
 
@@ -313,8 +266,8 @@ function buildMeta(route) {
   }
 
   if (route === "/mileage") {
-    const title = "마일리지 가치 계산기 | 1마일 원화 가치 · 좌석등급별 가성비 비교 2026";
-    const description = "항공사별 마일리지 사용처를 비교해 1마일당 원화 가치와 최적 노선을 계산합니다.";
+    const title = pageTitleFor(route);
+    const description = MILEAGE_DESCRIPTION;
     const canonical = `${SITE_URL}/mileage`;
 
     return {
@@ -334,7 +287,7 @@ function buildMeta(route) {
   }
 
   if (route === "/credit-vs-debit") {
-    const title = "신용카드 vs 체크카드 비교 | 연회비까지 반영한 실속 계산";
+    const title = pageTitleFor(route);
     const description = "월 카드 사용액과 연회비를 기준으로 신용카드와 체크카드 중 어떤 쪽이 더 실속인지 계산합니다.";
     const canonical = `${SITE_URL}/credit-vs-debit`;
 
@@ -355,7 +308,7 @@ function buildMeta(route) {
   }
 
   if (route === "/point-convert") {
-    const title = "포인트 전환 비교 | 항공·호텔·현금성 포인트 가치 계산";
+    const title = pageTitleFor(route);
     const description = "보유 포인트를 어디로 넘겨야 가치가 큰지 예상 환산가치 기준으로 비교합니다.";
     const canonical = `${SITE_URL}/point-convert`;
 
@@ -376,7 +329,7 @@ function buildMeta(route) {
   }
 
   if (route === "/billing-cycle") {
-    const title = "결제일별 이용기간 계산기 | 카드 결제일에 따른 최대 유예일";
+    const title = pageTitleFor(route);
     const description = "카드 결제일과 사용일을 기준으로 실제 결제까지 남는 이용 가능 기간을 계산합니다.";
     const canonical = `${SITE_URL}/billing-cycle`;
 
@@ -397,7 +350,7 @@ function buildMeta(route) {
   }
 
   if (route === "/customs") {
-    const title = "해외직구 관세 계산기 | 상품가+배송비 기준 예상 세금";
+    const title = pageTitleFor(route);
     const description = "해외직구 상품가와 배송비를 입력하면 품목별 예상 관부가세를 계산합니다.";
     const canonical = `${SITE_URL}/customs`;
 
@@ -418,7 +371,7 @@ function buildMeta(route) {
   }
 
   if (route === "/about") {
-    const title = "서비스 안내 | 카드 계산기";
+    const title = pageTitleFor(route);
     const description = "주유 할인카드와 해외결제 카드를 비교해 실질 비용을 계산하는 도구입니다.";
     const canonical = `${SITE_URL}/about`;
 
@@ -436,7 +389,7 @@ function buildMeta(route) {
   }
 
   if (route === "/privacy") {
-    const title = "개인정보 처리방침 | 카드 계산기";
+    const title = pageTitleFor(route);
     const description = "shakilabs.com/card 개인정보 처리방침 안내 페이지입니다.";
     const canonical = `${SITE_URL}/privacy`;
 
@@ -454,7 +407,7 @@ function buildMeta(route) {
   }
 
   if (route === "/terms") {
-    const title = "이용약관 | 카드 계산기";
+    const title = pageTitleFor(route);
     const description = "shakilabs.com/card 이용약관 안내 페이지입니다.";
     const canonical = `${SITE_URL}/terms`;
 
@@ -471,7 +424,7 @@ function buildMeta(route) {
     };
   }
 
-  const title = "주유 할인카드 비교 계산기 | 내 주유량에 맞는 최적 카드 찾기 2026";
+  const title = pageTitleFor("/fuel-card");
   const description = "월 주유 금액만 입력하면 카드별 절약액을 즉시 비교합니다. 현대카드, 신한카드, KB국민, 삼성카드 주유 할인 한눈에.";
   const canonical = `${SITE_URL}/fuel-card`;
 
@@ -546,7 +499,7 @@ function buildFaqPage(entities) {
 function buildPrerenderSection(meta) {
   return `
     <section data-seo-prerender class="sh-container sh-container--prose" style="padding-block:20px;line-height:1.6;">
-      <h1 style="font-size:28px;line-height:1.3;margin:0 0 12px;">${meta.title.split(" | ")[0]}</h1>
+      <h1 style="font-size:28px;line-height:1.3;margin:0 0 12px;">${meta.heading ?? meta.title.split(" | ")[0]}</h1>
       <p style="margin:0 0 10px;">${meta.description}</p>
       <p style="margin:0;"><a href="/card${meta.appPath}">계산기 열기</a></p>
     </section>`;
@@ -594,9 +547,9 @@ function replaceTag(html, pattern, next) {
 }
 
 function applyMeta(html, meta, route) {
-  // <title>/og:title/twitter:title에만 카테고리+ShakiLabs 배지를 붙인다.
-  // meta.title 자체는 그대로 둔다 — 아래에서 h1(split(" | ")[0])과 JSON-LD
-  // name이 같은 meta.title을 다시 읽어 배지 없는 순수 페이지명을 써야 한다.
+  // <title>/og:title/twitter:title에만 " | ShakiLabs" 접미사를 붙인다(seo-meta.mjs 레시피).
+  // meta.title 자체는 그대로 둔다 — JSON-LD name과 대체 h1이 같은 meta.title을 다시 읽어
+  // 접미사 없는 순수 페이지명을 써야 한다.
   const escapedTitle = escapeAttr(normalizeTitle(meta.title));
   const escapedDescription = escapeAttr(meta.description);
   const escapedCanonical = escapeAttr(meta.canonical);
@@ -675,7 +628,9 @@ function stripAdsenseLoader(html) {
 
 const notFoundHtml = stripAdsenseLoader(
   applyMeta(template, {
-    title: "페이지를 찾을 수 없습니다 | 카드 계산기",
+    title: pageTitleFor("/404"),
+    // 제목에는 사이트 공통 페이지 레시피로 앱 이름이 붙지만(" · 카드 계산기"), 본문 h1은 그대로 둔다.
+    heading: "페이지를 찾을 수 없습니다",
     description: "요청한 카드 계산기 페이지를 찾을 수 없습니다.",
     canonical: `${SITE_URL}/404`,
     appPath: "/404",
