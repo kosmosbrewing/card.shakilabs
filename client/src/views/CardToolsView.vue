@@ -19,8 +19,7 @@ const seoTitle = pageTitle("/all");
   />
   <div class="sh-container sh-container--page space-y-5 py-5">
     <ShSurface padding="lg">
-      <ShText as="p" variant="caption" tone="muted">CARD TOOL DIRECTORY</ShText>
-      <ShText as="h1" variant="display" class="mt-2">카드를 고르기 전에 목적부터 정리하세요</ShText>
+      <ShText as="h1" variant="display">카드를 고르기 전에 목적부터 정리하세요</ShText>
       <ShText tone="muted" class="mt-3">
         혜택 회수, 해외 결제, 포인트 관리 중 지금 필요한 결정과 가까운 도구에서 시작하세요.
         각 도구에는 "언제 쓰는가"와 "무엇을 넣으면 무엇이 나오는가"를 함께 적어 두었습니다.
