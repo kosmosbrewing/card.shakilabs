@@ -49,7 +49,6 @@ const CURRENT_SERVICE = SERVICE_CATALOG.services.find((service) => service.app =
 const STATIC_THEME_TOGGLE = `<div class="sh-global-header__utility"><button type="button" class="sh-theme-toggle" aria-label="다크 모드로 전환" style="width:44px;min-height:44px;border:0;background:transparent;color:#fafafa;"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="20" height="20"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.6" /><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" /></svg></button></div>`;
 
 const SITE_LINKS = [
-  { href: "/blog", label: "블로그" },
   { href: "/card/about", label: "소개" },
 ];
 
@@ -182,9 +181,6 @@ export function buildPrerenderFooter() {
           <a href="/card/about" style="color:hsl(var(--muted-foreground));margin-right:12px;">서비스 소개</a>
           <a href="/card/privacy" style="color:hsl(var(--muted-foreground));margin-right:12px;">개인정보처리방침</a>
           <a href="/card/terms" style="color:hsl(var(--muted-foreground));margin-right:12px;">이용약관</a>
-          <!-- 블로그는 root 앱 소유(shakilabs.com/blog). JS 없는 크롤러에게도 도달 경로를 주려면
-               Vue 푸터뿐 아니라 이 정적 푸터에도 같은 절대경로가 있어야 한다. -->
-          <a href="/blog" style="color:hsl(var(--muted-foreground));">블로그</a>
         </p>
         <p style="margin:0;">
           본 서비스의 카드 정보는 각 카드사 공식 페이지에서 확인 가능한 공개 데이터를 기반으로 합니다.
