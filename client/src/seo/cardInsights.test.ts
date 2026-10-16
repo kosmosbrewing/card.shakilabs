@@ -6,7 +6,7 @@ import {
   insightsPlainText,
 } from "../../scripts/card-insights.mjs";
 import { buildRichContent } from "../../scripts/prerender-content.mjs";
-import { SITEMAP_ROUTES } from "../../scripts/seo-routes.mjs";
+import { NOINDEX_ROUTES, SITEMAP_ROUTES } from "../../scripts/seo-routes.mjs";
 import { ANNUAL_FEE_CARDS, createDefaultSpendingPattern } from "@/data/annualFeeCards";
 import { DCC_MARKUP } from "@/data/exchangeRates";
 import { FUEL_CARDS } from "@/data/fuelCards";
@@ -28,6 +28,8 @@ import { calculateOverseasPayment } from "@/utils/overseasCalculator";
 // The insight builders return loosely typed objects from a .mjs module; the
 // facts are addressed by key here.
 type Facts = Record<string, any>;
+// 색인 소거(2026-10-16): noindex 계산기(/credit-vs-debit)도 화면은 그대로라 인사이트를 가져야 한다
+const CALCULATOR_PAGE_ROUTES = [...SITEMAP_ROUTES, ...NOINDEX_ROUTES];
 const factsOf = (route: string): Facts => insightsFor(route)!.facts as Facts;
 
 // Ratcliff/Obershelp similarity, the same measure difflib.SequenceMatcher.ratio()
@@ -75,7 +77,7 @@ const EXISTING_BODY_CEILING = 0.85;
 
 describe("card insight sections", () => {
   it("covers every calculator page in the sitemap and nothing else", () => {
-    const calculatorRoutes = SITEMAP_ROUTES.filter(
+    const calculatorRoutes = CALCULATOR_PAGE_ROUTES.filter(
       (route: string) => !["/", "/all", "/about", "/terms", "/privacy"].includes(route),
     );
     expect([...INSIGHT_ROUTES].sort()).toEqual([...calculatorRoutes].sort());

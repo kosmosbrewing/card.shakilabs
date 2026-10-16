@@ -100,8 +100,13 @@ export const SEO_ROUTES = [
 
 // The sitemap advertises only self-canonical pages. Listing a URL that
 // canonicalizes elsewhere sends crawlers to a page that immediately points away.
+
+// 색인 소거(2026-10-16, 사용자 승인): 62일 활성 사용자 8명 미만 + 네이버 TOP 30 밖인 계산기·가이드.
+// 도구는 그대로 쓰이고(내부 링크 유지) 사이트맵·색인에서만 뺀다. 네이버 클릭이 월 10+ 되면 다시 넣는다.
+// validate-noindex.mjs가 사이트맵 ⇔ noindex 없음 / 사이트맵 밖 self-canonical ⇔ noindex를 빌드마다 대조한다.
+export const NOINDEX_ROUTES = ["/credit-vs-debit"];
 export const SITEMAP_ROUTES = SEO_ROUTES.filter(
-  (route) => !CANONICAL_OVERRIDES.has(route),
+  (route) => !CANONICAL_OVERRIDES.has(route) && !NOINDEX_ROUTES.includes(route),
 );
 
 // Canonical path for a prerendered route: variants point at their family base,
