@@ -11,7 +11,8 @@ import { calculateCustoms } from "@/utils/cardTabCalculator";
 import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
 const seoTitle = pageTitle("/customs");
-const seoDescription = "해외직구 상품가와 배송비를 입력하면 품목별 예상 관부가세를 계산합니다.";
+const seoDescription =
+  "해외직구 상품가와 배송비를 입력하면 면세 한도를 넘는지 확인하고 품목별 관세율로 관세·부가세 예상액과 세금을 더한 총 원화 비용을 계산합니다. 2026년 기준.";
 
 const productUsd = ref(280);
 const shippingUsd = ref(20);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Component } from "vue";
-import { ArrowRight, Calculator, CarFront, Plane } from "lucide-vue-next";
+import { ArrowRight, Calculator, Plane, Tv } from "lucide-vue-next";
 
 type RelatedServiceItem = {
   title: string;
@@ -16,11 +16,13 @@ const items: RelatedServiceItem[] = [
     href: "/finance/salary",
     icon: Calculator,
   },
+  // 2026-11-01: /car/tax는 10-16 색인 소거(noindex) 페이지라 크롤러를 색인 불가 페이지로 보내고 있었다.
+  // 카드 이용자와 교차 의도가 가장 큰 이 사이트 최다 유입 페이지(/ott/youtube-premium, 네이버 30일 372클릭)로 바꾼다.
   {
-    title: "자동차 취등록세 계산",
-    description: "차량 구매 직후 드는 세금과 초기비용까지 한 번에 계산합니다.",
-    href: "/car/tax",
-    icon: CarFront,
+    title: "유튜브 프리미엄 국가별 요금",
+    description: "해외결제 카드로 구독하면 얼마나 아끼는지 44개국 요금을 원화로 비교합니다.",
+    href: "/ott/youtube-premium",
+    icon: Tv,
   },
   {
     title: "여행 환전 계산",

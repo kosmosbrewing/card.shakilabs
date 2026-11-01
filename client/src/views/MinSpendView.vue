@@ -41,7 +41,7 @@ useCardFuelPrices();
 
 const seoTitle = pageTitle("/min-spend");
 const seoDescription =
-  "내 월 지출 패턴을 입력하면 카드별 전월 실적 충족 여부와 순 혜택을 자동 계산합니다.";
+  "내 월 지출을 항목별로 입력하면 카드별 전월 실적 기준을 채우는지, 할인·적립에서 연회비를 뺀 순 혜택이 얼마인지 계산합니다. 실적 인정 제외 업종은 카드사 기준을 함께 안내합니다.";
 
 const summaryMessage = computed(() => {
   if (!bestCard.value) return "";
