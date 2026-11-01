@@ -12,7 +12,8 @@ import { calculatePointConversions } from "@/utils/cardTabCalculator";
 import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
 const seoTitle = pageTitle("/point-convert");
-const seoDescription = "보유 포인트를 어디로 넘겨야 가치가 큰지 예상 환산가치 기준으로 비교합니다.";
+const seoDescription =
+  "보유 포인트를 입력하면 전환처별 전환 비율과 1포인트당 예상 환산가치를 계산해 어디로 넘기는 것이 유리한지 비교합니다. 전환 수수료와 최소 단위도 함께 봅니다.";
 
 const pointAmount = ref(120_000);
 const { result, validationError } = useSafeCalculation(

@@ -10,7 +10,8 @@ import { calculateBillingCycle } from "@/utils/cardTabCalculator";
 import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
 const seoTitle = pageTitle("/billing-cycle");
-const seoDescription = "카드 결제일과 사용일을 기준으로 실제 결제까지 남는 이용 가능 기간을 계산합니다.";
+const seoDescription =
+  "카드 결제일과 사용일을 넣으면 그 결제가 어느 달 청구서에 잡히고 실제 출금까지 며칠이 남는지 계산합니다. 결제일별 이용기간을 나란히 비교해 가장 길게 쓰는 결제일을 고를 수 있습니다.";
 
 const purchaseDay = ref(15);
 const billingDay = ref<(typeof BILLING_DAY_OPTIONS)[number]>(14);
