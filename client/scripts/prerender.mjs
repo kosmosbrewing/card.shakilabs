@@ -610,7 +610,7 @@ for (const route of SEO_ROUTES) {
     "",
   );
   // 색인 소거(2026-10-16): NOINDEX_ROUTES는 정적 head에 robots noindex(뷰의 SEOHead noindex와 쌍)
-  writeFileSync(filePath, NOINDEX_ROUTES.includes(route) ? html.replace("</head>", '    <meta name="robots" content="noindex,nofollow" />\n  </head>') : html, "utf-8");
+  writeFileSync(filePath, NOINDEX_ROUTES.includes(route) ? html.replace("</head>", '    <meta name="robots" content="noindex,follow" />\n  </head>') : html, "utf-8");
   console.log(`[prerender] ${route} -> ${filePath}`);
 }
 
