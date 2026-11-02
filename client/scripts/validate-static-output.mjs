@@ -456,6 +456,11 @@ function prerenderedBodyChars(html) {
 // variants hand it. 1,500 characters is the floor used across the apps, counted
 // with whitespace stripped (see prerenderedBodyChars).
 const THIN_CONTENT_FLOOR = 1500;
+// The home is an index: one sentence, the situation table and the cap-threshold
+// data block. Its essay blocks (3 steps, metric glossary, pitfalls, 6-question
+// FAQ) were removed in the 2026-11 UI audit, so the home alone gets a lower
+// floor (measured 1,113 after the cut). Every other route keeps 1,500.
+const HUB_CONTENT_FLOOR = 1000;
 
 function validateContentDepth() {
   // Every URL the sitemap advertises has to clear the floor, not just the hubs.
@@ -466,8 +471,9 @@ function validateContentDepth() {
 
   for (const route of targets) {
     const chars = prerenderedBodyChars(readFileSync(outputPathFor(route), "utf8"));
-    assert(chars >= THIN_CONTENT_FLOOR,
-      `${route} prerenders only ${chars} chars of body text, below the ${THIN_CONTENT_FLOOR} floor`);
+    const floor = route === "/" ? HUB_CONTENT_FLOOR : THIN_CONTENT_FLOOR;
+    assert(chars >= floor,
+      `${route} prerenders only ${chars} chars of body text, below the ${floor} floor`);
   }
 }
 
