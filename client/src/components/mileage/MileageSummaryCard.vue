@@ -30,22 +30,22 @@ const airline = computed(() =>
         <span class="text-body text-muted-foreground">{{ airline.mileageName }}</span>
       </div>
 
-      <!-- 대표 수치(BL-020) -->
+      <!-- 대표 수치(BL-020). 라벨은 일반어 — "예시 환산 상한"·"효율" 같은 내부 용어를 화면에서 뺐다(2026-11 UI 감사 §D). -->
       <ResultHero
-        label="예시 환산 상한"
+        label="보유 마일의 최대 가치 (예시 운임 기준)"
         :value="formatTotalValue(result.totalValueKrw)"
         value-class="text-status-success"
       />
 
       <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
         <div class="retro-panel-muted px-3 py-3">
-          <div class="text-caption text-muted-foreground">예시 최고 1마일 가치</div>
+          <div class="text-caption text-muted-foreground">1마일당 최대 가치</div>
           <div class="mt-1 text-heading font-bold tabular-nums text-status-success">
             {{ formatValuePerMile(result.bestValuePerMile) }}
           </div>
         </div>
         <div class="retro-panel-muted px-3 py-3">
-          <div class="text-caption text-muted-foreground">필요 마일 충족 옵션</div>
+          <div class="text-caption text-muted-foreground">지금 쓸 수 있는 항공권</div>
           <div class="mt-1 text-heading font-bold tabular-nums text-foreground">
             {{ result.balanceEligible.length }}개
           </div>

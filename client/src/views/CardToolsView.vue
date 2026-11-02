@@ -62,7 +62,7 @@ const seoTitle = pageTitle("/all");
         아래 숫자는 계산에 실제로 쓰이는 카드 데이터에서 그대로 뽑은 값이라, 카드가 추가되거나 조건이 바뀌면 이 표도 함께 바뀝니다.
       </ShText>
       <div class="mt-3 overflow-x-auto">
-        <table class="w-full min-w-[560px] border-collapse text-caption">
+        <table class="w-full border-collapse text-caption md:min-w-[560px]">
           <thead>
             <tr>
               <th scope="col" class="border border-border bg-muted px-3 py-2 text-left font-semibold">계산기</th>
