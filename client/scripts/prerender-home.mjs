@@ -114,7 +114,7 @@ function buildHomeExtraContentRaw() {
     (row) => `
         <tr>
           <td style="${TD}">${row.card}</td>
-          <td style="${TD}">${row.category}</td>
+          <td class="sh-col-secondary" style="${TD}">${row.category}</td>
           <td style="${TD}">${row.rate}%</td>
           <td style="${TD}">${formatWon(row.monthlyCap)}원</td>
           <td style="${TD}">${formatWon(row.capAtSpend)}원</td>
@@ -139,7 +139,7 @@ function buildHomeExtraContentRaw() {
       <thead>
         <tr>
           <th style="${TH}">카드</th>
-          <th style="${TH}">대표 혜택</th>
+          <th class="sh-col-secondary" style="${TH}">대표 혜택</th>
           <th style="${TH}">할인율</th>
           <th style="${TH}">월 한도</th>
           <th style="${TH}">한도에 닿는 월 지출</th>

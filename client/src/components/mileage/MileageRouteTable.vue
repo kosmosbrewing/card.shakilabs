@@ -52,7 +52,7 @@ const sortOptions: { key: MileageSortKey; label: string }[] = [
       <ShTable
         aria-label="노선과 좌석 등급별 마일리지 가치 비교"
         density="compact"
-        min-width="44rem"
+        min-width="0"
         scroll-hint="표를 좌우로 스크롤해 전체 노선을 확인하세요."
       >
           <ShTableHeader>
@@ -60,9 +60,11 @@ const sortOptions: { key: MileageSortKey; label: string }[] = [
               <ShTableHead>노선</ShTableHead>
               <ShTableHead>등급</ShTableHead>
               <ShTableHead numeric>필요 마일</ShTableHead>
-              <ShTableHead numeric>예시 현금가</ShTableHead>
+              <!-- 48rem 미만에서는 예시 현금가·상태 열을 접는다(.sh-col-secondary, ui 0.3.44) — 반폭 카드 안 6열이 390px에서 +364px 가로 스크롤이었다.
+                   1마일 가치는 현금가÷필요 마일이라 핵심 3열(노선·필요 마일·1마일 가치)로 읽힌다. -->
+              <ShTableHead numeric class="sh-col-secondary">예시 현금가</ShTableHead>
               <ShTableHead numeric>1마일 가치</ShTableHead>
-              <ShTableHead numeric>상태</ShTableHead>
+              <ShTableHead numeric class="sh-col-secondary">상태</ShTableHead>
             </ShTableRow>
           </ShTableHeader>
           <ShTableBody>
@@ -76,11 +78,11 @@ const sortOptions: { key: MileageSortKey; label: string }[] = [
               </ShTableCell>
               <ShTableCell>{{ item.seatClassLabel }}</ShTableCell>
               <ShTableCell numeric>{{ item.milesRequired.toLocaleString() }}</ShTableCell>
-              <ShTableCell numeric>{{ item.cashPrice.toLocaleString() }}원</ShTableCell>
+              <ShTableCell numeric class="sh-col-secondary">{{ item.cashPrice.toLocaleString() }}원</ShTableCell>
               <ShTableCell numeric emphasis class="text-status-success">
                 {{ formatValuePerMile(item.valuePerMile) }}
               </ShTableCell>
-              <ShTableCell numeric>
+              <ShTableCell numeric class="sh-col-secondary">
                 <ShBadge :tone="item.hasEnoughMiles ? 'success' : 'warning'">
                   {{ item.hasEnoughMiles ? "마일 충족" : `${item.milesShortage.toLocaleString()} 부족` }}
                 </ShBadge>
