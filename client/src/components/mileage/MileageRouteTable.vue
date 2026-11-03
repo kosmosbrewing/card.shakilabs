@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {
   ShBadge,
-  ShButton,
   ShTable,
   ShTableBody,
   ShTableCell,
   ShTableHead,
   ShTableHeader,
   ShTableRow,
+  ShToggleGroup,
 } from "@shakilabs/ui";
 import type { MileageSortKey } from "@/composables/useMileageCalc";
 import type { MileageValuePerMile } from "@/utils/mileageCalculator";
@@ -22,10 +22,10 @@ const emit = defineEmits<{
   "update:sortKey": [value: MileageSortKey];
 }>();
 
-const sortOptions: { key: MileageSortKey; label: string }[] = [
-  { key: "valuePerMile", label: "가치 높은순" },
-  { key: "milesRequired", label: "필요 마일 적은순" },
-  { key: "route", label: "노선순" },
+const sortToggleOptions: { value: MileageSortKey; label: string }[] = [
+  { value: "valuePerMile", label: "가치 높은순" },
+  { value: "milesRequired", label: "필요 마일 적은순" },
+  { value: "route", label: "노선순" },
 ];
 </script>
 
@@ -33,19 +33,14 @@ const sortOptions: { key: MileageSortKey; label: string }[] = [
   <div class="retro-panel overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
       <h2 class="retro-title">노선 / 좌석 비교표</h2>
-      <div class="result-sort-options flex gap-1">
-        <ShButton
-          v-for="option in sortOptions"
-          :key="option.key"
-          type="button"
-          :variant="sortKey === option.key ? 'primary' : 'secondary'"
-          size="sm"
-          class="whitespace-nowrap"
-          @click="emit('update:sortKey', option.key)"
-        >
-          {{ option.label }}
-        </ShButton>
-      </div>
+      <!-- 정렬은 패키지 토글 그룹(세그먼트) — ShButton 3개가 390px에서 전폭 3행으로 쌓였다(2026-11 UI 감사 스크린샷). -->
+      <ShToggleGroup
+        class="result-sort-options"
+        :model-value="sortKey"
+        :options="sortToggleOptions"
+        label="정렬"
+        @update:model-value="emit('update:sortKey', $event)"
+      />
     </div>
 
     <div class="retro-panel-content">
