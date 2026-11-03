@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ShToggleGroup } from "@shakilabs/ui";
 import type { MinSpendSortKey } from "@/composables/useMinSpendCalc";
 import type { MinSpendCalcResult } from "@/utils/minSpendCalculator";
 import { formatQualificationStatus } from "@/utils/minSpendCalculator";
@@ -13,10 +14,10 @@ const emit = defineEmits<{
   "update:sortKey": [value: MinSpendSortKey];
 }>();
 
-const sortOptions: { key: MinSpendSortKey; label: string }[] = [
-  { key: "netBenefit", label: "순혜택 높은순" },
-  { key: "gap", label: "부족액 적은순" },
-  { key: "minSpend", label: "실적 조건 낮은순" },
+const sortToggleOptions: { value: MinSpendSortKey; label: string }[] = [
+  { value: "netBenefit", label: "순혜택 높은순" },
+  { value: "gap", label: "부족액 적은순" },
+  { value: "minSpend", label: "실적 조건 낮은순" },
 ];
 </script>
 
@@ -24,22 +25,14 @@ const sortOptions: { key: MinSpendSortKey; label: string }[] = [
   <div class="retro-panel overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
       <h2 class="retro-title">전체 카드 비교</h2>
-      <div class="result-sort-options flex gap-1">
-        <button
-          v-for="option in sortOptions"
-          :key="option.key"
-          type="button"
-          :class="[
-            'touch-target rounded-lg border px-2 py-1 text-tiny font-medium transition-colors',
-            sortKey === option.key
-              ? 'border-primary bg-primary/10 text-primary'
-              : 'border-border/70 text-muted-foreground hover:text-foreground',
-          ]"
-          @click="emit('update:sortKey', option.key)"
-        >
-          {{ option.label }}
-        </button>
-      </div>
+      <!-- 정렬은 패키지 토글 그룹(세그먼트) — 앱 자체 칩 버튼을 ShPresetGroup·ShToggleGroup과 같은 문법으로(2026-11 UI 감사). -->
+      <ShToggleGroup
+        class="result-sort-options"
+        :model-value="sortKey"
+        :options="sortToggleOptions"
+        label="정렬"
+        @update:model-value="emit('update:sortKey', $event)"
+      />
     </div>
 
     <div class="retro-panel-content">

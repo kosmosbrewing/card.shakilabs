@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ShToggleGroup } from "@shakilabs/ui";
 import type { AnnualFeeSortKey } from "@/composables/useAnnualFeeCalc";
 import type { AnnualFeeCalcResult } from "@/utils/annualFeeCalculator";
 import { formatBreakEven, formatRoiRatio } from "@/utils/annualFeeCalculator";
@@ -12,10 +13,10 @@ const emit = defineEmits<{
   "update:sortKey": [value: AnnualFeeSortKey];
 }>();
 
-const sortOptions: { key: AnnualFeeSortKey; label: string }[] = [
-  { key: "netBenefit", label: "순혜택 높은순" },
-  { key: "breakEven", label: "회수 빠른순" },
-  { key: "annualFee", label: "연회비 낮은순" },
+const sortToggleOptions: { value: AnnualFeeSortKey; label: string }[] = [
+  { value: "netBenefit", label: "순혜택 높은순" },
+  { value: "breakEven", label: "회수 빠른순" },
+  { value: "annualFee", label: "연회비 낮은순" },
 ];
 </script>
 
@@ -23,22 +24,14 @@ const sortOptions: { key: AnnualFeeSortKey; label: string }[] = [
   <div class="retro-panel overflow-hidden">
     <div class="retro-titlebar rounded-t-2xl">
       <h2 class="retro-title">전체 카드 비교</h2>
-      <div class="result-sort-options flex gap-1">
-        <button
-          v-for="option in sortOptions"
-          :key="option.key"
-          type="button"
-          :class="[
-            'touch-target rounded-lg border px-2 py-1 text-tiny font-medium transition-colors',
-            sortKey === option.key
-              ? 'border-primary bg-primary/10 text-primary'
-              : 'border-border/70 text-muted-foreground hover:text-foreground',
-          ]"
-          @click="emit('update:sortKey', option.key)"
-        >
-          {{ option.label }}
-        </button>
-      </div>
+      <!-- 정렬은 패키지 토글 그룹(세그먼트) — 앱 자체 칩 버튼을 ShPresetGroup·ShToggleGroup과 같은 문법으로(2026-11 UI 감사). -->
+      <ShToggleGroup
+        class="result-sort-options"
+        :model-value="sortKey"
+        :options="sortToggleOptions"
+        label="정렬"
+        @update:model-value="emit('update:sortKey', $event)"
+      />
     </div>
 
     <div class="retro-panel-content">
